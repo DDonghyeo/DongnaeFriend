@@ -12,8 +12,6 @@ public class HealthCheckController {
 
     @GetMapping("")
     public String hi() {
-        User user = new User();
-        userRepository.save(user);
         return "hih????";
     }
 
