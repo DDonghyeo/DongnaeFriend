@@ -27,6 +27,6 @@ public class SharingCommentLike extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "sharing_board_id", nullable = false)
-    private SharingBoard sharingBoard;
+    @JoinColumn(name = "sharing_comment_id", nullable = false)
+    private SharingComment sharingComment;
 }

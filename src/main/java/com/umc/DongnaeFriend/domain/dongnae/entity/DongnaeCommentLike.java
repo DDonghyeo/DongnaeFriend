@@ -28,6 +28,6 @@ public class DongnaeCommentLike extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "dongnae_board_id", nullable = false)
-    private DongnaeBoard dongnaeBoard;
+    @JoinColumn(name = "dongnae_comment_id", nullable = false)
+    private DongnaeComment dongnaeComment;
 }
