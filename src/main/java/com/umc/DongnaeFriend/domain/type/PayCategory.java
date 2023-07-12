@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public enum PayCategory {
     CASH(0, "현금"),
     CHECK_CARD(1, "체크카드"),
-    CREDIT_CART(2, "신용카드"),
+    CREDIT_CARD(2, "신용카드"),
     ETC(3, "기타");
 
     private final Integer value;
