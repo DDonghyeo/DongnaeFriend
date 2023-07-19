@@ -7,6 +7,8 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.umc.DongnaeFriend.domain.BaseTimeEntity;
 import javax.persistence.*;
+
+import com.umc.DongnaeFriend.domain.account.book.dto.MemoDto;
 import lombok.*;
 
 @Getter
@@ -27,4 +29,12 @@ public class Memo extends BaseTimeEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT", nullable = false)
     private String memo;
+
+    @Column(nullable = false)
+    private Boolean done;
+
+    public void updateMemo(MemoDto.MemoRequest request){
+        this.memo = request.getMemo();
+        this.done = request.getDone();
+    }
 }
