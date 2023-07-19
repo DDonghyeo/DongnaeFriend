@@ -27,7 +27,4 @@ public class Memo extends BaseTimeEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT", nullable = false)
     private String memo;
-
-    @Column(nullable = false)
-    private Boolean done;   // 완료 여부
 }
