@@ -38,7 +38,10 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     private DongnaeSympathyRepository dongnaeSympathyRepository;
 
 
-
+    /*
+     * [동네정보] 게시글 검색
+     * @param sort
+     */
 
 //    @Transactional(propagation = Propagation.REQUIRED)
     public List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, int sort) {
@@ -56,7 +59,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     }
 
     /*
-     * [가계부 공유] 게시글 목록 조회
+     * [동네정보] 게시글 목록 조회
      * @param sort
      */
     public List<DongnaeBoardDto.ListResponse> searchAll(int sort) {

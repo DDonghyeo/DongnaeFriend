@@ -1,5 +1,7 @@
 package com.umc.DongnaeFriend.domain.dongnae.controller;
 
+import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
+import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeBoardRepository;
 import com.umc.DongnaeFriend.domain.dongnae.service.DongnaeBoardService;
 import lombok.Getter;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * */
 
 @RestController
-@RequestMapping("/account-books/sharing")
+@RequestMapping("/town-information")
 public class DongnaeBoardController {
 
     @Autowired
@@ -22,7 +24,7 @@ public class DongnaeBoardController {
     DongnaeBoardService dongnaeBoardService;
 
     /*
-     * [가계부 공유] 게시글 검색
+     * [동네정보] 게시글 검색
      * @param keyword
      * @param category
      * @param sort
@@ -34,15 +36,26 @@ public class DongnaeBoardController {
         return ResponseEntity.ok(dongnaeBoardService.searchByKeyword(keyword, category, sort));
     }
 
-
     /*
-     * [가계부 공유] 게시글 목록 조회
+     * [동네정보] 게시글 목록조회
      * @param sort
      */
     @GetMapping("")
     public ResponseEntity<?> postBoard(@RequestParam("sortBy") int sort) {
         return ResponseEntity.ok(dongnaeBoardService.searchAll(sort));
     }
+
+
+    /*
+     * [동네정보] 게시글 등록
+     * @param sort
+     */
+    @PostMapping("")
+    public ResponseEntity<?> createBoard(@RequestBody DongnaeBoardDto req {
+        return ResponseEntity.ok();
+    }
+
+
 
 
 }
