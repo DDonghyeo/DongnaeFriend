@@ -72,9 +72,12 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         long days = duration.toDays();
         long hours = duration.toHours() % 24;
         long minutes = duration.toMinutes() % 60;
-        long seconds = duration.getSeconds() % 60;
 
-        return minutes + "분 전";
+        if (days > 1) return days + "일 전";
+        else if (hours >= 1) {
+            return -hours + "시간 전";
+        } else return -minutes + "분 전";
+
     }
 }
 
