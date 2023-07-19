@@ -30,7 +30,7 @@ public class DongnaeBoardController {
     public ResponseEntity<?> getBoards(@RequestParam("keyword") String keyword,
                                        @RequestParam("category") int category,
                                        @RequestParam("sortBy") int sort) {
-        return ResponseEntity.ok(dongnaeBoardService.getBoard(keyword, category));
+        return ResponseEntity.ok(dongnaeBoardService.getBoard(keyword, category, sort));
     }
 
 

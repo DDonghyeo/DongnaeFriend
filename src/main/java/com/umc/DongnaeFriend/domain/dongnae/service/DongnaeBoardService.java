@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface DongnaeBoardService {
 
-    public List<DongnaeBoardDto.ListResponse> getBoard(String keyword, int category);
+    public List<DongnaeBoardDto.ListResponse> getBoard(String keyword, int category, int sort);
 }

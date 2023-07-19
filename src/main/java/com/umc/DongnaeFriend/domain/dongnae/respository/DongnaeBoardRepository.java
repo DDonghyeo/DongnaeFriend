@@ -12,10 +12,15 @@ import java.util.List;
 @Repository
 public interface DongnaeBoardRepository extends JpaRepository<DongnaeBoard, Long> {
 
-    @Query(value = "select * from dongnae_board where title like %?1%  or content like %?1% and category = ?2 ;", nativeQuery = true)
-    public List<DongnaeBoard> findByKeyword(String keyword, String category);
+    @Query(value = "select * from dongnae_board where title like %?1%  or content like %?1% and category = ?2 ORDER BY created_at DESC;", nativeQuery = true)
+    List<DongnaeBoard> findByKeywordOrderByCreatedAt(String keyword, String category);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM dongnae_board WHERE title like %:keyword% or content like  %:keyword% ")
-    public List<DongnaeBoard> searchBoard(@Param("keyword") String keyword);
+    @Query(value = "SELECT dongnae_board.*, COUNT(dongnae_sympathy.dongnae_board_id) AS cnt FROM dongnae_board\n" +
+            "LEFT JOIN dongnae_sympathy ON  dongnae_board.dongnae_board_id = dongnae_sympathy.dongnae_board_id\n" +
+            "WHERE (dongnae_board.title LIKE %?1% OR dongnae_board.content LIKE %?2%)\n" +
+            "AND dongnae_board.category = ?2 GROUP BY dongnae_board.dongnae_board_id ORDER BY cnt DESC ;", nativeQuery = true)
+    List<DongnaeBoard> findByKeywordOrderByLikes(String keyword, String category);
+
+
 
 }

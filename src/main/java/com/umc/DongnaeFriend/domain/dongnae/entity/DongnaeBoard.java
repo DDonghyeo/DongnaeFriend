@@ -48,8 +48,10 @@ public class DongnaeBoard extends BaseTimeEntity {
     @ColumnDefault("0")
     private Integer view = 0;
 
+
     private String place;   // 사용자 장소 공유시 장소 이름(ex. "00키친")
     private String placeLocation;  // 장소의 정확한 위치
+
 
 
 }

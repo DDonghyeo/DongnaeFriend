@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +38,16 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
 
 //    @Transactional(propagation = Propagation.REQUIRED)
-    public List<DongnaeBoardDto.ListResponse> getBoard(String keyword, int category) {
+    public List<DongnaeBoardDto.ListResponse> getBoard(String keyword, int category, int sort) {
         String categoryName = DongnaeBoardCategory.valueOf(category).name();
-        List<DongnaeBoard> dongnaeBoardList = dongnaeBoardRepository.findByKeyword(keyword, categoryName);
+
+
+        List<DongnaeBoard> dongnaeBoardList = new ArrayList<>();
+        if (sort == 0) {
+            dongnaeBoardList = dongnaeBoardRepository.findByKeywordOrderByCreatedAt(keyword, categoryName);
+        } else {
+            dongnaeBoardList = dongnaeBoardRepository.findByKeywordOrderByLikes(keyword, categoryName);
+        }
 
         return dongnaeBoardList.stream()
                 .map(origin -> DongnaeBoardDto.ListResponse.builder()
