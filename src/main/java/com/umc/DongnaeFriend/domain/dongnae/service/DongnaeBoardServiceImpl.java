@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,18 +38,40 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     private DongnaeSympathyRepository dongnaeSympathyRepository;
 
 
+
+
 //    @Transactional(propagation = Propagation.REQUIRED)
-    public List<DongnaeBoardDto.ListResponse> getBoard(String keyword, int category, int sort) {
+    public List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, int sort) {
         String categoryName = DongnaeBoardCategory.valueOf(category).name();
 
 
-        List<DongnaeBoard> dongnaeBoardList = new ArrayList<>();
+        List<DongnaeBoard> dongnaeBoardList;
         if (sort == 0) {
             dongnaeBoardList = dongnaeBoardRepository.findByKeywordOrderByCreatedAt(keyword, categoryName);
         } else {
             dongnaeBoardList = dongnaeBoardRepository.findByKeywordOrderByLikes(keyword, categoryName);
         }
 
+        return getListResponses(dongnaeBoardList);
+    }
+
+    /*
+     * [가계부 공유] 게시글 목록 조회
+     * @param sort
+     */
+    public List<DongnaeBoardDto.ListResponse> searchAll(int sort) {
+
+        List<DongnaeBoard> dongnaeBoardList;
+        if (sort == 0) {
+            dongnaeBoardList = dongnaeBoardRepository.findAllOrderByCreatedAt();
+        } else {
+            dongnaeBoardList = dongnaeBoardRepository.findAllOrderByLikes();
+        }
+
+        return getListResponses(dongnaeBoardList);
+    }
+
+    private List<DongnaeBoardDto.ListResponse> getListResponses(List<DongnaeBoard> dongnaeBoardList) {
         return dongnaeBoardList.stream()
                 .map(origin -> DongnaeBoardDto.ListResponse.builder()
                         .town(origin.getPlace())
@@ -75,18 +98,24 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     private String getTime(LocalDateTime time) {
         LocalDateTime now = LocalDateTime.now(); // 현재 시간
-        Duration duration = Duration.between(time, now);
+        Duration duration = Duration.between(now, time);
 
+        log.info(now.toString());
+        log.info(time.toString());
         long days = duration.toDays();
+        log.info(" days: "+ days);
         long hours = duration.toHours() % 24;
+        log.info(" hours: "+ hours);
         long minutes = duration.toMinutes() % 60;
+        log.info(" minutes: "+ minutes);
 
         if (days > 1) return days + "일 전";
         else if (hours >= 1) {
             return hours + "시간 전";
-        } else return -minutes + "분 전";
+        } else return minutes + "분 전";
 
     }
+
 }
 
 

@@ -21,6 +21,14 @@ public interface DongnaeBoardRepository extends JpaRepository<DongnaeBoard, Long
             "AND dongnae_board.category = ?2 GROUP BY dongnae_board.dongnae_board_id ORDER BY cnt DESC ;", nativeQuery = true)
     List<DongnaeBoard> findByKeywordOrderByLikes(String keyword, String category);
 
+    @Query(value = "select * from dongnae_board ORDER BY created_at DESC;", nativeQuery = true)
+    List<DongnaeBoard> findAllOrderByCreatedAt();
+
+    @Query(value = "SELECT dongnae_board.*, COUNT(dongnae_sympathy.dongnae_board_id) AS cnt FROM dongnae_board\n" +
+            "LEFT JOIN dongnae_sympathy ON  dongnae_board.dongnae_board_id = dongnae_sympathy.dongnae_board_id\n" +
+            "GROUP BY dongnae_board.dongnae_board_id ORDER BY cnt DESC ;", nativeQuery = true)
+    List<DongnaeBoard> findAllOrderByLikes();
+
 
 
 }
