@@ -75,7 +75,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
         if (days > 1) return days + "일 전";
         else if (hours >= 1) {
-            return -hours + "시간 전";
+            return hours + "시간 전";
         } else return -minutes + "분 전";
 
     }
