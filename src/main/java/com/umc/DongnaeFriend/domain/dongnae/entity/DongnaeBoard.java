@@ -53,5 +53,4 @@ public class DongnaeBoard extends BaseTimeEntity {
     private String placeLocation;  // 장소의 정확한 위치
 
 
-
 }

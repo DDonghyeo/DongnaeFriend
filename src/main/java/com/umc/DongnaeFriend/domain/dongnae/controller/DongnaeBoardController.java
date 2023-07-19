@@ -51,9 +51,12 @@ public class DongnaeBoardController {
      * @param sort
      */
     @PostMapping("")
-    public ResponseEntity<?> createBoard(@RequestBody DongnaeBoardDto req {
-        return ResponseEntity.ok();
+    public ResponseEntity<?> createBoard(@RequestBody DongnaeBoardDto.Request req) {
+        dongnaeBoardService.createBoard(req);
+        return ResponseEntity.ok("요청에 성공했습니다.");
     }
+
+
 
 
 

@@ -2,8 +2,10 @@ package com.umc.DongnaeFriend.domain.dongnae.dto;
 
 
 
+import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
+import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.*;
 
 import java.util.List;
@@ -25,8 +27,9 @@ public class DongnaeBoardDto {
 
         private String placeLocation;
 
-        public DongnaeBoard toEntity() {
+        public DongnaeBoard toEntity(User user, Dongnae dongnae) {
             return DongnaeBoard.builder()
+                    .user(user)
                     .category(DongnaeBoardCategory.valueOf(category)
 //                            category == 0 ? RESTAURANT:
 //                            category == 1 ? FACILITY:
@@ -37,6 +40,11 @@ public class DongnaeBoardDto {
                     )
                     .title(title)
                     .content(content)
+                    .place(place)
+                    .placeLocation(placeLocation)
+
+                    .dongnae(dongnae)
+                    .view(0)
                     .build();
         }
 

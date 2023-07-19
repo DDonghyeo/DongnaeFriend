@@ -1,13 +1,18 @@
 package com.umc.DongnaeFriend.domain.dongnae.service;
 
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
+import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeImg;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeBoardRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeCommentRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeImgRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeSympathyRepository;
+import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
+import com.umc.DongnaeFriend.domain.type.Gender;
+import com.umc.DongnaeFriend.domain.type.YesNo;
+import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +77,17 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         }
 
         return getListResponses(dongnaeBoardList);
+    }
+
+    /*
+     * [동네정보] 게시글 목록 조회
+     */
+    public void createBoard(DongnaeBoardDto.Request req) {
+        //TODO : User Mapping UserRepository 필요.
+        Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
+        User user = User.builder().age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
+
+        dongnaeBoardRepository.save(req.toEntity(user, dongnae));
     }
 
     private List<DongnaeBoardDto.ListResponse> getListResponses(List<DongnaeBoard> dongnaeBoardList) {

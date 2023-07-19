@@ -9,4 +9,6 @@ public interface DongnaeBoardService {
     List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, int sort);
 
     List<DongnaeBoardDto.ListResponse> searchAll(int sort);
+
+    void createBoard(DongnaeBoardDto.Request req);
 }
