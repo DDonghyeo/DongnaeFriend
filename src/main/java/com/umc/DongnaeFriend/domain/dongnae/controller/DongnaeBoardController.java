@@ -26,11 +26,23 @@ public class DongnaeBoardController {
     /*
      * [동네정보] 홈 화면
      */
+    //TODO : 파라미터 다시 확인해보기
     @GetMapping("/home")
     public ResponseEntity<?> home(@RequestParam("category") int category,
                                        @RequestParam("sortBy") int sort) {
         return ResponseEntity.ok(dongnaeBoardService.home(category));
     }
+
+    /*
+     * [동네정보] 사용자 위치 정보
+     */
+    //TODO : 파라미터 다시 확인해보기
+    @GetMapping("/user/location")
+    public ResponseEntity<?> getLocation() {
+        return ResponseEntity.ok(dongnaeBoardService.getUserLocaiton());
+    }
+
+
 
 
     /*

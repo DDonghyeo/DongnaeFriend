@@ -1,6 +1,7 @@
 package com.umc.DongnaeFriend.domain.dongnae.service;
 
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
+import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface DongnaeBoardService {
     void createBoard(DongnaeBoardDto.Request req);
 
     List<DongnaeBoardDto.ListResponse> home(int category);
+
+    public UserLocationDto getUserLocaiton();
 }

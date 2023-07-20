@@ -1,6 +1,7 @@
 package com.umc.DongnaeFriend.domain.dongnae.service;
 
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
+import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
 import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeImg;
@@ -50,6 +51,15 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         String category_ = "RESTAURANT";
         List<DongnaeBoard> dongnaeBoardList = dongnaeBoardRepository.findTwoByCategoryOrderByCreatedAt(category_);
         return getListResponses(dongnaeBoardList);
+    }
+
+    /*
+     * [동네정보] 사용자 위치 정보
+     */
+    public UserLocationDto getUserLocaiton() {
+        //TODO : 사용자 식별자 가져오기 - (User 필요)
+        long user_id = 1;
+        return new UserLocationDto("서울도시");
     }
 
 
