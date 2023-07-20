@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -163,6 +164,24 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
                 .ScrapOrNot(scrapOrNot)
                 .view(board.get().getView()).build();
     }
+
+
+    /*
+     * [동네정보] 게시글 수정
+     */
+    @Override
+    public void updateBoard(long board_id, DongnaeBoardDto.Request request) {
+        Optional<DongnaeBoard> board = dongnaeBoardRepository.findById(board_id);
+        if (board.isPresent()) {
+            board.get().updateBoard(request);
+            dongnaeBoardRepository.save(board.get());
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+
+
 
 
 

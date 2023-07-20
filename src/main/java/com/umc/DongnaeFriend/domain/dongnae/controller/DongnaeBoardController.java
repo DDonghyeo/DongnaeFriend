@@ -65,7 +65,7 @@ public class DongnaeBoardController {
 
     /*
      * [동네정보] 게시글 등록
-     * @param sort
+     * @param DongnaeBoardDto.Request
      */
     @PostMapping("")
     public ResponseEntity<?> createBoard(@RequestBody DongnaeBoardDto.Request req) {
@@ -75,13 +75,23 @@ public class DongnaeBoardController {
 
     /*
      * [동네정보] 게시글 상세 조회
-     * @param sort
+     * @param board_id
      */
     @GetMapping("/{townInformationId}")
     public ResponseEntity<?> getBoard(@PathVariable("townInformationId") int board_id) {
         return ResponseEntity.ok(dongnaeBoardService.getBoard(board_id));
     }
 
+    /*
+     * [동네정보] 게시글 수정
+     * @param sort
+     */
+    @PutMapping("/{townInformationId}")
+    public ResponseEntity<?> updateBoard(@PathVariable("townInformationId") int board_id,
+                                         @RequestBody DongnaeBoardDto.Request request) {
+        dongnaeBoardService.updateBoard(board_id, request);
+        return ResponseEntity.ok("요청에 성공했습니다.");
+    }
 
 
 

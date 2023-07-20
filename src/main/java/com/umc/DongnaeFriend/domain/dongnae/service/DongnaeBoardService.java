@@ -18,4 +18,6 @@ public interface DongnaeBoardService {
     UserLocationDto getUserLocation();
 
     DongnaeBoardDto.Response getBoard(long board_id);
+
+    void updateBoard(long board_id, DongnaeBoardDto.Request request);
 }
