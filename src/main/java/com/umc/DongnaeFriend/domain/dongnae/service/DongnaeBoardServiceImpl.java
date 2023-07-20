@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Duration;
@@ -33,7 +35,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     //임시 유저
     Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
-    User user = User.builder().age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
+    User user = User.builder().age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
 
     @Autowired
     private DongnaeBoardRepository dongnaeBoardRepository;
@@ -117,7 +119,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     public void createBoard(DongnaeBoardDto.Request req) {
         //TODO : User Mapping UserRepository 필요.
         Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
-        User user = User.builder().age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
+        User user = User.builder().age(Age.AGE10).profileImage("profileImg").email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
 
         dongnaeBoardRepository.save(req.toEntity(user, dongnae));
     }
@@ -127,6 +129,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
      * [동네정보] 게시글 상세 조회
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public DongnaeBoardDto.Response getBoard(long board_id) {
         //TODO : User 식별자 필요.
         int user_id = 1;
@@ -142,7 +145,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         boolean isWriter = board.get().getUser().getId() == user_id;
 
         //LikeOrNot 검사
-        boolean likeOrNot = dongnaeSympathyRepository.findByUser_Id(user_id).isPresent();
+        boolean likeOrNot = !dongnaeSympathyRepository.findByUser_Id(user_id).isEmpty();
 
         //TODO: ScrapRepository 필요
         //scrapOrNot 검사
