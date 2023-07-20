@@ -20,7 +20,7 @@ import lombok.*;
 @AllArgsConstructor(access = PRIVATE)
 @Entity
 @Table(name = "users")
-public class User extends BaseTimeEntity {
+public class  User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
