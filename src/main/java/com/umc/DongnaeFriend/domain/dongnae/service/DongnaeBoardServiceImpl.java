@@ -16,17 +16,23 @@ import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class DongnaeBoardServiceImpl implements DongnaeBoardService {
+
+    //임시 유저
+    Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
+    User user = User.builder().age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
 
     @Autowired
     private DongnaeBoardRepository dongnaeBoardRepository;
@@ -45,6 +51,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
      * 카테고리 별 게시글 2개씩 반환
      * @param sort
      */
+    @Override
     public List<DongnaeBoardDto.ListResponse> home(int category) {
         String category_String = DongnaeBoardCategory.valueOf(category).name();
         //TODO : 동네 인증 여부 확인하기 - (User 필요)
@@ -56,7 +63,8 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     /*
      * [동네정보] 사용자 위치 정보
      */
-    public UserLocationDto getUserLocaiton() {
+    @Override
+    public UserLocationDto getUserLocation() {
         //TODO : 사용자 식별자 가져오기 - (User 필요)
         long user_id = 1;
         return new UserLocationDto("서울도시");
@@ -68,6 +76,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
      * @param sort
      */
 
+    @Override
 //    @Transactional(propagation = Propagation.REQUIRED)
     public List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, int sort) {
         String categoryName = DongnaeBoardCategory.valueOf(category).name();
@@ -87,6 +96,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
      * [동네정보] 게시글 목록 조회
      * @param sort
      */
+    @Override
     public List<DongnaeBoardDto.ListResponse> searchAll(int sort) {
 
         List<DongnaeBoard> dongnaeBoardList;
@@ -100,8 +110,9 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     }
 
     /*
-     * [동네정보] 게시글 목록 조회
+     * [동네정보] 게시글 등록
      */
+    @Override
     public void createBoard(DongnaeBoardDto.Request req) {
         //TODO : User Mapping UserRepository 필요.
         Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
@@ -109,6 +120,51 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
         dongnaeBoardRepository.save(req.toEntity(user, dongnae));
     }
+
+
+    /*
+     * [동네정보] 게시글 상세 조회
+     */
+    @Override
+    public DongnaeBoardDto.Response getBoard(long board_id) {
+        //TODO : User 식별자 필요.
+        int user_id = 1;
+        Optional<DongnaeBoard> board = dongnaeBoardRepository.findById(board_id);
+        if (board.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        //Get Images
+        List<DongnaeImg> imgs = dongnaeImgRepository.findAllByDongnaeBoard_Id(board_id);
+
+        //Writer인지 검사
+        boolean isWriter = board.get().getUser().getId() == user_id;
+
+        //LikeOrNot 검사
+        boolean likeOrNot = dongnaeSympathyRepository.findByUser_Id(user_id).isPresent();
+
+        //TODO: ScrapRepository 필요
+        //scrapOrNot 검사
+        boolean scrapOrNot = false;
+
+        return DongnaeBoardDto.Response.builder()
+                .profileImage(user.getProfileImage())
+                .nickname(user.getNickname())
+                .category(board.get().getCategory().getValue())
+                .title(board.get().getTitle())
+                .content(board.get().getContent())
+                .images(imgs.stream().map(DongnaeImg::getImageUrl).collect(Collectors.toList()))
+                .place(board.get().getPlace())
+                .placeLocation(board.get().getPlaceLocation())
+                .createdAt(getTime(board.get().getCreatedAt()))
+                .townCertification(user.getTownCertCnt())
+                .isWriter(isWriter)
+                .likeOrNot(likeOrNot)
+                .ScrapOrNot(scrapOrNot)
+                .view(board.get().getView()).build();
+    }
+
+
 
 
     //ListResponse 변환

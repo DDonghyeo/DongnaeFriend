@@ -15,5 +15,7 @@ public interface DongnaeBoardService {
 
     List<DongnaeBoardDto.ListResponse> home(int category);
 
-    public UserLocationDto getUserLocaiton();
+    UserLocationDto getUserLocation();
+
+    DongnaeBoardDto.Response getBoard(long board_id);
 }

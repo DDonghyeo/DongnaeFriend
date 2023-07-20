@@ -1,10 +1,8 @@
 package com.umc.DongnaeFriend.domain.dongnae.controller;
 
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
-import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeBoardRepository;
 import com.umc.DongnaeFriend.domain.dongnae.service.DongnaeBoardService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,13 +34,10 @@ public class DongnaeBoardController {
     /*
      * [동네정보] 사용자 위치 정보
      */
-    //TODO : 파라미터 다시 확인해보기
     @GetMapping("/user/location")
     public ResponseEntity<?> getLocation() {
-        return ResponseEntity.ok(dongnaeBoardService.getUserLocaiton());
+        return ResponseEntity.ok(dongnaeBoardService.getUserLocation());
     }
-
-
 
 
     /*
@@ -76,6 +71,15 @@ public class DongnaeBoardController {
     public ResponseEntity<?> createBoard(@RequestBody DongnaeBoardDto.Request req) {
         dongnaeBoardService.createBoard(req);
         return ResponseEntity.ok("요청에 성공했습니다.");
+    }
+
+    /*
+     * [동네정보] 게시글 상세 조회
+     * @param sort
+     */
+    @GetMapping("/{townInformationId}")
+    public ResponseEntity<?> getBoard(@PathVariable("townInformationId") int board_id) {
+        return ResponseEntity.ok(dongnaeBoardService.getBoard(board_id));
     }
 
 

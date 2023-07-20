@@ -74,6 +74,41 @@ public class DongnaeBoardDto {
         private int likes;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Response {
+        private String profileImage;
+
+        private String nickname;
+
+        private int category;
+
+        private String title;
+
+        private String content;
+
+        private List<String> images;
+
+        private String place;
+
+        private String placeLocation;
+
+        private String createdAt;
+
+        private int townCertification;
+
+        //게시글 조회한 사람이 작성자인지?
+        private boolean isWriter;
+
+        private boolean likeOrNot;
+
+        private boolean ScrapOrNot;
+
+        private int view;
+
+    }
 
 
 }
