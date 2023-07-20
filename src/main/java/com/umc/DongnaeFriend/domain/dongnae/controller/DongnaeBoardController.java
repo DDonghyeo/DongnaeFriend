@@ -24,6 +24,16 @@ public class DongnaeBoardController {
     DongnaeBoardService dongnaeBoardService;
 
     /*
+     * [동네정보] 홈 화면
+     */
+    @GetMapping("/home")
+    public ResponseEntity<?> home(@RequestParam("category") int category,
+                                       @RequestParam("sortBy") int sort) {
+        return ResponseEntity.ok(dongnaeBoardService.home(category));
+    }
+
+
+    /*
      * [동네정보] 게시글 검색
      * @param keyword
      * @param category

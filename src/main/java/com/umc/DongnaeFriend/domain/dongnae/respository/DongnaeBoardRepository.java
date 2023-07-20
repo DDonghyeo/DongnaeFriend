@@ -29,6 +29,9 @@ public interface DongnaeBoardRepository extends JpaRepository<DongnaeBoard, Long
             "GROUP BY dongnae_board.dongnae_board_id ORDER BY cnt DESC ;", nativeQuery = true)
     List<DongnaeBoard> findAllOrderByLikes();
 
+    @Query(value = "select * from dongnae_board where category = ?1 ORDER BY created_at DESC LIMIT 1 ;", nativeQuery = true)
+    List<DongnaeBoard> findTwoByCategoryOrderByCreatedAt(String category);
+
 
 
 }

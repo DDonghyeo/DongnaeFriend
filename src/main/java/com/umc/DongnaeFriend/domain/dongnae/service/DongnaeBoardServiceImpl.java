@@ -16,13 +16,10 @@ import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +38,19 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     @Autowired
     private DongnaeSympathyRepository dongnaeSympathyRepository;
+
+    /*
+     * [동네정보] 홈 화면
+     * 카테고리 별 게시글 2개씩 반환
+     * @param sort
+     */
+    public List<DongnaeBoardDto.ListResponse> home(int category) {
+        String category_String = DongnaeBoardCategory.valueOf(category).name();
+        //TODO : 동네 인증 여부 확인하기 - (User 필요)
+        String category_ = "RESTAURANT";
+        List<DongnaeBoard> dongnaeBoardList = dongnaeBoardRepository.findTwoByCategoryOrderByCreatedAt(category_);
+        return getListResponses(dongnaeBoardList);
+    }
 
 
     /*
@@ -90,6 +100,8 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         dongnaeBoardRepository.save(req.toEntity(user, dongnae));
     }
 
+
+    //ListResponse 변환
     private List<DongnaeBoardDto.ListResponse> getListResponses(List<DongnaeBoard> dongnaeBoardList) {
         return dongnaeBoardList.stream()
                 .map(origin -> DongnaeBoardDto.ListResponse.builder()
@@ -115,6 +127,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     }
 
 
+    //시간 계산
     private String getTime(LocalDateTime time) {
         LocalDateTime now = LocalDateTime.now(); // 현재 시간
         Duration duration = Duration.between(now, time);

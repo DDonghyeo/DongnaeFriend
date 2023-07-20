@@ -11,4 +11,6 @@ public interface DongnaeBoardService {
     List<DongnaeBoardDto.ListResponse> searchAll(int sort);
 
     void createBoard(DongnaeBoardDto.Request req);
+
+    List<DongnaeBoardDto.ListResponse> home(int category);
 }
