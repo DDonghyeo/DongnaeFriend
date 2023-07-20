@@ -16,16 +16,17 @@ import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.AuthenticationException;
 import javax.persistence.EntityNotFoundException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     //임시 유저
     Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
-    User user = User.builder().age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
+    User user = User.builder().id(1L).age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
 
     @Autowired
     private DongnaeBoardRepository dongnaeBoardRepository;
@@ -139,7 +140,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         }
 
         //Get Images
-        List<DongnaeImg> imgs = dongnaeImgRepository.findAllByDongnaeBoard_Id(board_id);
+        List<DongnaeImg> images = dongnaeImgRepository.findAllByDongnaeBoard_Id(board_id);
 
         //Writer인지 검사
         boolean isWriter = board.get().getUser().getId() == user_id;
@@ -157,7 +158,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
                 .category(board.get().getCategory().getValue())
                 .title(board.get().getTitle())
                 .content(board.get().getContent())
-                .images(imgs.stream().map(DongnaeImg::getImageUrl).collect(Collectors.toList()))
+                .images(images.stream().map(DongnaeImg::getImageUrl).collect(Collectors.toList()))
                 .place(board.get().getPlace())
                 .placeLocation(board.get().getPlaceLocation())
                 .createdAt(getTime(board.get().getCreatedAt()))
@@ -173,14 +174,32 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
      * [동네정보] 게시글 수정
      */
     @Override
-    public void updateBoard(long board_id, DongnaeBoardDto.Request request) {
+    public void updateBoard(long board_id, DongnaeBoardDto.Request request) throws AuthenticationException {
         Optional<DongnaeBoard> board = dongnaeBoardRepository.findById(board_id);
         if (board.isPresent()) {
+            //User Validaiton
+            if (!Objects.equals(board.get().getUser().getId(), user.getId())) {
+                throw new AuthenticationException();
+            }
             board.get().updateBoard(request);
             dongnaeBoardRepository.save(board.get());
         } else {
             throw new EntityNotFoundException();
         }
+    }
+
+    @Override
+    public void deleteBoard(long board_id) throws AuthenticationException {
+        Optional<DongnaeBoard> board = dongnaeBoardRepository.findById(board_id);
+
+        if (board.isEmpty())  throw new EntityNotFoundException();
+        //User Validation
+        if (!Objects.equals(board.get().getUser().getId(), user.getId())) {
+            throw new AuthenticationException();
+        } else {
+            dongnaeBoardRepository.deleteById(board_id);
+        }
+
     }
 
 

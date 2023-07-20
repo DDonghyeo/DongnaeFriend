@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
+
 /*
  * [ 가계부 공유 ]
  * */
@@ -84,12 +86,23 @@ public class DongnaeBoardController {
 
     /*
      * [동네정보] 게시글 수정
-     * @param sort
+     * @param baord_id
+     * @param DongnaeBoardDto.Request
      */
     @PutMapping("/{townInformationId}")
     public ResponseEntity<?> updateBoard(@PathVariable("townInformationId") int board_id,
-                                         @RequestBody DongnaeBoardDto.Request request) {
+                                         @RequestBody DongnaeBoardDto.Request request) throws AuthenticationException {
         dongnaeBoardService.updateBoard(board_id, request);
+        return ResponseEntity.ok("요청에 성공했습니다.");
+    }
+
+    /*
+     * [동네정보] 게시글 삭제
+     * @param board_id
+     */
+    @DeleteMapping("/{townInformationId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable("townInformationId") int board_id) throws AuthenticationException {
+        dongnaeBoardService.deleteBoard(board_id);
         return ResponseEntity.ok("요청에 성공했습니다.");
     }
 

@@ -3,6 +3,7 @@ package com.umc.DongnaeFriend.domain.dongnae.service;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 public interface DongnaeBoardService {
@@ -19,5 +20,7 @@ public interface DongnaeBoardService {
 
     DongnaeBoardDto.Response getBoard(long board_id);
 
-    void updateBoard(long board_id, DongnaeBoardDto.Request request);
+    void updateBoard(long board_id, DongnaeBoardDto.Request request) throws AuthenticationException;
+
+    void deleteBoard(long board_id) throws AuthenticationException;
 }

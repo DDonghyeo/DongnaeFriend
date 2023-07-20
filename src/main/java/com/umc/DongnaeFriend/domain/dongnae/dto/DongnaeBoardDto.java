@@ -74,6 +74,7 @@ public class DongnaeBoardDto {
         private int likes;
     }
 
+
     @Getter
     @Builder
     @AllArgsConstructor
