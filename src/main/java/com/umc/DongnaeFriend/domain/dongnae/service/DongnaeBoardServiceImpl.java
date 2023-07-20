@@ -222,14 +222,20 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
         log.info(now.toString());
         log.info(time.toString());
-        long days = duration.toDays();
+        long days = -duration.toDays();
         log.info(" days: "+ days);
-        long hours = duration.toHours() % 24;
+        long hours = -duration.toHours() % 24;
         log.info(" hours: "+ hours);
-        long minutes = duration.toMinutes() % 60;
+        long minutes = -duration.toMinutes() % 60;
         log.info(" minutes: "+ minutes);
 
-        if (days > 1) return days + "일 전";
+        if (days >= 1){
+            if (days == 1) {
+                return "어제";
+            }
+            return days + "일 전";
+        }
+
         else if (hours >= 1) {
             return hours + "시간 전";
         } else return minutes + "분 전";
