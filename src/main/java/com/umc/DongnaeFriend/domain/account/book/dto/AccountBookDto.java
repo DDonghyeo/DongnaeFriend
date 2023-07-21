@@ -1,17 +1,11 @@
 package com.umc.DongnaeFriend.domain.account.book.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
-import com.umc.DongnaeFriend.domain.account.book.entity.Memo;
 import com.umc.DongnaeFriend.domain.type.TransactionCategory;
-import com.umc.DongnaeFriend.domain.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AccountBookDto {
 
@@ -59,24 +53,30 @@ public class AccountBookDto {
         private Long income;
         private Long budget;
 
-        private ExpenseDto expenseDto;
+        private List<Expense> expense;
     }
 
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @Slf4j
     public static class ExpenseDto{
-        private Long food;
-        private Long transport;
-        private Long culture;
-        private Long daily;
-        private Long trade;
-        private Long beauty;
-        private Long health;
-        private Long education;
-        private Long fix;
+        private Long FOODS;
+        private Long TRANSPORTATION;
+        private Long CULTURE;
+        private Long DAILY_NECESSITY;
+        private Long SECOND_HAND;
+        private Long FASHION;
+        private Long HEALTH;
+        private Long EDUCATION;
+        private Long FIXED_EXPENSES;
         private Long OTT;
-        private Long etc;
+        private Long ETC;
+
+
+
     }
+
+
 }

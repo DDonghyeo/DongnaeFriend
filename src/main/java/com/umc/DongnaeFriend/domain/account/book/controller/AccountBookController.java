@@ -30,7 +30,7 @@ public class AccountBookController {
     @GetMapping("/category")
     public List<AccountBookDto.AccountBookCategoryResponse> getTransactionAll(@RequestParam(value = "year", required = false) Integer year,
                                                                               @RequestParam(value = "month", required = false) Integer month){
-        return accountBookService.getAccountBook(year, month);
+        return null;
     }
 
     @GetMapping("/all")

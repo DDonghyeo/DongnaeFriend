@@ -1,5 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.book.repository.accountBook;
 
+import com.umc.DongnaeFriend.domain.account.book.dto.AccountBookDto;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.service.AccountBookService;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>, AccountBookRepositoryCustom {
@@ -46,4 +48,10 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>,
             + "set ab.income = ab.income + :incomeGap "
             + "where ab.id = :accountBookId")
     void updateAccountBookIncomeEdit(@Param("accountBookId")Long accountBookId, @Param("incomeGap")Long incomeGap);
+
+    @Query(value = "SELECT transaction.transaction_category, SUM(transaction.price) as sum_price " +
+            "from transaction " +
+            "where transaction.month = :month and transaction.year = :year " +
+            "group by transaction.transaction_category", nativeQuery = true)
+    Object[] getAccountBookGroupByCategory (@Param("month") long month, @Param("year") long year);
 }

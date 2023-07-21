@@ -1,5 +1,10 @@
 package com.umc.DongnaeFriend.domain.account.book.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import com.querydsl.core.Tuple;
 import com.umc.DongnaeFriend.domain.account.book.dto.AccountBookDto;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
@@ -7,9 +12,11 @@ import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountB
 import com.umc.DongnaeFriend.domain.account.book.repository.transaction.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -37,16 +44,14 @@ public class AccountBookService {
 
 
     // 가계부 조회 -> 이번달 남은 예산 & 지출, 저축(수입), 카테고리별 지출 -> 가계부 예산 총합 조회 로직 필요
-    public AccountBookDto.ExpenseDto getAccountBook(Integer year, Integer month){
-        return accountBookRepository.getAccountBook(year, month);
-    }
 
-    public AccountBookDto.AccountBookResponse getAccountBookResponse(Integer year, Integer month){
+    public AccountBookDto.AccountBookResponse getAccountBookResponse(Integer year, Integer month) {
         AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
         return AccountBookDto.AccountBookResponse.builder()
                 .income(accountBook.getIncome())
                 .expenditure(accountBook.getExpenditure())
-                .expenseDto(getAccountBook(year, month))
+                .budget(accountBook.getBudget())
+                .expense(accountBookRepository.getAccountBook(year,month))
                 .build();
     }
 

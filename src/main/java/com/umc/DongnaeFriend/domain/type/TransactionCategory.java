@@ -1,6 +1,7 @@
 package com.umc.DongnaeFriend.domain.type;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
