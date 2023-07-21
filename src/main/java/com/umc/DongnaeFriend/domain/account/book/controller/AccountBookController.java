@@ -5,6 +5,8 @@ import com.umc.DongnaeFriend.domain.account.book.service.AccountBookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/account")
@@ -25,5 +27,16 @@ public class AccountBookController {
         accountBookService.createBudget(year, month, budget);
     }
 
+    @GetMapping("/category")
+    public List<AccountBookDto.AccountBookCategoryResponse> getTransactionAll(@RequestParam(value = "year", required = false) Integer year,
+                                                                              @RequestParam(value = "month", required = false) Integer month){
+        return accountBookService.getAccountBook(year, month);
+    }
 
+    @GetMapping("/all")
+    public AccountBookDto.AccountBookResponse getAccountBook(@RequestParam(value = "year", required = false) Integer year,
+                                                             @RequestParam(value = "month", required = false) Integer month){
+
+        return accountBookService.getAccountBookResponse(year, month);
+    }
 }

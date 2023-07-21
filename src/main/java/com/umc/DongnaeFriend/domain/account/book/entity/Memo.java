@@ -30,7 +30,7 @@ public class Memo extends BaseTimeEntity {
     @Column(columnDefinition = "MEDIUMTEXT", nullable = false)
     private String memo;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private Boolean done;
 
     public void updateMemo(MemoDto.MemoRequest request){

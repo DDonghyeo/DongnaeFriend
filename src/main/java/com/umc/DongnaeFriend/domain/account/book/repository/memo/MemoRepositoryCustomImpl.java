@@ -1,11 +1,9 @@
 package com.umc.DongnaeFriend.domain.account.book.repository.memo;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.umc.DongnaeFriend.domain.account.book.entity.Memo;
-import com.umc.DongnaeFriend.domain.account.book.entity.QAccountBook;
+import static com.umc.DongnaeFriend.domain.account.book.entity.QAccountBook.accountBook;
 import com.umc.DongnaeFriend.domain.account.book.entity.QMemo;
 
-import static org.springframework.data.jpa.domain.Specification.where;
 
 public class MemoRepositoryCustomImpl implements MemoRepositoryCustom{
 
@@ -17,8 +15,8 @@ public class MemoRepositoryCustomImpl implements MemoRepositoryCustom{
 
     @Override
     public Integer getMemoCnt(Integer year, Integer month) {
-        QMemo memo = QMemo.memo1;
-        QAccountBook accountBook = QAccountBook.accountBook;
+        QMemo memo = QMemo.qMemo;
+
         return Math.toIntExact(jpaQueryFactory
                 .select(memo.count())
                 .from(memo)

@@ -3,13 +3,47 @@ package com.umc.DongnaeFriend.domain.account.book.repository.accountBook;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.service.AccountBookService;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>, AccountBookRepositoryCustom {
 
-    // 지난 달 지출액 확인
-
-    Optional<AccountBook> findByIdAndYearAndMonth(Long accountBookId, Integer year, Integer month);
+    //Optional<AccountBook> findByIdAndYearAndMonth(Long accountBookId, Integer year, Integer month);
     Optional<AccountBook> findByYearAndMonth(Integer year, Integer month);
+    @Modifying
+    @Query(value = "update AccountBook ab "
+            + "set ab.expenditure = ab.expenditure + :expenditure "
+            + "where ab.id = :accountBookId")
+    void updateAccountBookExpenditure(@Param("accountBookId")Long accountBookId, @Param("expenditure")Long expenditure);
+
+    @Modifying
+    @Query(value = "update AccountBook ab "
+            + "set ab.income = ab.income + :income "
+            + "where ab.id = :accountBookId")
+    void updateAccountBookIncome(@Param("accountBookId")Long accountBookId, @Param("income")Long income);
+
+    @Modifying
+    @Query(value = "update AccountBook ab "
+            + "set ab.expenditure = ab.expenditure - :expenditure "
+            + "where ab.id = :accountBookId")
+    void updateAccountBookExpenditureDelete(@Param("accountBookId")Long accountBookId, @Param("expenditure")Long expenditure);
+    @Modifying
+    @Query(value = "update AccountBook ab "
+            + "set ab.income = ab.income - :income "
+            + "where ab.id = :accountBookId")
+    void updateAccountBookIncomeDelete(@Param("accountBookId")Long accountBookId, @Param("income")Long income);
+    @Modifying
+    @Query(value = "update AccountBook ab "
+            + "set ab.expenditure = ab.expenditure - :expenditureGap "
+            + "where ab.id = :accountBookId")
+    void updateAccountBookExpenditureEdit(@Param("accountBookId")Long accountBookId, @Param("expenditureGap")Long expenditureGap);
+    @Modifying
+    @Query(value = "update AccountBook ab "
+            + "set ab.income = ab.income + :incomeGap "
+            + "where ab.id = :accountBookId")
+    void updateAccountBookIncomeEdit(@Param("accountBookId")Long accountBookId, @Param("incomeGap")Long incomeGap);
 }

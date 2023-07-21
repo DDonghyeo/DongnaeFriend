@@ -37,7 +37,7 @@ public class MemoService {
         AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
         Integer memoCnt = memoRepository.getMemoCnt(year, month);
 
-        if(memoCnt<5){
+        if(memoCnt<8){
             memoRepository.save(memoRequest.toEntity(accountBook));
         }else{
             // 개수 초과 예외처리

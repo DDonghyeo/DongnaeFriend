@@ -7,6 +7,8 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.umc.DongnaeFriend.domain.BaseTimeEntity;
+import com.umc.DongnaeFriend.domain.account.book.dto.AccountBookDto;
+import com.umc.DongnaeFriend.domain.account.book.dto.TransactionDto;
 import com.umc.DongnaeFriend.domain.type.PayCategory;
 import com.umc.DongnaeFriend.domain.type.TransactionCategory;
 import javax.persistence.*;
@@ -52,4 +54,15 @@ public class Transaction extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Integer day;
+
+    public void updateTransaction(TransactionDto.TransactionRequest request, AccountBook accountBook){
+        this.accountBook = accountBook;
+        this.categoryMemo = request.getCategoryMemo();
+        this.year = request.getYear();
+        this.month =request.getMonth();
+        this.day = request.getDay();
+        this.price = request.getPrice();
+        this.payCategory = request.getPayCategory();
+
+    }
 }

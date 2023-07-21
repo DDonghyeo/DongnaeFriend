@@ -30,16 +30,16 @@ public class MemoDto {
 
     @Getter
     public static class MemoListResponse{
-        private List<MemoDto.MemoResponse> memos;
+        private List<MemoResponse> memos;
 
-        public MemoListResponse(List<MemoDto.MemoResponse> memos){
+        public MemoListResponse(List<MemoResponse> memos){
             this.memos = memos;
         }
 
         public static MemoListResponse of(List<Memo> memoList){
-            List<MemoDto.MemoResponse> memoResponses = memoList
+            List<MemoResponse> memoResponses = memoList
                     .stream()
-                    .map(MemoDto.MemoResponse::from)
+                    .map(MemoResponse::from)
                     .collect(Collectors.toList());
 
             return new MemoListResponse(memoResponses);
@@ -57,7 +57,6 @@ public class MemoDto {
             return Memo.builder()
                     .accountBook(accountBook)
                     .memo(memo)
-                    .done(done)
                     .build();
         }
     }

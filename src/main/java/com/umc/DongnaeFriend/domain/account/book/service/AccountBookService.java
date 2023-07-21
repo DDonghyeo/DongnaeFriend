@@ -1,5 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.book.service;
 
+import com.querydsl.core.Tuple;
 import com.umc.DongnaeFriend.domain.account.book.dto.AccountBookDto;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountBookRepository;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -18,7 +20,6 @@ public class AccountBookService {
     // User 권한 확인 //
 
     private final AccountBookRepository accountBookRepository;
-    private final TransactionRepository transactionRepository;
 
 
     // 가계부 예산 설정 (한달)
@@ -36,5 +37,18 @@ public class AccountBookService {
 
 
     // 가계부 조회 -> 이번달 남은 예산 & 지출, 저축(수입), 카테고리별 지출 -> 가계부 예산 총합 조회 로직 필요
+    public AccountBookDto.ExpenseDto getAccountBook(Integer year, Integer month){
+        return accountBookRepository.getAccountBook(year, month);
+    }
+
+    public AccountBookDto.AccountBookResponse getAccountBookResponse(Integer year, Integer month){
+        AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
+        return AccountBookDto.AccountBookResponse.builder()
+                .income(accountBook.getIncome())
+                .expenditure(accountBook.getExpenditure())
+                .expenseDto(getAccountBook(year, month))
+                .build();
+    }
+
 
 }
