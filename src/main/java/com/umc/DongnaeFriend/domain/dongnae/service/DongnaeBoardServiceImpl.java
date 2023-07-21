@@ -203,11 +203,6 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     }
 
 
-
-
-
-
-
     //ListResponse 변환
     private List<DongnaeBoardDto.ListResponse> getListResponses(List<DongnaeBoard> dongnaeBoardList) {
         return dongnaeBoardList.stream()
