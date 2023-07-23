@@ -5,6 +5,7 @@ import com.umc.DongnaeFriend.domain.account.sharing.service.AccountBookSharingSe
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class accountBookSharingController {
     @Autowired
     AccountBookSharingService accountBookSharingService;
 
-    /**
+    /*
      * [가계부 공유] 게시글 검색
      * @param keyword
      * @param pageable
@@ -40,7 +41,17 @@ public class accountBookSharingController {
         return ResponseEntity.ok(res);
     }
 
+    /*
+     * [가계부 공유] 게시글 등록
 
+     *
+     * @param RequestDto
+     */
+
+    public ResponseEntity<?> createPost(@RequestBody SharingDto.Request req) {
+        accountBookSharingService.createPost(req);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 

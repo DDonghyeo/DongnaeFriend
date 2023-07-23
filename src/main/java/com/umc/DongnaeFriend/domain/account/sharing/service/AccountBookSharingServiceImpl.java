@@ -61,6 +61,24 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
         return getListResponses(sharingBoards);
     }
 
+    /*
+     * [가계부 공유] 게시글 등록
+     */
+    @Override
+    public void createPost(SharingDto.Request req) {
+        sharingBoardRepository.save(SharingBoard.builder()
+                .category(SharingCategory.valueOf(req.getCategory()))
+                .title(req.getTitle())
+                .content(req.getContent())
+                .build()
+        );
+        //TODO : Img 파일 업로드
+    }
+
+
+
+
+
 
     //ListResponse 변환
     private List<SharingDto.ListResponse> getListResponses(List<SharingBoard> sharingBoardList) {

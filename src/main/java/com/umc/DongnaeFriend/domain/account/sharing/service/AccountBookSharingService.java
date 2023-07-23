@@ -8,4 +8,6 @@ import java.util.List;
 public interface AccountBookSharingService {
 
     List<SharingDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable);
+
+    void createPost(SharingDto.Request req);
 }

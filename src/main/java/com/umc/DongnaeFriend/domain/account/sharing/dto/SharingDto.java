@@ -5,7 +5,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class SharingDto {
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Request {
+        private int category;
+
+        private String title;
+
+        private String content;
+
+        private List<String> images;
+    }
+
+
+
 
     @Getter
     @Builder
