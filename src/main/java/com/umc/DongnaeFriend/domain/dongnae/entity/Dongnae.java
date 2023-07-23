@@ -21,7 +21,7 @@ public class Dongnae extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String townName;
+    private String townName; //동 이름
 
     @Column(nullable = false)
     private String city;  //시
