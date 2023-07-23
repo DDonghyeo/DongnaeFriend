@@ -20,4 +20,10 @@ public interface AccountBookSharingService {
      * [가계부 공유] 게시글 수정
      */
     void updateBoard(long board_id, SharingDto.Request req);
+
+
+    /*
+     * [가계부 공유] 게시글 삭제
+     */
+    void deleteBoard(long board_id);
 }

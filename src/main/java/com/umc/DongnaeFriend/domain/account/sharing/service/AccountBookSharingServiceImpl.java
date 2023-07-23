@@ -126,6 +126,14 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
         //TODO: Img Upload
     }
 
+    /*
+     * [가계부 공유] 게시글 수정
+     */
+    @Override
+    public void deleteBoard(long board_id) {
+        sharingBoardRepository.deleteById(board_id);
+    }
+
 
 
 

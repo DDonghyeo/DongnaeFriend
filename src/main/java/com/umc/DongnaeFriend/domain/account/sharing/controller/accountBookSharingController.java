@@ -76,4 +76,15 @@ public class accountBookSharingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /*
+     * [가계부 공유] 게시글 삭제
+     *
+     * @PathVariable accountBookId
+     */
+    @DeleteMapping("/{accountBookId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable("accountBookId") int board_id) {
+        accountBookSharingService.deleteBoard(board_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
