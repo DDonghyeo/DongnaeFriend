@@ -48,11 +48,19 @@ public class accountBookSharingController {
      * @param RequestDto
      */
 
+    @PostMapping("")
     public ResponseEntity<?> createPost(@RequestBody SharingDto.Request req) {
         accountBookSharingService.createPost(req);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
+    /*
+     * [가계부 공유] 게시글 상세조회
+     *
+     * @PathVariable accountBookId
+     */
+    @GetMapping("/{accountBookId}")
+    public ResponseEntity<?> getPost(@PathVariable("accountBookId") int board_id) {
+        return ResponseEntity.ok(accountBookSharingService.getBoard(board_id));
+    }
 }

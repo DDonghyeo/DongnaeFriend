@@ -21,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
@@ -32,7 +34,7 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
 
     //임시 유저
     Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
-    User user = User.builder().id(1L).age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
+    User user = User.builder().profileImage("profileImage").id(1L).age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
 
     @Autowired
     private SharingBoardRepository sharingBoardRepository;
@@ -66,15 +68,48 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      */
     @Override
     public void createPost(SharingDto.Request req) {
-        sharingBoardRepository.save(SharingBoard.builder()
-                .category(SharingCategory.valueOf(req.getCategory()))
-                .title(req.getTitle())
-                .content(req.getContent())
-                .build()
-        );
+        sharingBoardRepository.save(req.toEntity(user));
         //TODO : Img 파일 업로드
     }
 
+
+    /*
+     * [가계부 공유] 게시글 상세 조회
+     */
+    @Override
+    public SharingDto.Response getBoard(long board_id) {
+        //TODO : User 식별자 필요.
+        Optional<SharingBoard> board = sharingBoardRepository.findById(board_id);
+        if (board.isEmpty()) {
+            throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
+        }
+
+        //Get Images
+        List<SharingImg> images = sharingImgRepository.findAllBySharingBoard_Id(board_id);
+
+        //Writer인지 검사
+        boolean isWriter = Objects.equals(board.get().getUser().getId(), user.getId());
+
+        //LikeOrNot 검사
+        boolean likeOrNot = !sharingSympathyRepository.findByUser_Id(user.getId()).isEmpty();
+
+        //TODO: ScrapRepository 필요
+        //scrapOrNot 검사
+        boolean scrapOrNot = false;
+
+        return SharingDto.Response.builder()
+                .profileImage(user.getProfileImage())
+                .nickname(user.getNickname())
+                .category(board.get().getCategory().getValue())
+                .title(board.get().getTitle())
+                .content(board.get().getContent())
+                .images(images.stream().map(SharingImg::getImageUrl).collect(Collectors.toList()))
+                .createdAt(getTime(board.get().getCreatedAt()))
+                .isWriter(isWriter)
+                .likeOrNot(likeOrNot)
+                .scrapOrNot(scrapOrNot)
+                .view(board.get().getView()).build();
+    }
 
 
 

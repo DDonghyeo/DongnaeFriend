@@ -10,4 +10,9 @@ public interface AccountBookSharingService {
     List<SharingDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable);
 
     void createPost(SharingDto.Request req);
+
+    /*
+     * [가계부 공유] 게시글 상세 조회
+     */
+    SharingDto.Response getBoard(long board_id);
 }

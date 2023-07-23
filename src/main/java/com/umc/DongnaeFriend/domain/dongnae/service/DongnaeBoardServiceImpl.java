@@ -130,7 +130,6 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     @Transactional(propagation = Propagation.REQUIRED)
     public DongnaeBoardDto.Response getBoard(long board_id) {
         //TODO : User 식별자 필요.
-        int user_id = 1;
         Optional<DongnaeBoard> board = dongnaeBoardRepository.findById(board_id);
         if (board.isEmpty()) {
             throw new RuntimeException();
@@ -140,10 +139,10 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         List<DongnaeImg> images = dongnaeImgRepository.findAllByDongnaeBoard_Id(board_id);
 
         //Writer인지 검사
-        boolean isWriter = board.get().getUser().getId() == user_id;
+        boolean isWriter = Objects.equals(board.get().getUser().getId(), user.getId());
 
         //LikeOrNot 검사
-        boolean likeOrNot = !dongnaeSympathyRepository.findByUser_Id(user_id).isEmpty();
+        boolean likeOrNot = !dongnaeSympathyRepository.findByUser_Id(user.getId()).isEmpty();
 
         //TODO: ScrapRepository 필요
         //scrapOrNot 검사
@@ -163,7 +162,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
                 .townCertification(user.getTownCertCnt())
                 .isWriter(isWriter)
                 .likeOrNot(likeOrNot)
-                .ScrapOrNot(scrapOrNot)
+                .scrapOrNot(scrapOrNot)
                 .view(board.get().getView()).build();
     }
 

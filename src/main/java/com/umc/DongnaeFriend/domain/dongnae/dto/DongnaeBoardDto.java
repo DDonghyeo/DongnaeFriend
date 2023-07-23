@@ -104,7 +104,7 @@ public class DongnaeBoardDto {
 
         private boolean likeOrNot;
 
-        private boolean ScrapOrNot;
+        private boolean scrapOrNot;
 
         private int view;
 
