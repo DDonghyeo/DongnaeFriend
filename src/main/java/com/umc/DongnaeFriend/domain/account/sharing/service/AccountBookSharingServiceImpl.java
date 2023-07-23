@@ -111,6 +111,20 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
                 .view(board.get().getView()).build();
     }
 
+    /*
+     * [가계부 공유] 게시글 수정
+     */
+    @Override
+    public void updateBoard(long board_id, SharingDto.Request req) {
+        SharingBoard board = sharingBoardRepository.findById(board_id).orElseThrow(
+                () -> new CustomException(ErrorCode.INVALID_VALUE));
+
+        board.updateBoard(req);
+        sharingBoardRepository.save(board);
+
+        sharingImgRepository.deleteAllById(board_id);
+        //TODO: Img Upload
+    }
 
 
 

@@ -55,12 +55,25 @@ public class accountBookSharingController {
     }
 
     /*
-     * [가계부 공유] 게시글 상세조회
+     * [가계부 공유] 게시글 상세 조회
      *
      * @PathVariable accountBookId
      */
     @GetMapping("/{accountBookId}")
-    public ResponseEntity<?> getPost(@PathVariable("accountBookId") int board_id) {
+    public ResponseEntity<?> updatePost(@PathVariable("accountBookId") long board_id) {
         return ResponseEntity.ok(accountBookSharingService.getBoard(board_id));
     }
+
+    /*
+     * [가계부 공유] 게시글 수정
+     *
+     * @PathVariable accountBookId
+     * @RequestBody SharingDto.Request
+     */
+    @PutMapping("/{accountBookId}")
+    public ResponseEntity<?> updateBoard(@PathVariable("accountBookId") int board_id, @RequestBody SharingDto.Request req) {
+        accountBookSharingService.updateBoard(board_id, req);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

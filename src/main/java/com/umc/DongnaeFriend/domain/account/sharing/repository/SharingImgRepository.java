@@ -16,4 +16,6 @@ public interface SharingImgRepository extends JpaRepository<SharingImg, Long> {
     Optional<SharingImg> findFirst(long sharing_board_id);
 
     List<SharingImg> findAllBySharingBoard_Id(long id);
+
+    void deleteAllById(long id);
 }

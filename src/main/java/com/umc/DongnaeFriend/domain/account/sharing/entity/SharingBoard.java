@@ -8,6 +8,8 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.umc.DongnaeFriend.domain.BaseTimeEntity;
+import com.umc.DongnaeFriend.domain.account.sharing.dto.SharingDto;
+import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.type.SharingCategory;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import javax.persistence.*;
@@ -43,4 +45,10 @@ public class SharingBoard extends BaseTimeEntity {
     @Column(name = "view")
     @ColumnDefault("0")
     private Integer view;
+
+    public void updateBoard(SharingDto.Request req) {
+        this.category = SharingCategory.valueOf(req.getCategory());
+        this.title = req.getTitle();
+        this.content = req.getContent();
+    }
 }
