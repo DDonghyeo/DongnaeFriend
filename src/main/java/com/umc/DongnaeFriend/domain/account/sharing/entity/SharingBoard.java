@@ -12,6 +12,7 @@ import com.umc.DongnaeFriend.domain.type.SharingCategory;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import javax.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Builder
@@ -38,4 +39,8 @@ public class SharingBoard extends BaseTimeEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT", nullable = false)
     private String content;
+
+    @Column(name = "view")
+    @ColumnDefault("0")
+    private Integer view;
 }

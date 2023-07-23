@@ -15,6 +15,8 @@ public enum ErrorCode {
 
     /* 50* 스크랩 */
 
+    /* 200 NO_CONTENT : 자료를 찾을 수 없음 */
+    NO_CONTENT_FOUND(NO_CONTENT, 204, "요청된 자료를 찾을 수 없습니다."),
 
     /* 400 BAD_REQUEST : 잘못된 요청 */
     INVALID_REFRESH_TOKEN(BAD_REQUEST, 400, "리프레시 토큰이 유효하지 않습니다"),
@@ -31,6 +33,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(NOT_FOUND,404, "해당 유저 정보를 찾을 수 없습니다"),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, 404,"로그아웃 된 사용자입니다"),
     NOT_FOLLOW(NOT_FOUND,404, "팔로우 중이지 않습니다"),
+
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT,409, "데이터가 이미 존재합니다"),

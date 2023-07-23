@@ -22,13 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityNotFoundException;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
 
 @Slf4j
 @Service
@@ -119,9 +119,6 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     @Override
     public void createBoard(DongnaeBoardDto.Request req) {
         //TODO : User Mapping UserRepository 필요.
-        Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
-        User user = User.builder().age(Age.AGE10).profileImage("profileImg").email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
-
         dongnaeBoardRepository.save(req.toEntity(user, dongnae));
     }
 
@@ -153,6 +150,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         boolean scrapOrNot = false;
 
         return DongnaeBoardDto.Response.builder()
+
                 .profileImage(user.getProfileImage())
                 .nickname(user.getNickname())
                 .category(board.get().getCategory().getValue())
@@ -207,6 +205,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     private List<DongnaeBoardDto.ListResponse> getListResponses(List<DongnaeBoard> dongnaeBoardList) {
         return dongnaeBoardList.stream()
                 .map(origin -> DongnaeBoardDto.ListResponse.builder()
+                        .id(origin.getId())
                         .town(origin.getPlace())
                         .category(origin.getCategory().getValue())
                         .title(origin.getTitle())
@@ -229,32 +228,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     }
 
 
-    //시간 계산
-    private String getTime(LocalDateTime time) {
-        LocalDateTime now = LocalDateTime.now(); // 현재 시간
-        Duration duration = Duration.between(now, time);
 
-        log.info(now.toString());
-        log.info(time.toString());
-        long days = -duration.toDays();
-        log.info(" days: "+ days);
-        long hours = -duration.toHours() % 24;
-        log.info(" hours: "+ hours);
-        long minutes = -duration.toMinutes() % 60;
-        log.info(" minutes: "+ minutes);
-
-        if (days >= 1){
-            if (days == 1) {
-                return "어제";
-            }
-            return days + "일 전";
-        }
-
-        else if (hours >= 1) {
-            return hours + "시간 전";
-        } else return minutes + "분 전";
-
-    }
 
 }
 

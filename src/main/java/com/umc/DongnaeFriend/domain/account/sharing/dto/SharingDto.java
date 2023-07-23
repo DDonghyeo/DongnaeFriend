@@ -1,4 +1,4 @@
-package com.umc.DongnaeFriend.domain.account.book.dto;
+package com.umc.DongnaeFriend.domain.account.sharing.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ public class SharingDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ListResponse {
-        private String id;
+        private Long id;
 
         private int category;
 
@@ -29,6 +29,9 @@ public class SharingDto {
         private int commentCount;
 
         private int likes;
+
     }
+
+
 
 }
