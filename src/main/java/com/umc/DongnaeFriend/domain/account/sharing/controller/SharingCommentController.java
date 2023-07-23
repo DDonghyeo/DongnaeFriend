@@ -19,9 +19,16 @@ public class SharingCommentController {
     }
 
     // [가계부 공유] 댓글 수정
-    @PutMapping("/{comment_id}")
-    public String putComment(@PathVariable("comment_id") Long comment_id,  @RequestBody ReqSharingCommentDto reqSharingCommentDto) {
-        sharingCommentService.modifyComment(comment_id, reqSharingCommentDto);
+    @PutMapping("/{commentId}")
+    public String putComment(@PathVariable("commentId") Long commentId,  @RequestBody ReqSharingCommentDto reqSharingCommentDto) {
+        sharingCommentService.modifyComment(commentId, reqSharingCommentDto);
+        return "";
+    }
+
+    // [가게부 공유] 댓글 삭제
+    @DeleteMapping("/{commentId}")
+    public String deleteComment(@PathVariable("commentId") Long commentId) {
+        sharingCommentService.deleteComment(commentId);
         return "";
     }
 }

@@ -56,9 +56,10 @@ public class SharingCommentService {
         return "댓글 등록 성공";
     }
 
-    public String modifyComment(Long comment_id, ReqSharingCommentDto reqSharingCommentDto) {
+    // [가계부 공유] 댓글 수정
+    public String modifyComment(Long commentId, ReqSharingCommentDto reqSharingCommentDto) {
         // 댓글 찾기
-        Optional<SharingComment> sharingCommentOptional = sharingCommentRepository.findById(comment_id);
+        Optional<SharingComment> sharingCommentOptional = sharingCommentRepository.findById(commentId);
         SharingComment sharingComment = sharingCommentOptional.get();
 
         sharingComment.modifyComment(reqSharingCommentDto);
@@ -66,5 +67,16 @@ public class SharingCommentService {
         sharingCommentRepository.save(sharingComment);
 
         return "댓글 수정 성공";
+    }
+
+    // [가게부 공유] 댓글 삭제
+    public String deleteComment(Long commentId) {
+        // 댓글 찾기
+        Optional<SharingComment> sharingCommentOptional = sharingCommentRepository.findById(commentId);
+        SharingComment sharingComment = sharingCommentOptional.get();
+
+        sharingCommentRepository.delete(sharingComment);
+
+        return "댓글 삭제 성공";
     }
 }
