@@ -5,6 +5,7 @@ import com.umc.DongnaeFriend.domain.account.book.repository.SharingBoardReposito
 import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.Gender;
+import com.umc.DongnaeFriend.domain.type.SharingCategory;
 import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,9 @@ public class accountBookSharingServiceImpl implements accountBookSharingService 
 
     /*
      * [가계부 공유] 게시글 검
-     * Pageable : page, size, sortBy
-     * @param sort
      */
     public List<SharingDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable) {
-        sharingBoardRepository
+        sharingBoardRepository.findByKeywordAAndCategory(keyword, SharingCategory.valueOf(category).name(), pageable);
     }
 
 }
