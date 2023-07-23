@@ -3,7 +3,6 @@ package com.umc.DongnaeFriend.domain.account.book.dto;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.type.TransactionCategory;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
