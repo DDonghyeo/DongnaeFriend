@@ -12,10 +12,16 @@ public class SharingCommentController {
     private final SharingCommentService sharingCommentService;
 
     // [가계부 공유] 댓글 등록
-    @PostMapping("/{sharing_board_id}")
-    public String postComment(@PathVariable("sharing_board_id") Long sharing_board_id,  @RequestBody ReqSharingCommentDto reqSharingCommentDto) {
-        sharingCommentService.newComment(sharing_board_id, reqSharingCommentDto);
+    @PostMapping("/{accountBookId}")
+    public String postComment(@PathVariable("accountBookId") Long accountBookId,  @RequestBody ReqSharingCommentDto reqSharingCommentDto) {
+        sharingCommentService.newComment(accountBookId, reqSharingCommentDto);
         return "";
     }
 
+    // [가계부 공유] 댓글 수정
+    @PutMapping("/{comment_id}")
+    public String putComment(@PathVariable("comment_id") Long comment_id,  @RequestBody ReqSharingCommentDto reqSharingCommentDto) {
+        sharingCommentService.modifyComment(comment_id, reqSharingCommentDto);
+        return "";
+    }
 }
