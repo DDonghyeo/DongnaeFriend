@@ -58,4 +58,45 @@ public class User extends BaseTimeEntity {
     private String refreshToken;
 
     private Long kakaoId;
+
+    /**
+     * 유저 정보 업데이트 로직
+     */
+    public void updateProfile(User updateUser){
+        updateNickname(updateUser.nickname);
+        updateGender(updateUser.gender);
+        updateAge(updateUser.age);
+        updateProfileImage(updateUser.profileImage);
+        updateInfoCert(updateUser.infoCert);
+    }
+
+    public void updateNickname(String nickname){
+        if(nickname!=null){
+            this.nickname=nickname;
+        }
+    }
+
+    public void updateProfileImage(String profileImage){
+        if(profileImage!=null){
+            this.profileImage=profileImage;
+        }
+    }
+
+    public void updateAge(Age age){
+        if(age!=null){
+            this.age =age;
+        }
+    }
+
+    public void updateGender(Gender gender){
+        if(gender!=null){
+            this.gender=gender;
+        }
+    }
+
+    public void updateInfoCert(YesNo infoCert){
+        if(infoCert!=null){
+            this.infoCert=infoCert;
+        }
+    }
 }

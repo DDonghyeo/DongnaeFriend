@@ -1,30 +1,20 @@
 package com.umc.DongnaeFriend.domain.account.book.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import com.querydsl.core.Tuple;
 import com.umc.DongnaeFriend.domain.account.book.dto.AccountBookDto;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountBookRepository;
-import com.umc.DongnaeFriend.domain.account.book.repository.transaction.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.List;
+
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AccountBookService {
 
-    // User 권한 확인 //
+    // User 권한 확인 필요 //
 
     private final AccountBookRepository accountBookRepository;
 
@@ -32,7 +22,9 @@ public class AccountBookService {
     // 가계부 예산 설정 (한달)
     @Transactional
     public void createBudget(Integer year, Integer month, Long budget){
-
+        this.accountBookRepository.findByYearAndMonth(year, month)
+                .ifPresent(ab->{throw new IllegalStateException("이미 예산이 설정되어있습니다.");
+                });
         accountBookRepository.save(AccountBookDto.BudgetRequest.toEntity(year, month, budget));
     }
 
@@ -43,8 +35,7 @@ public class AccountBookService {
     }
 
 
-    // 가계부 조회 -> 이번달 남은 예산 & 지출, 저축(수입), 카테고리별 지출 -> 가계부 예산 총합 조회 로직 필요
-
+    // 가계부 조회 -> 이번달 남은 예산 & 지출, 저축(수입), 카테고리별 지출
     public AccountBookDto.AccountBookResponse getAccountBookResponse(Integer year, Integer month) {
         AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
         return AccountBookDto.AccountBookResponse.builder()
@@ -54,6 +45,4 @@ public class AccountBookService {
                 .expense(accountBookRepository.getAccountBook(year,month))
                 .build();
     }
-
-
 }

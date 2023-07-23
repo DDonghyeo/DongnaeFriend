@@ -1,6 +1,5 @@
 package com.umc.DongnaeFriend.domain.account.book.service;
 
-import com.querydsl.core.Tuple;
 import com.umc.DongnaeFriend.domain.account.book.dto.TransactionDto;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.entity.Transaction;
@@ -8,7 +7,6 @@ import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountB
 import com.umc.DongnaeFriend.domain.account.book.repository.transaction.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

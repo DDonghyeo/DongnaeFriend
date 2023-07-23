@@ -9,5 +9,4 @@ import lombok.Data;
 public class Expense {
     public TransactionCategory category;
     public long price;
-
 }

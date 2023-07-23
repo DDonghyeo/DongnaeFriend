@@ -52,31 +52,6 @@ public class AccountBookDto {
         private Long expenditure;
         private Long income;
         private Long budget;
-
         private List<Expense> expense;
     }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Slf4j
-    public static class ExpenseDto{
-        private Long FOODS;
-        private Long TRANSPORTATION;
-        private Long CULTURE;
-        private Long DAILY_NECESSITY;
-        private Long SECOND_HAND;
-        private Long FASHION;
-        private Long HEALTH;
-        private Long EDUCATION;
-        private Long FIXED_EXPENSES;
-        private Long OTT;
-        private Long ETC;
-
-
-
-    }
-
-
 }
