@@ -7,6 +7,7 @@ import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountB
 import com.umc.DongnaeFriend.domain.account.book.repository.transaction.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -48,9 +49,9 @@ public class TransactionService {
     }
 
     // 지출 또는 수입 내역 조회
-    public TransactionDto.TransactionListResponse getTransactions(Integer year, Integer month){
+    public TransactionDto.TransactionListResponse getTransactions(Integer year, Integer month, Integer day, Pageable pageable){
 
-        List<Transaction> transactionList  = transactionRepository.findByYearAndMonth(year, month);
+        List<Transaction> transactionList  = transactionRepository.findByYearAndMonth(year, month, day, pageable);
         return TransactionDto.TransactionListResponse.of(transactionList);
     }
 

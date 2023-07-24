@@ -49,9 +49,9 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>,
             + "where ab.id = :accountBookId")
     void updateAccountBookIncomeEdit(@Param("accountBookId")Long accountBookId, @Param("incomeGap")Long incomeGap);
 
-    @Query(value = "SELECT transaction.transaction_category, SUM(transaction.price) as sum_price " +
+    /*@Query(value = "SELECT transaction.transaction_category, SUM(transaction.price) as sum_price " +
             "from transaction " +
             "where transaction.month = :month and transaction.year = :year " +
             "group by transaction.transaction_category", nativeQuery = true)
-    Object[] getAccountBookGroupByCategory (@Param("month") long month, @Param("year") long year);
+    Object[] getAccountBookGroupByCategory (@Param("month") long month, @Param("year") long year);*/
 }

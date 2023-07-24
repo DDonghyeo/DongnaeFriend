@@ -5,6 +5,7 @@ import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountBookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
@@ -41,7 +42,7 @@ public class AccountBookService {
         return AccountBookDto.AccountBookResponse.builder()
                 .income(accountBook.getIncome())
                 .expenditure(accountBook.getExpenditure())
-                .budget(accountBook.getBudget())
+                .budget(accountBook.getBudget()+accountBook.getIncome()-accountBook.getExpenditure())
                 .expense(accountBookRepository.getAccountBook(year,month))
                 .build();
     }
