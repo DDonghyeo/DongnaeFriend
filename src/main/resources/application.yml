@@ -3,12 +3,6 @@ logging:
     com.example.carrotmarket: debug
     org.hibernate.SQL: debug
 
-spring:
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
 ---
 # Settings for local
 spring:
@@ -19,3 +13,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate.ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+
+
+jwt:
+  secret-key: 6B64DCA4EA2F53EDIKU9AAB215FE7

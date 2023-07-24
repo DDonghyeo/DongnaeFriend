@@ -28,7 +28,7 @@ public class  User extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "dongnae_id", nullable = false)
+    @JoinColumn(name = "dongnae_id")
     private Dongnae dongnae;
 
     @Column(nullable = false)
