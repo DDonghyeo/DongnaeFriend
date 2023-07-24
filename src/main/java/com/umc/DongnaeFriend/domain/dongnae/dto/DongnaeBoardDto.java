@@ -10,8 +10,6 @@ import lombok.*;
 
 import java.util.List;
 
-import static com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory.*;
-
 
 public class DongnaeBoardDto {
 
@@ -55,6 +53,7 @@ public class DongnaeBoardDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ListResponse {
+        private Long id;
         private String town;
 
         private int category;
@@ -105,7 +104,7 @@ public class DongnaeBoardDto {
 
         private boolean likeOrNot;
 
-        private boolean ScrapOrNot;
+        private boolean scrapOrNot;
 
         private int view;
 

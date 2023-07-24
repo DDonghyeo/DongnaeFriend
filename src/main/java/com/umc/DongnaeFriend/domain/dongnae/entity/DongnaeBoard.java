@@ -6,7 +6,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.umc.DongnaeFriend.domain.BaseTimeEntity;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
@@ -14,8 +13,6 @@ import com.umc.DongnaeFriend.domain.user.entity.User;
 import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.util.List;
 
 @Getter
 @Builder
