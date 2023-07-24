@@ -37,6 +37,7 @@ public class UserService {
         String email = userInfo.get("email").toString();
 
         Optional<String> gender = Optional.ofNullable(userInfo.get("gender").toString());
+
         Optional<String> age = Optional.ofNullable(userInfo.get("age").toString());
 
 

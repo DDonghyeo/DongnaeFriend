@@ -19,21 +19,9 @@ public class JwtUtil {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
-        } catch (SignatureException ex) {
+        } catch (SignatureException | IllegalArgumentException | MalformedJwtException | ExpiredJwtException |
+                 UnsupportedJwtException | NullPointerException | IllegalStateException ex) {
             throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
-        } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
-        } catch (NullPointerException ex){
-            log.error("JWT is empty");
-        } catch (IllegalStateException e) {
-            log.info("JWT is illegal");
         }
-        return false;
     }
 }
