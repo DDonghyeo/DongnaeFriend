@@ -5,6 +5,7 @@ plugins {
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
+
 group = 'com.umc'
 version = '0.0.1-SNAPSHOT'
 
@@ -40,11 +41,14 @@ dependencies {
 
 	//gson
 	implementation 'com.google.code.gson:gson:2.8.8'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
 jar {
 	enabled = false
 }
@@ -67,3 +71,4 @@ configurations {
 	}
 	querydsl.extendsFrom compileClasspath
 }
+

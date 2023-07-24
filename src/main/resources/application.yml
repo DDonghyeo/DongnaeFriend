@@ -8,6 +8,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
 ---
 # Settings for local
 spring:
@@ -19,3 +20,4 @@ spring:
   jpa:
     hibernate.ddl-auto: update
     database: mysql
+

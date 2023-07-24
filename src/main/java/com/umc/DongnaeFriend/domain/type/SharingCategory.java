@@ -1,5 +1,7 @@
 package com.umc.DongnaeFriend.domain.type;
 
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,4 +15,13 @@ public enum SharingCategory {
 
     private final Integer value;
     private final String category;
+
+    public static SharingCategory valueOf(Integer value) {
+        for (SharingCategory category : SharingCategory.values()) {
+            if (category.getValue().equals(value)) {
+                return category;
+            } else throw new CustomException(ErrorCode.INVALID_VALUE);
+        }
+        throw new IllegalArgumentException("Invalid Category: " + value);
+    }
 }

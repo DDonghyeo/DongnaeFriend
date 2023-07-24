@@ -15,4 +15,13 @@ public enum DongnaeBoardCategory {
 
     private final Integer value;
     private final String category;
+
+    public static DongnaeBoardCategory valueOf(Integer value) {
+        for (DongnaeBoardCategory category : DongnaeBoardCategory.values()) {
+            if (category.getValue().equals(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Invalid Category: " + value);
+    }
 }
