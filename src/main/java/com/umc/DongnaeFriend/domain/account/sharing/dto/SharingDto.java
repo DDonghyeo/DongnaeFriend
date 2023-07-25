@@ -57,9 +57,6 @@ public class SharingDto {
         int view;
     }
 
-
-
-
     @Getter
     @Builder
     @AllArgsConstructor

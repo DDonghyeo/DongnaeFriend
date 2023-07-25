@@ -68,6 +68,7 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      */
     @Override
     public void createPost(SharingDto.Request req) {
+
         sharingBoardRepository.save(req.toEntity(user));
         //TODO : Img 파일 업로드
     }
@@ -161,7 +162,4 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
                         .build())
                 .collect(Collectors.toList());
     }
-
-
-
 }

@@ -35,15 +35,15 @@ public class MyPageDto {
     @AllArgsConstructor
     public static class MyPageRequestDto{
         private String nickname;
-        private String profileImage;
         private Age age;
+        //private String profileImage;
         private Gender gender;
         private YesNo infoCert;
 
         public User toEntity(){
             return User.builder()
                     .nickname(nickname)
-                    .profileImage(profileImage)
+                    //.profileImage(profileImage)
                     .age(age)
                     .gender(gender)
                     .infoCert(infoCert)

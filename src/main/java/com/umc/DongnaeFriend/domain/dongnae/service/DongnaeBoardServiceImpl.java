@@ -5,15 +5,13 @@ import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
 import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeImg;
-import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeBoardRepository;
-import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeCommentRepository;
-import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeImgRepository;
-import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeSympathyRepository;
+import com.umc.DongnaeFriend.domain.dongnae.respository.*;
 import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
 import com.umc.DongnaeFriend.domain.type.Gender;
 import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +47,13 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     @Autowired
     private DongnaeSympathyRepository dongnaeSympathyRepository;
+
+    // 임시 유저, 동네 등록 //
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private DongnaeRepository dongnaeRepository;
 
     /*
      * [동네정보] 홈 화면
@@ -119,6 +124,12 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     @Override
     public void createBoard(DongnaeBoardDto.Request req) {
         //TODO : User Mapping UserRepository 필요.
+
+        Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
+        User user = User.builder().id(1L).age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
+
+        dongnaeRepository.save(dongnae);
+        userRepository.save(user);
         dongnaeBoardRepository.save(req.toEntity(user, dongnae));
     }
 
@@ -225,10 +236,6 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
                         .build())
                 .collect(Collectors.toList());
     }
-
-
-
-
 }
 
 
