@@ -64,7 +64,6 @@ public class DongnaeProfileService {
                 .content(getWrittenContent(user.getId(), category))
                 .build();
     }
-🏝️
     /**
      * 동네정보 - 작성한 글 , 작성한 댓글의 게시글 조회
      * TODO : 공감, 스크랩 게시물 조회 필요
@@ -81,7 +80,6 @@ public class DongnaeProfileService {
         }
         return getProfileListResponse(dongnaeBoardList);
     }
-🏝️
     //ListResponse 변환
     private List<DongnaeBoardDto.DongnaeProfileListResponse> getProfileListResponse(List<DongnaeBoard> dongnaeBoardList){
         return dongnaeBoardList.stream()
