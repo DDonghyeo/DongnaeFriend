@@ -3,6 +3,8 @@ package com.umc.DongnaeFriend.domain.dongnae.respository;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 
@@ -31,4 +33,8 @@ public interface DongnaeBoardRepository extends JpaRepository<DongnaeBoard, Long
     @Query(value = "select * from dongnae_board where category = ?1 ORDER BY created_at DESC LIMIT 1 ;", nativeQuery = true)
     List<DongnaeBoard> findTwoByCategoryOrderByCreatedAt(String category);
 
+
+    public int countAllByUserId(Long userId);
+
+    List<DongnaeBoard> findAllByUserId(Long userId);
 }
