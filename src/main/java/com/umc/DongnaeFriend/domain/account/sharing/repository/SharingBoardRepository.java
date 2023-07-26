@@ -1,8 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.sharing.repository;
 
-import com.umc.DongnaeFriend.domain.account.sharing.dto.SharingDto;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
-import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

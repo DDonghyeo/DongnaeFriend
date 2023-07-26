@@ -1,7 +1,6 @@
 package com.umc.DongnaeFriend.domain.profile.dto;
 
 import com.umc.DongnaeFriend.domain.account.sharing.dto.SharingDto;
-import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

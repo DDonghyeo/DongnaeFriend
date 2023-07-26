@@ -1,7 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.sharing.repository;
 
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingSympathy;
-import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeSympathy;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

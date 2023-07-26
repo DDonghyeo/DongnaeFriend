@@ -1,9 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.sharing.dto;
 
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
-import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
-import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
-import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
 import com.umc.DongnaeFriend.domain.type.SharingCategory;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.AllArgsConstructor;
