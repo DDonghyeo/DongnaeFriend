@@ -82,6 +82,21 @@ public class SharingDto {
 
     }
 
-
+    /**
+     * 프로필 조회 시 필요한 정보
+     */
+    @Getter @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AccountBookProfileListResponse {
+        private Long id;
+        //private String town;
+        private int category;
+        private String title;
+        private String imageUrl;
+        private String createdAt;
+        private int commentCount;
+        private int likeCount;
+    }
 
 }

@@ -134,7 +134,5 @@ public class DongnaeBoardDto {
         private int commentCount;
         private int likeCount;
     }
-
-
 }
 

@@ -13,7 +13,6 @@ public class DongnaeProfileDto {
     @Getter
     @Builder
     @AllArgsConstructor
-
     @NoArgsConstructor
     public static class DongnaeProfileResponse{
 
