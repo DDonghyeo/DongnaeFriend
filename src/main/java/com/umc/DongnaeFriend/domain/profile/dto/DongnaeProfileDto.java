@@ -18,8 +18,6 @@ public class DongnaeProfileDto {
 
         private Long userId;
         private boolean isMine;
-        private String nickname;
-        private String profileImage;
         private int postTotalCount;
         private int commentTotalCount;
         private int likedTotalCount;
