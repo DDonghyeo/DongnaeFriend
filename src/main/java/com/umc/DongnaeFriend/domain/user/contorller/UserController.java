@@ -6,8 +6,9 @@ import com.umc.DongnaeFriend.domain.user.service.UserService;
 import com.umc.DongnaeFriend.global.exception.CustomException;
 import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import com.umc.DongnaeFriend.global.util.JwtTokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -25,6 +27,8 @@ public class UserController {
 
     JwtTokenProvider jwtTokenProvider;
 
+
+
     /**
      * 유저 로그인 / 회원가입
      * 인증 절차
@@ -32,6 +36,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> userLogin(@RequestBody UserDto.Request request) {
         try {
+            log.info("userLogin 진입");
             //사용자 정보 가져오기
             HashMap<String, Object> userInfo = kakaoService.getUserInfo(request.getAccessToken());
 
@@ -39,8 +44,8 @@ public class UserController {
             userService.userValidation(userInfo);
 
             //토큰 생성
-            String access_token = jwtTokenProvider.createAccessToken((Long) userInfo.get("usreId"));
-
+            String access_token = jwtTokenProvider.createAccessToken((Long) userInfo.get("userId"));
+            log.info("access_token : {}", access_token);
             return ResponseEntity.ok(access_token);
 
         } catch (IOException e) {
@@ -49,8 +54,16 @@ public class UserController {
     }
 
     @PostMapping("/user/reissuance")
-    public ResponseEntity<?> reiussnaceToken(String access_oto) {
-        return null;
+    public ResponseEntity<?> reiussnaceToken(String refreshToken) {
+        try {
+
+            //토큰 재발급
+            String access_token = userService.createAccessTokenFromRefreshToken(refreshToken);
+            return ResponseEntity.ok(access_token);
+        } catch (Exception e) {
+            // RefreshToken만료
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
     }
 
 

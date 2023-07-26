@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Id;
 import java.util.Date;
 
 import static com.umc.DongnaeFriend.config.JwtConfig.SECRET_KEY;
@@ -46,6 +47,18 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // RefreshToken 생성
+    public String createRefreshToken(Long userId) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_LENGTH);
+
+        return Jwts.builder()
+                .signWith(SignatureAlgorithm.ES512, String.valueOf(SECRET_KEY))
+                .claim("userId", userId)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .compact();
+    }
 
 
 
