@@ -13,6 +13,7 @@ import com.umc.DongnaeFriend.domain.type.Gender;
 import com.umc.DongnaeFriend.domain.type.YesNo;
 import javax.persistence.*;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 @Getter
 @Builder
@@ -28,7 +29,8 @@ public class  User extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "dongnae_id", nullable = false)
+    @JoinColumn(name = "dongnae_id")
+    @Nullable
     private Dongnae dongnae;
 
     @Column(nullable = false)
