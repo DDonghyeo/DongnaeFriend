@@ -4,11 +4,15 @@ package com.umc.DongnaeFriend.domain.dongnae.dto;
 
 import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
+import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
+import com.umc.DongnaeFriend.domain.type.Gender;
+import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DongnaeBoardDto {
@@ -25,7 +29,12 @@ public class DongnaeBoardDto {
 
         private String placeLocation;
 
+
+
         public DongnaeBoard toEntity(User user, Dongnae dongnae) {
+            dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
+            user = User.builder().id(1L).age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
+
             return DongnaeBoard.builder()
                     .user(user)
                     .category(DongnaeBoardCategory.valueOf(category)
@@ -107,7 +116,23 @@ public class DongnaeBoardDto {
         private boolean scrapOrNot;
 
         private int view;
+    }
 
+    /**
+     * 프로필 조회 시 필요한 정보
+     */
+    @Getter @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DongnaeProfileListResponse {
+        private Long id;
+        private String town;
+        private int category;
+        private String title;
+        private String imageUrl;
+        private String createdAt;
+        private int commentCount;
+        private int likeCount;
     }
 
 

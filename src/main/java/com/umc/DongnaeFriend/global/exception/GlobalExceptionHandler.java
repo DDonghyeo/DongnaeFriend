@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
             .body(new ErrorResponse(validException));
     }
 
+
     //일반 예외처리
 //    @ExceptionHandler({Exception.class})
 //    protected ResponseEntity<?> handleServerException(Exception ex) {
@@ -37,4 +38,5 @@ public class GlobalExceptionHandler {
 //            .status(SERVER_ERROR.getHttpStatus())
 //            .body(new ErrorResponse(exception));
 //    }
+
 }
