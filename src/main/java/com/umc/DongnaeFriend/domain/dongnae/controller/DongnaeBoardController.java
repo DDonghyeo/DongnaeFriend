@@ -3,6 +3,7 @@ package com.umc.DongnaeFriend.domain.dongnae.controller;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeBoardRepository;
 import com.umc.DongnaeFriend.domain.dongnae.service.DongnaeBoardService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,7 @@ import javax.naming.AuthenticationException;
  * [ 가계부 공유 ]
  * */
 
+@Slf4j
 @RestController
 @RequestMapping("/town-information")
 public class DongnaeBoardController {
@@ -53,6 +55,9 @@ public class DongnaeBoardController {
     public ResponseEntity<?> getBoards(@RequestParam("keyword") String keyword,
                                        @RequestParam("category") int category,
                                        @RequestParam("sortBy") int sort) {
+
+
+        log.info("User Id: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return ResponseEntity.ok(dongnaeBoardService.searchByKeyword(keyword, category, sort));
     }
 

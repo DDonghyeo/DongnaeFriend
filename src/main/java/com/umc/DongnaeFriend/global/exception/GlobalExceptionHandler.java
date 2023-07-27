@@ -30,11 +30,11 @@ public class GlobalExceptionHandler {
     }
 
     //일반 예외처리
-    @ExceptionHandler({Exception.class})
-    protected ResponseEntity<?> handleServerException(Exception ex) {
-        CustomException exception = new CustomException(SERVER_ERROR);
-        return ResponseEntity
-            .status(SERVER_ERROR.getHttpStatus())
-            .body(new ErrorResponse(exception));
-    }
+//    @ExceptionHandler({Exception.class})
+//    protected ResponseEntity<?> handleServerException(Exception ex) {
+//        CustomException exception = new CustomException(SERVER_ERROR);
+//        return ResponseEntity
+//            .status(SERVER_ERROR.getHttpStatus())
+//            .body(new ErrorResponse(exception));
+//    }
 }

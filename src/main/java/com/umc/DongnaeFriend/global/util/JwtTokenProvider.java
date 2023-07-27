@@ -1,25 +1,27 @@
 package com.umc.DongnaeFriend.global.util;
 
+import com.umc.DongnaeFriend.config.JwtConfig;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import io.jsonwebtoken.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Id;
 import java.util.Date;
 
-import static com.umc.DongnaeFriend.config.JwtConfig.SECRET_KEY;
+
 
 @Log4j2
 @Component
 public class JwtTokenProvider {
 
+    private final JwtConfig jwtConfig;
+
     @Autowired
     private UserRepository userRepository;
 
-    public JwtTokenProvider(UserRepository userRepository) {
+    public JwtTokenProvider(JwtConfig jwtConfig, UserRepository userRepository) {
+        this.jwtConfig = jwtConfig;
         this.userRepository = userRepository;
     }
 
@@ -29,6 +31,8 @@ public class JwtTokenProvider {
 
     //accessToken 생성
     public String createAccessToken(Long userId) {
+
+        log.info("SECRET KEY FROM PROVIDER: "+ jwtConfig.SECRET_KEY);
         Date now = new Date(); //현재 시간
         Date validity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH);
 
@@ -40,7 +44,7 @@ public class JwtTokenProvider {
 //        claims.put("email", user.getEmail()); // 사용자 이메일
 
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, String.valueOf(SECRET_KEY))
+                .signWith(SignatureAlgorithm.HS512, String.valueOf(jwtConfig.SECRET_KEY))
                 .claim("userId", userId)
                 .setIssuedAt(now) //token 발행 시간
                 .setExpiration(validity)
@@ -53,7 +57,7 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_LENGTH);
 
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.ES512, String.valueOf(SECRET_KEY))
+                .signWith(SignatureAlgorithm.HS512, String.valueOf(jwtConfig.SECRET_KEY))
                 .claim("userId", userId)
                 .setIssuedAt(now)
                 .setExpiration(validity)

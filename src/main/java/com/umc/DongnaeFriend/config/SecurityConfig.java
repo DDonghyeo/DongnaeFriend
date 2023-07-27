@@ -1,6 +1,7 @@
 package com.umc.DongnaeFriend.config;
 
-import com.umc.DongnaeFriend.security.JwtTokenFilter;
+
+import com.umc.DongnaeFriend.global.security.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,4 +31,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 나머지 코드는 이전 예제와 동일
 }
-

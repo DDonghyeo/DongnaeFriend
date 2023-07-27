@@ -1,6 +1,7 @@
 package com.umc.DongnaeFriend.domain.user.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 public class UserDto {
@@ -16,6 +17,7 @@ public class UserDto {
     }
 
     @Getter
+    @Builder
     @AllArgsConstructor
     public static class Response {
 

@@ -7,6 +7,6 @@ import org.springframework.context.annotation.Configuration;
 public class JwtConfig {
 
     @Value("${jwt.secret-key}")
-    public static String SECRET_KEY;
+    public String SECRET_KEY;
 
 }

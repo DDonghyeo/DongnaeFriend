@@ -2,6 +2,7 @@ package com.umc.DongnaeFriend.domain.user.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class KakaoServiceimpl implements KakaoService {
 
@@ -52,23 +54,26 @@ public class KakaoServiceimpl implements KakaoService {
         Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
         });
 
+
         System.out.println(jsonMap.get("properties"));
 
+        Long id = (Long) jsonMap.get("id");
         Map<String, Object> properties = (Map<String, Object>) jsonMap.get("properties");
         Map<String, Object> kakao_account = (Map<String, Object>) jsonMap.get("kakao_account");
+        Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
 
-        // System.out.println(properties.get("nickname"));
-        // System.out.println(kakao_account.get("email"));
+        log.info("profile : " + profile.toString());
+        log.info("kakao_acount : " + kakao_account.toString());
 
         String nickname = properties.get("nickname").toString();
+        String profileImage = properties.get("profile_image").toString();
         String email = kakao_account.get("email").toString();
-        String gender = kakao_account.get("gender").toString();
-        String age = kakao_account.get("age").toString();
 
+        userInfo.put("id", id);
         userInfo.put("nickname", nickname);
+        userInfo.put("profileImage", profileImage);
         userInfo.put("email", email);
-        userInfo.put("gender", gender);
-        userInfo.put("age", age);
+
 
         return userInfo;
     }

@@ -3,6 +3,7 @@ package com.umc.DongnaeFriend.domain.user.service;
 import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.Gender;
 import com.umc.DongnaeFriend.domain.type.YesNo;
+import com.umc.DongnaeFriend.domain.user.dto.UserDto;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import com.umc.DongnaeFriend.global.exception.CustomException;
@@ -25,53 +26,80 @@ public class UserService {
 
     KakaoService kakaoService;
 
+    @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    public void userValidation(HashMap<String, Object> userInfo) {
-        Optional<User> user= userRepository.findById((Long) userInfo.get("userId"));
 
+    public UserDto.Response userValidation(HashMap<String, Object> userInfo) {
+        Long kakao_id = (Long) userInfo.get("id");
+        Optional<User> user= userRepository.findByKakaoId(kakao_id);
         if (user.isEmpty()) {
-            userRegister(userInfo);
+            User new_user = userRegister(userInfo);
+            return UserDto.Response.builder()
+                    .accessToken(jwtTokenProvider.createAccessToken(new_user.getId()))
+                    .refreshToken(new_user.getRefreshToken())
+                    .build();
+        } else {
+            return UserDto.Response.builder()
+                    .accessToken(jwtTokenProvider.createAccessToken(user.get().getId()))
+                    .refreshToken(user.get().getRefreshToken())
+                    .build();
         }
+
     }
 
 
-    //유저 회원가입
-    public void userRegister(HashMap<String, Object> userInfo) {
+    //유저 회원가입 -> Refresh Token을 return
+    public User userRegister(HashMap<String, Object> userInfo) {
         //필수
         String nickName = userInfo.get("nickname").toString();
         //필수
         String email = userInfo.get("email").toString();
 
-        Optional<String> gender = Optional.ofNullable(userInfo.get("gender").toString());
-        String strGender = "";
-        log.info("Gender : {}", gender.get());
-        if(gender.get()=="F"){
-            strGender="여성";
-        }else {
-            strGender = "남성";
-        }
-        log.info("strGender : {}", strGender);
+        String profileImage = userInfo.get("profileImage").toString();
 
+        Long kakaoId = (Long) userInfo.get("id");
 
-        Optional<String> age = Optional.ofNullable(userInfo.get("age").toString());
-        String[] ageRange = age.get().split("-");
+//        Optional<String> gender = Optional.ofNullable(userInfo.get("gender").toString());
+//        String strGender = "";
+//        log.info("Gender : {}", gender.get());
+//        if(gender.get()=="F"){
+//            strGender="여성";
+//        }else {
+//            strGender = "남성";
+//        }
+//        log.info("strGender : {}", strGender);
+//
+//
+//        Optional<String> age = Optional.ofNullable(userInfo.get("age").toString());
+//        String[] ageRange = age.get().split("-");
+//
+//
+//        // refreshToken userId를 claim 으로 생성 뒤, User의 필드에 넣고 User를 저장
+        String refresh_Token = jwtTokenProvider.createRefreshToken((Long) userInfo.get("id"));
 
-
-        // refreshToken userId를 claim 으로 생성 뒤, User의 필드에 넣고 User를 저장
-        String refresh_Token = jwtTokenProvider.createRefreshToken((Long) userInfo.get("usreId"));
-
-        userRepository.save(
+        return userRepository.save(
                 User.builder()
                         .nickname(nickName)
+//                        .dongnae(
+//
+//                        )
                         .email(email)
                         //TODO : Gender 결정[O]
-                        .gender(Gender.valueOf(strGender))
+                        .gender(
+//                                Gender.valueOf(strGender)
+                                Gender.MALE
+                        )
                         //TODO : Age 결정[O]
-                        .age(Age.valueOf(ageRange[0]+"대"))
+                        .age(
+//                                Age.valueOf(ageRange[0]+"대")
+                                Age.AGE20
+                        )
                         .townCert(YesNo.NO)
                         .townCertCnt(0)
                         .infoCert(YesNo.NO)
+                        .profileImage(profileImage)
+                        .kakaoId(kakaoId)
                         .refreshToken(refresh_Token)
                         .build()
         );
@@ -91,4 +119,6 @@ public class UserService {
 
         return accessToken;
     }
+
+
 }

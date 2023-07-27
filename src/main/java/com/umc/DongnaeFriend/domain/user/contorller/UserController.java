@@ -8,9 +8,12 @@ import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import com.umc.DongnaeFriend.global.util.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -25,6 +28,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
     JwtTokenProvider jwtTokenProvider;
 
 
@@ -34,19 +38,24 @@ public class UserController {
      * 인증 절차
      */
     @PostMapping("/login")
-    public ResponseEntity<?> userLogin(@RequestBody UserDto.Request request) {
+    public ResponseEntity<?> userLogin(@RequestParam("accessToken") String accessToken, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+        log.info("LoginController 진입");
+
+//        if (!type.equals("kakao")) {
+//            throw new CustomException(ErrorCode.SERVER_ERROR);
+//        }
+
+
         try {
             log.info("userLogin 진입");
             //사용자 정보 가져오기
-            HashMap<String, Object> userInfo = kakaoService.getUserInfo(request.getAccessToken());
+            HashMap<String, Object> userInfo = kakaoService.getUserInfo(accessToken);
 
             //사용자 확인  기존 회원 -> 넘어가고, 없는 회원 -> 회원가입
-            userService.userValidation(userInfo);
 
-            //토큰 생성
-            String access_token = jwtTokenProvider.createAccessToken((Long) userInfo.get("userId"));
-            log.info("access_token : {}", access_token);
-            return ResponseEntity.ok(access_token);
+            UserDto.Response response =  userService.userValidation(userInfo);
+
+            return ResponseEntity.ok(response);
 
         } catch (IOException e) {
             throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
