@@ -13,6 +13,7 @@ import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,32 +47,30 @@ public class AccountBookProfileService {
     /**
      * 가계부 공유 프로필 조회
      */
-    public AccountBookProfileDto.AccountBookProfileResponse getAbSharing(Long userId, int category){
+    public AccountBookProfileDto.AccountBookProfileResponse getAbSharing(Long userId, int category, Pageable pageable){
         User user = checkUser(userId);
 
         // 유저 아이디가 있으면 타사용자, 유저아이디가 없으면 본인
 
         return AccountBookProfileDto.AccountBookProfileResponse.builder()
                 .userId(userId==null ? user.getId() /*본인인증 필요*/ : userId)
-                .nickname(user.getNickname())
                 .isMine(userId.equals(user.getId() /*본인인증 필오*/))
-                .profileImage(user.getProfileImage())
                 .postTotalCount(sharingBoardRepository.countAllByUserId(user.getId()))
                 .commentTotalCount(sharingCommentRepository.countAllByUserId(user.getId()))
                 .likedTotalCount(sharingSympathyRepository.countAllByUserId(user.getId()))
                 .profile(UserProfileDto.UserProfileResponseDto.of(user))
-                .content(getWrittenContent(user.getId(), category))
+                .content(getWrittenContent(user.getId(), category, pageable))
                 .build();
     }
     /**
      * 가계부 공유 - 작성한 글 , 작성한 댓글의 게시글 조회
      */
-    public List<SharingDto.AccountBookProfileListResponse> getWrittenContent(Long userId, int category) {
+    public List<SharingDto.AccountBookProfileListResponse> getWrittenContent(Long userId, int category, Pageable pageable) {
         User user = checkUser(userId);
 
         List<SharingBoard> sharingBoardList;
         if(category==0){
-            sharingBoardList= sharingBoardRepository.findAllByUserId(user.getId());
+            sharingBoardList= sharingBoardRepository.findAllByUserId(user.getId(), pageable);
         }else{
             sharingBoardList = sharingCommentRepository.getCommentByUserIdAndBoard(user.getId())
                     .stream().map(SharingComment::getSharingBoard).distinct().collect(Collectors.toList());

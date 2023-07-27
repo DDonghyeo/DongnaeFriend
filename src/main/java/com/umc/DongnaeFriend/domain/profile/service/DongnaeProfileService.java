@@ -13,6 +13,7 @@ import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class DongnaeProfileService {
     /**
      * 동네 정보 프로필 조회
      */
-    public DongnaeProfileDto.DongnaeProfileResponse getDongnaeProfile(Long userId, int category){
+    public DongnaeProfileDto.DongnaeProfileResponse getDongnaeProfile(Long userId, int category, Pageable pageable){
         User user = checkUser(userId);
 
         // 유저 아이디가 있으면 타사용자, 유저아이디가 없으면 본인
@@ -59,14 +60,14 @@ public class DongnaeProfileService {
                 .commentTotalCount(commentRepository.countAllByUserId(user.getId()))
                 .likedTotalCount(dongnaeSympathyRepository.countAllByUserId(user.getId()))
                 .profile(UserProfileDto.UserProfileResponseDto.of(user))
-                .content(getWrittenContent(user.getId(), category))
+                .content(getWrittenContent(user.getId(), category, pageable))
                 .build();
     }
     /**
      * 동네정보 - 작성한 글 , 작성한 댓글의 게시글 조회
      * TODO : 공감, 스크랩 게시물 조회 필요
      */
-    public List<DongnaeBoardDto.DongnaeProfileListResponse> getWrittenContent(Long userId, int category) {
+    public List<DongnaeBoardDto.DongnaeProfileListResponse> getWrittenContent(Long userId, int category, Pageable pageable) {
         User user = checkUser(userId);
 
         List<DongnaeBoard> dongnaeBoardList;

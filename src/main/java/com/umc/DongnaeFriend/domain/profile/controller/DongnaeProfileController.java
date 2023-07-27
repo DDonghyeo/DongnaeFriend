@@ -6,6 +6,7 @@ import com.umc.DongnaeFriend.domain.profile.dto.MyPageDto;
 import com.umc.DongnaeFriend.domain.profile.service.DongnaeProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,8 @@ public class DongnaeProfileController {
     // 동네정보 프로필 조회
     @GetMapping({"/api/my/town", "/api/{userId}/town"})
     public DongnaeProfileDto.DongnaeProfileResponse getProfile(@PathVariable(value = "userId", required = false) Long userId,
-                                                               @RequestParam int category){
-        return dongnaeProfileService.getDongnaeProfile(userId, category);
+                                                               @RequestParam int category, Pageable pageable){
+        return dongnaeProfileService.getDongnaeProfile(userId, category, pageable);
     }
 
 }
