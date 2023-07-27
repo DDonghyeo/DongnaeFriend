@@ -5,6 +5,8 @@ import com.umc.DongnaeFriend.domain.profile.service.AccountBookProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +21,8 @@ public class AccountBookProfileController {
 
     // 동네정보 프로필 조회
     @GetMapping({"/api/my/account-books", "/api/{userId}/account-books"})
-    public AccountBookProfileDto.AccountBookProfileResponse getProfile(@PathVariable(value = "userId", required = false) Long userId,
-                                                                       @RequestParam int category, Pageable pageable){
-        return accountBookProfileService.getAbSharing(userId, category, pageable);
+    public ResponseEntity<AccountBookProfileDto.AccountBookProfileResponse> getProfile(@PathVariable(value = "userId", required = false) Long userId,
+                                                                                      @RequestParam int category, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(accountBookProfileService.getAbSharing(userId, category, pageable));
     }
 }
