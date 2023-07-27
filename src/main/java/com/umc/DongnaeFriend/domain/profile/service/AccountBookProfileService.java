@@ -88,7 +88,7 @@ public class AccountBookProfileService {
     private List<SharingDto.AccountBookProfileListResponse> getProfileListResponse(List<SharingBoard> sharingBoardList){
         return sharingBoardList.stream()
                 .map(sharingBoard -> SharingDto.AccountBookProfileListResponse.builder()
-                        .id(sharingBoard.getId())
+                        .boardId(sharingBoard.getId())
                         //.town(sharingBoard.getPlaceLocation())
                         .category(sharingBoard.getCategory().getValue())
                         .title(sharingBoard.getTitle())

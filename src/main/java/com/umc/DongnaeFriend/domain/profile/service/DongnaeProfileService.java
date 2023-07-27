@@ -54,9 +54,7 @@ public class DongnaeProfileService {
 
         return DongnaeProfileDto.DongnaeProfileResponse.builder()
                 .userId(userId==null ? user.getId() /*본인인증 필요*/ : userId)
-                .nickname(user.getNickname())
                 .isMine(userId.equals(user.getId() /*본인인증 필오*/))
-                .profileImage(user.getProfileImage())
                 .postTotalCount(dongnaeBoardRepository.countAllByUserId(user.getId()))
                 .commentTotalCount(commentRepository.countAllByUserId(user.getId()))
                 .likedTotalCount(dongnaeSympathyRepository.countAllByUserId(user.getId()))
@@ -84,7 +82,7 @@ public class DongnaeProfileService {
     private List<DongnaeBoardDto.DongnaeProfileListResponse> getProfileListResponse(List<DongnaeBoard> dongnaeBoardList){
         return dongnaeBoardList.stream()
                 .map(dongnaeBoard -> DongnaeBoardDto.DongnaeProfileListResponse.builder()
-                        .id(dongnaeBoard.getId())
+                        .boardId(dongnaeBoard.getId())
                         .town(dongnaeBoard.getPlaceLocation())
                         .category(dongnaeBoard.getCategory().getValue())
                         .title(dongnaeBoard.getTitle())

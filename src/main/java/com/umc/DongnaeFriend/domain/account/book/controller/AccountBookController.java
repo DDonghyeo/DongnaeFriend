@@ -28,6 +28,13 @@ public class AccountBookController {
         accountBookService.createBudget(year, month, budget);
     }
 
+    @PutMapping("/budget")
+    public void updateBudget(@RequestParam(value = "year", required = false) Integer year,
+                             @RequestParam(value = "month", required = false) Integer month,
+                             @RequestParam(value = "amount", required = false) Long budget){
+        accountBookService.updateBudget(year, month, budget);
+    }
+
     @GetMapping("/category")
     public List<AccountBookDto.AccountBookCategoryResponse> getTransactionAll(@RequestParam(value = "year", required = false) Integer year,
                                                                               @RequestParam(value = "month", required = false) Integer month){

@@ -40,4 +40,8 @@ public class AccountBook extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Integer month;
+
+    public void updateBudget(Long budget){
+        this.budget = budget;
+    }
 }
