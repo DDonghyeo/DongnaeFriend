@@ -43,6 +43,7 @@ public class JwtTokenProvider {
 //        claims.put("userId", user.getId()); // 사용자 아이디
 //        claims.put("email", user.getEmail()); // 사용자 이메일
 
+
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, String.valueOf(jwtConfig.SECRET_KEY))
                 .claim("userId", userId)
