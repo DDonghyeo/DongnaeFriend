@@ -1,8 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.sharing.repository;
 
-import com.umc.DongnaeFriend.domain.account.sharing.dto.SharingDto;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
-import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,7 +34,7 @@ public interface SharingBoardRepository extends JpaRepository<SharingBoard,Long>
             "LEFT JOIN sharing_sympathy ON  sharing_board.sharing_board_id = sharing_sympathy.sharing_board_id\n" +
             "WHERE (sharing_board.title LIKE %:keyword% OR sharing_board.content LIKE %:keyword%)\n" +
             "AND sharing_board.category = :category GROUP BY sharing_board.sharing_board_id ", nativeQuery = true)
-    List<SharingBoard> findByKeywordOrderByLikes(@Param("keyword") String keyword, @Param("category") String category, Pageable pageable);
+    List<SharingBoard> findByKeyword(@Param("keyword") String keyword, @Param("category") String category, Pageable pageable);
 
 
 
