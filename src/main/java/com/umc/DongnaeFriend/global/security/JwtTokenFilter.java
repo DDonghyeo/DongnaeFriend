@@ -31,10 +31,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         log.info("JwtTokenFilter 진입");
 
-        if (request.getServletPath().contains("/user/login")) {
-            log.info("/user/login 진입");
-        }
-
         // Request Header에서 JWT 토큰 가져오기
         String authorizationHeader = request.getHeader("Authorization");
         log.info("authorizationHeader : {}",authorizationHeader);

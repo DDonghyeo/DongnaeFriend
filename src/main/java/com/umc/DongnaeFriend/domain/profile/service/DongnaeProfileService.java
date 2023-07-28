@@ -14,6 +14,7 @@ import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,6 @@ public class DongnaeProfileService {
     private final DongnaeBoardRepository dongnaeBoardRepository;
     private final DongnaeImgRepository dongnaeImgRepository;
     private final UserRepository userRepository;
-
 
     // 본인 or 타사용자 확인
     private User checkUser(Long userId){
@@ -93,5 +93,10 @@ public class DongnaeProfileService {
                         .likeCount(dongnaeSympathyRepository.countAllByDongnaeBoardId(dongnaeBoard.getId()))
                         .build())
                 .collect(Collectors.toList());
+    }
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow();
     }
 }

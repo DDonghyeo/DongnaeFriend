@@ -11,6 +11,8 @@ import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import com.umc.DongnaeFriend.global.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +26,7 @@ public class MyPageService {
     /**
      * 사용자 정보 확인 필요 !
      */
+    private final UserRepository userRepository;
 
     //임시 유저 & 동네
     Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
@@ -31,15 +34,14 @@ public class MyPageService {
 
 
     public MyPageDto.MyPageResponseDto getMyPage(){
-        //User user = userRepository.findById(userId).orElseThrow();
+        User user = findUser();
         return MyPageDto.MyPageResponseDto.of(user, getUserLocation());
     }
 
     public void updateMyPage(MyPageDto.MyPageRequestDto myPageRequest, MultipartFile image){
-        //User user = userRepository.findById(userId).orElseThrow();
+       //User user = User.builder().age(Age.AGE10).profileImage("profileImg").email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
 
-        User user = User.builder().age(Age.AGE10).profileImage("profileImg").email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
-
+        User user = findUser();
         String fileName = "ProfileImage_" + user.getId().toString()+".png";
 
         log.info("fileName : " + fileName);
@@ -66,5 +68,11 @@ public class MyPageService {
     }
     public UserLocationDto getUserLocation(){
         return new UserLocationDto("한남동");
+    }
+
+    public User findUser(){
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long)userId)
+                .orElseThrow();
     }
 }
