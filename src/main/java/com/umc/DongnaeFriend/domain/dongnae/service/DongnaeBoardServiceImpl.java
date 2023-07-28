@@ -14,6 +14,7 @@ import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,19 +56,6 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     @Autowired
     private DongnaeRepository dongnaeRepository;
 
-    /*
-     * [동네정보] 홈 화면
-     * 카테고리 별 게시글 2개씩 반환
-     * @param sort
-     */
-    @Override
-    public List<DongnaeBoardDto.ListResponse> home(int category) {
-        String category_String = DongnaeBoardCategory.valueOf(category).name();
-        //TODO : 동네 인증 여부 확인하기 - (User 필요)
-        String category_ = "RESTAURANT";
-        List<DongnaeBoard> dongnaeBoardList = dongnaeBoardRepository.findTwoByCategoryOrderByCreatedAt(category_);
-        return getListResponses(dongnaeBoardList);
-    }
 
     /*
      * [동네정보] 사용자 위치 정보
@@ -87,16 +75,10 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     @Override
 //    @Transactional(propagation = Propagation.REQUIRED)
-    public List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, int sort) {
+    public List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable) {
         String categoryName = DongnaeBoardCategory.valueOf(category).name();
 
-
-        List<DongnaeBoard> dongnaeBoardList;
-        if (sort == 0) {
-            dongnaeBoardList = dongnaeBoardRepository.findByKeywordOrderByCreatedAt(keyword, categoryName);
-        } else {
-            dongnaeBoardList = dongnaeBoardRepository.findByKeywordOrderByLikes(keyword, categoryName);
-        }
+        List<DongnaeBoard> dongnaeBoardList = dongnaeBoardRepository.findByKeyword(keyword, categoryName, pageable);
 
         return getListResponses(dongnaeBoardList);
     }
@@ -132,6 +114,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         userRepository.save(user);
         dongnaeBoardRepository.save(req.toEntity(user, dongnae));
     }
+
 
 
     /*

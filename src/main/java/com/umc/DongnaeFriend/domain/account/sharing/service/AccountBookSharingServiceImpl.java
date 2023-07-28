@@ -55,7 +55,7 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
     @Override
     public List<SharingDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable) {
         //TODO : 전체 카테고리 처리
-        List<SharingBoard> sharingBoards = sharingBoardRepository.findByKeywordOrderByLikes(keyword, SharingCategory.valueOf(category).name(), pageable);
+        List<SharingBoard> sharingBoards = sharingBoardRepository.findByKeyword(keyword, SharingCategory.valueOf(category).name(), pageable);
         if (sharingBoards.isEmpty()) {
             throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
         }
