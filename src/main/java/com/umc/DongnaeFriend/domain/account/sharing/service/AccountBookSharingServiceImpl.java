@@ -59,7 +59,6 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
         if (sharingBoards.isEmpty()) {
             throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
         }
-        log.info("board found" + sharingBoards.get(0).getId());
         return getListResponses(sharingBoards);
     }
 
@@ -118,7 +117,7 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
     @Override
     public void updateBoard(long board_id, SharingDto.Request req) {
         SharingBoard board = sharingBoardRepository.findById(board_id).orElseThrow(
-                () -> new CustomException(ErrorCode.INVALID_VALUE));
+                () -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
         board.updateBoard(req);
         sharingBoardRepository.save(board);
@@ -132,6 +131,15 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      */
     @Override
     public void deleteBoard(long board_id) {
+        Optional<SharingBoard> sharingBoard = sharingBoardRepository.findById(board_id);
+        if (sharingBoard.isEmpty()) {
+            throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
+        }
+
+        if (!Objects.equals(sharingBoard.get().getUser().getId(), user.getId())) {
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+        }
+
         sharingBoardRepository.deleteById(board_id);
     }
 
