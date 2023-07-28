@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,9 +36,7 @@ public class accountBookSharingController {
     @GetMapping("/search")
 
     public ResponseEntity<?> searchAll(@RequestParam("keyword") String keyword, @RequestParam("category") int category, Pageable pageable) {
-        log.info("searching : " + keyword + category);
         List<SharingDto.ListResponse> res = accountBookSharingService.searchByKeyword(keyword, category, pageable);
-        log.info("res ");
         return ResponseEntity.ok(res);
     }
 
