@@ -17,4 +17,14 @@ public enum Gender {
     public String getGender() {
         return this.gender;
     }
+
+    public static Gender fromString(String strGender) {
+
+        for(Gender gender : Gender.values()){
+            if(gender.getGender().equals(strGender)){
+                return gender;
+            }
+        }
+        throw new IllegalArgumentException("No matching type for [" + strGender + "]");
+    }
 }

@@ -22,4 +22,14 @@ public enum Age {
     public String getAge() {
         return this.age;
     }
+
+    public static Age fromString(String strAge) {
+
+        for(Age age : Age.values()){
+            if(age.getAge().equals(strAge)){
+                return age;
+            }
+        }
+        throw new IllegalArgumentException("No matching type for [" + strAge + "]");
+    }
 }

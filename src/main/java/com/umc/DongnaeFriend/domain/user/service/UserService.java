@@ -60,22 +60,13 @@ public class UserService {
 
         Long kakaoId = (Long) userInfo.get("id");
 
-//        Optional<String> gender = Optional.ofNullable(userInfo.get("gender").toString());
-//        String strGender = "";
-//        log.info("Gender : {}", gender.get());
-//        if(gender.get()=="F"){
-//            strGender="여성";
-//        }else {
-//            strGender = "남성";
-//        }
-//        log.info("strGender : {}", strGender);
-//
-//
-//        Optional<String> age = Optional.ofNullable(userInfo.get("age").toString());
-//        String[] ageRange = age.get().split("-");
-//
-//
-//        // refreshToken userId를 claim 으로 생성 뒤, User의 필드에 넣고 User를 저장
+        String strGender =  userInfo.getOrDefault("gender", null).toString();
+        String strAge = userInfo.getOrDefault("age", null).toString();
+
+        Gender gender = Gender.fromString(strGender);
+        Age age = Age.fromString(strAge);
+
+
         String refresh_Token = jwtTokenProvider.createRefreshToken((Long) userInfo.get("id"));
 
         return userRepository.save(
@@ -85,16 +76,8 @@ public class UserService {
 //
 //                        )
                         .email(email)
-                        //TODO : Gender 결정[O]
-                        .gender(
-//                                Gender.valueOf(strGender)
-                                Gender.MALE
-                        )
-                        //TODO : Age 결정[O]
-                        .age(
-//                                Age.valueOf(ageRange[0]+"대")
-                                Age.AGE20
-                        )
+                        .gender(gender)
+                        .age(age)
                         .townCert(YesNo.NO)
                         .townCertCnt(0)
                         .infoCert(YesNo.NO)
