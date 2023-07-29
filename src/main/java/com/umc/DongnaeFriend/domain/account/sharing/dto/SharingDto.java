@@ -1,9 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.sharing.dto;
 
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
-import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
-import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
-import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
 import com.umc.DongnaeFriend.domain.type.SharingCategory;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -89,6 +86,21 @@ public class SharingDto {
 
     }
 
-
+    /**
+     * 프로필 조회 시 필요한 정보
+     */
+    @Getter @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AccountBookProfileListResponse {
+        private Long boardId;
+        private int category;
+        private String title;
+        private String imageUrl;
+        //private String town;
+        private String createdAt;
+        private int commentCount;
+        private int likeCount;
+    }
 
 }

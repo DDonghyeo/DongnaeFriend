@@ -14,7 +14,6 @@ import lombok.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class DongnaeBoardDto {
@@ -134,16 +133,14 @@ public class DongnaeBoardDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class DongnaeProfileListResponse {
-        private Long id;
-        private String town;
+        private Long boardId;
         private int category;
         private String title;
         private String imageUrl;
+        private String town;
         private String createdAt;
         private int commentCount;
         private int likeCount;
     }
-
-
 }
 
