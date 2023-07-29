@@ -68,8 +68,8 @@ public class KakaoServiceimpl implements KakaoService {
         String nickname = properties.get("nickname").toString();
         String profileImage = properties.get("profile_image").toString();
         String email = kakao_account.get("email").toString();
-        String gender = kakao_account.get("gender").toString();
-        String age = kakao_account.get("age_range").toString();
+        String gender = kakao_account.getOrDefault("gender","").toString();
+        String age = kakao_account.getOrDefault("age_range","").toString();
 
         userInfo.put("id", id);
         userInfo.put("nickname", nickname);
