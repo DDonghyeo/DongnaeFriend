@@ -11,6 +11,8 @@ import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -20,12 +22,19 @@ public class DongnaeBoardDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Request {
+        @NotNull(message = "카테고리는 필수입니다.")
         private int category;
+
+        @NotNull(message = "제목은 필수입니다.")
         private String title;
+        @NotNull(message = "내응은 필수입니다.")
         private String content;
         private List<String> images;
+
+        @NotNull(message = "장소는 필수입니다.")
         private String place;
 
+        @NotNull(message = "자세한 장소는 필수입니다.")
         private String placeLocation;
 
 

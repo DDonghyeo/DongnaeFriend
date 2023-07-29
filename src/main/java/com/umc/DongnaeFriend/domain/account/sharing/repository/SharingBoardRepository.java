@@ -34,7 +34,7 @@ public interface SharingBoardRepository extends JpaRepository<SharingBoard,Long>
             "LEFT JOIN sharing_sympathy ON  sharing_board.sharing_board_id = sharing_sympathy.sharing_board_id\n" +
             "WHERE (sharing_board.title LIKE %:keyword% OR sharing_board.content LIKE %:keyword%)\n" +
             "AND sharing_board.category = :category GROUP BY sharing_board.sharing_board_id ", nativeQuery = true)
-    List<SharingBoard> findByKeywordOrderByLikes(@Param("keyword") String keyword, @Param("category") String category, Pageable pageable);
+    List<SharingBoard> findByKeyword(@Param("keyword") String keyword, @Param("category") String category, Pageable pageable);
 
     List<SharingBoard> findAllByUserId(Long userId, Pageable pageable);
     int countAllByUserId(Long userId);

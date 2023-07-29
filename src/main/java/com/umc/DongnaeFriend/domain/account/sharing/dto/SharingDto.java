@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class SharingDto {
@@ -17,11 +19,16 @@ public class SharingDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Request {
+
+        @NotNull(message = "카테고리는 필수입니다.")
         private int category;
 
+        @NotNull(message = "제목은 필수입니다.")
         private String title;
 
+        @NotNull(message = "내용은 필수입니다.")
         private String content;
+
 
         private List<String> images;
 
