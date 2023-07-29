@@ -86,23 +86,4 @@ public class TransactionDto {
             return new TransactionListResponse(transactionResponses);
         }
     }
-
-
-    @Getter
-    @NoArgsConstructor
-    public static class TransactionByCategory{
-        private TransactionCategory transactionCategory;
-        private Long price;
-        private Long expenditure;
-        private Long income;
-        private Long budget;
-
-        public TransactionByCategory(TransactionCategory transactionCategory, Long price, Long expenditure, Long income, Long budget) {
-            this.transactionCategory = transactionCategory;
-            this.price = price;
-            this.expenditure = expenditure;
-            this.income = income;
-            this.budget = budget;
-        }
-    }
 }

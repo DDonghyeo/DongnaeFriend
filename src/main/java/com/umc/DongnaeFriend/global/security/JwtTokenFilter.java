@@ -52,7 +52,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken( userId,null, null);
 
                 // SecurityContextHolder에 인증 객체 저장
-
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
                 filterChain.doFilter(request, response);
@@ -69,6 +68,5 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             log.info("Header None");
             filterChain.doFilter(request, response);
         }
-
     }
 }

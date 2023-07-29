@@ -23,9 +23,6 @@ public class AccountBookService {
     // 가계부 예산 설정 (한달)
     @Transactional
     public void createBudget(Integer year, Integer month, Long budget){
-        this.accountBookRepository.findByYearAndMonth(year, month)
-                .ifPresent(ab->{throw new IllegalStateException("이미 예산이 설정되어있습니다.");
-                });
         accountBookRepository.save(AccountBookDto.BudgetRequest.toEntity(year, month, budget));
     }
 
@@ -33,6 +30,12 @@ public class AccountBookService {
     public AccountBookDto.BudgetResponse getBudget(Integer year, Integer month){
         AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
         return AccountBookDto.BudgetResponse.of(accountBook.getId(),accountBook.getBudget());
+    }
+
+    // 가계부 예산 설정 수정
+    public void updateBudget(Integer year, Integer month, Long budget){
+        AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
+        accountBook.updateBudget(budget);
     }
 
 

@@ -5,6 +5,7 @@ import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeBoardRepository;
 import com.umc.DongnaeFriend.domain.dongnae.service.DongnaeBoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -26,15 +27,6 @@ public class DongnaeBoardController {
     @Autowired
     DongnaeBoardService dongnaeBoardService;
 
-    /*
-     * [동네정보] 홈 화면
-     */
-    //TODO : 파라미터 다시 확인해보기
-    @GetMapping("/home")
-    public ResponseEntity<?> home(@RequestParam("category") int category,
-                                       @RequestParam("sortBy") int sort) {
-        return ResponseEntity.ok(dongnaeBoardService.home(category));
-    }
 
     /*
      * [동네정보] 사용자 위치 정보
@@ -54,11 +46,11 @@ public class DongnaeBoardController {
     @GetMapping("/search")
     public ResponseEntity<?> getBoards(@RequestParam("keyword") String keyword,
                                        @RequestParam("category") int category,
-                                       @RequestParam("sortBy") int sort) {
+                                       Pageable pageable) {
 
 
         log.info("User Id: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return ResponseEntity.ok(dongnaeBoardService.searchByKeyword(keyword, category, sort));
+        return ResponseEntity.ok(dongnaeBoardService.searchByKeyword(keyword, category, pageable));
     }
 
     /*

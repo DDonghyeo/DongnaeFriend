@@ -4,7 +4,6 @@ package com.umc.DongnaeFriend.domain.account.book.repository.accountBook;
 import com.umc.DongnaeFriend.domain.account.book.dto.Expense;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 

@@ -13,6 +13,8 @@ import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,9 @@ import java.util.stream.Collectors;
 
 import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
 
+/**
+ * TODO : 공감, 스크랩 게시물 조회 필요
+ */
 @Service
 @RequiredArgsConstructor
 public class DongnaeProfileService {
@@ -30,13 +35,11 @@ public class DongnaeProfileService {
     private final DongnaeImgRepository dongnaeImgRepository;
     private final UserRepository userRepository;
 
-
     // 본인 or 타사용자 확인
     private User checkUser(Long userId){
         User user;
         if(userId==null){ // 유저아이디가 없으면 본인
-            user = userRepository.findById(userId/*본인인증 필요*/)
-                    .orElseThrow();
+            user = findUser();
         }else{
             user = userRepository.findById(userId)
                     .orElseThrow();
@@ -47,28 +50,25 @@ public class DongnaeProfileService {
     /**
      * 동네 정보 프로필 조회
      */
-    public DongnaeProfileDto.DongnaeProfileResponse getDongnaeProfile(Long userId, int category){
+    public DongnaeProfileDto.DongnaeProfileResponse getDongnaeProfile(Long userId, int category, Pageable pageable){
+        // 유저 아이디가 있으면 타사용자, 유저아이디가 없으면 본인
         User user = checkUser(userId);
 
-        // 유저 아이디가 있으면 타사용자, 유저아이디가 없으면 본인
-
         return DongnaeProfileDto.DongnaeProfileResponse.builder()
-                .userId(userId==null ? user.getId() /*본인인증 필요*/ : userId)
-                .nickname(user.getNickname())
-                .isMine(userId.equals(user.getId() /*본인인증 필오*/))
-                .profileImage(user.getProfileImage())
+                .userId(userId==null ? findUser().getId() : userId)
+                .isMine(user.getId().equals(findUser().getId()))
                 .postTotalCount(dongnaeBoardRepository.countAllByUserId(user.getId()))
                 .commentTotalCount(commentRepository.countAllByUserId(user.getId()))
                 .likedTotalCount(dongnaeSympathyRepository.countAllByUserId(user.getId()))
                 .profile(UserProfileDto.UserProfileResponseDto.of(user))
-                .content(getWrittenContent(user.getId(), category))
+                .content(getWrittenContent(user.getId(), category, pageable))
                 .build();
     }
+
     /**
      * 동네정보 - 작성한 글 , 작성한 댓글의 게시글 조회
-     * TODO : 공감, 스크랩 게시물 조회 필요
      */
-    public List<DongnaeBoardDto.DongnaeProfileListResponse> getWrittenContent(Long userId, int category) {
+    public List<DongnaeBoardDto.DongnaeProfileListResponse> getWrittenContent(Long userId, int category, Pageable pageable) {
         User user = checkUser(userId);
 
         List<DongnaeBoard> dongnaeBoardList;
@@ -80,11 +80,12 @@ public class DongnaeProfileService {
         }
         return getProfileListResponse(dongnaeBoardList);
     }
+
     //ListResponse 변환
     private List<DongnaeBoardDto.DongnaeProfileListResponse> getProfileListResponse(List<DongnaeBoard> dongnaeBoardList){
         return dongnaeBoardList.stream()
                 .map(dongnaeBoard -> DongnaeBoardDto.DongnaeProfileListResponse.builder()
-                        .id(dongnaeBoard.getId())
+                        .boardId(dongnaeBoard.getId())
                         .town(dongnaeBoard.getPlaceLocation())
                         .category(dongnaeBoard.getCategory().getValue())
                         .title(dongnaeBoard.getTitle())
@@ -94,5 +95,10 @@ public class DongnaeProfileService {
                         .likeCount(dongnaeSympathyRepository.countAllByDongnaeBoardId(dongnaeBoard.getId()))
                         .build())
                 .collect(Collectors.toList());
+    }
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow();
     }
 }

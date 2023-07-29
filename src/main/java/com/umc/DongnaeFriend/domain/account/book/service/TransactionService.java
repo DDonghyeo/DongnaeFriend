@@ -18,11 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionService {
 
-    /**
-     * 월별 가계부 지출 및 수입 업데이트 시 지출(예산) 총액이 0보다 작아지면 예외 발생하게 만들기
-     * 유저 권한 확인 필요
-     */
-
     private final TransactionRepository transactionRepository;
     private final AccountBookRepository accountBookRepository;
 
