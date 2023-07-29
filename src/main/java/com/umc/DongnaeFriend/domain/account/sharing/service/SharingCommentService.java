@@ -1,6 +1,7 @@
 package com.umc.DongnaeFriend.domain.account.sharing.service;
 
 import com.umc.DongnaeFriend.domain.account.sharing.dto.ReqSharingCommentDto;
+import com.umc.DongnaeFriend.domain.account.sharing.dto.ResSharingCommentList;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingComment;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -79,6 +81,21 @@ public class SharingCommentService {
         sharingCommentRepository.delete(sharingComment);
 
         return "댓글 삭제 성공";
+    }
+
+    // [가계부 공유] 댓글 목록 조회
+    public ResSharingCommentList getCommentList(Long accountBookId) {
+        // 게시판 가져오기
+        SharingBoard sharingBoard = sharingCommentRepository.findBySharingBoardId(accountBookId);
+
+        List<SharingComment> commentList = sharingCommentRepository.findAllByBoard(sharingBoard);
+
+        ResSharingCommentList resSharingCommentList = ResSharingCommentList.builder()
+                .totalCount(commentList.size())
+                .commentList(sharingCommentRepository.findAllByBoard(sharingBoard))
+                .build();
+
+        return resSharingCommentList;
     }
 
 }
