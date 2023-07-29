@@ -12,7 +12,7 @@ spring:
     password: Tnqls9004^^
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create
     properties:
       hibernate:
         format_sql: true

@@ -23,9 +23,6 @@ public class AccountBookService {
     // 가계부 예산 설정 (한달)
     @Transactional
     public void createBudget(Integer year, Integer month, Long budget){
-        /*this.accountBookRepository.findByYearAndMonth(year, month)
-                .ifPresent(ab->{throw new IllegalStateException("이미 예산이 설정되어있습니다.");
-                });*/
         accountBookRepository.save(AccountBookDto.BudgetRequest.toEntity(year, month, budget));
     }
 

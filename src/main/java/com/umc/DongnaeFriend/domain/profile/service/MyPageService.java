@@ -58,7 +58,6 @@ public class MyPageService {
         user.updateProfileImage(fileName);
         log.info("프로필 이미지 업데이트완료");
         user.updateProfile(myPageRequest.toEntity());
-        log.info("프로필 업데이트 완료");
 
         log.info("유저 닉네임 : " + user.getNickname());
         log.info("유저 프로필 : " + user.getProfileImage());
