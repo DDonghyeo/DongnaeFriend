@@ -25,10 +25,11 @@ public class SharingCommentController {
         return "";
     }
 
-    // [가게부 공유] 댓글 삭제
+    // [가계부 공유] 댓글 삭제
     @DeleteMapping("/{commentId}")
     public String deleteComment(@PathVariable("commentId") Long commentId) {
         sharingCommentService.deleteComment(commentId);
         return "";
     }
+
 }

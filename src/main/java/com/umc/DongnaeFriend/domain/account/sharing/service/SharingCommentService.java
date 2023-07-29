@@ -8,6 +8,7 @@ import com.umc.DongnaeFriend.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -69,7 +70,7 @@ public class SharingCommentService {
         return "댓글 수정 성공";
     }
 
-    // [가게부 공유] 댓글 삭제
+    // [가계부 공유] 댓글 삭제
     public String deleteComment(Long commentId) {
         // 댓글 찾기
         Optional<SharingComment> sharingCommentOptional = sharingCommentRepository.findById(commentId);
@@ -79,4 +80,5 @@ public class SharingCommentService {
 
         return "댓글 삭제 성공";
     }
+
 }
