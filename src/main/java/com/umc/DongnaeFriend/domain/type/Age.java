@@ -26,10 +26,10 @@ public enum Age {
     public static Age fromString(String strAge) {
 
         for(Age age : Age.values()){
-            if(age.getAge().equals(strAge)){
+            if((age.getAge().charAt(0))==(strAge.charAt(0))){
                 return age;
             }
         }
-        throw new IllegalArgumentException("No matching type for [" + strAge + "]");
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.umc.DongnaeFriend.domain.user.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.Gender;
 import com.umc.DongnaeFriend.domain.type.YesNo;
@@ -14,6 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -60,8 +65,8 @@ public class UserService {
 
         Long kakaoId = (Long) userInfo.get("id");
 
-        String strGender =  userInfo.getOrDefault("gender", null).toString();
-        String strAge = userInfo.getOrDefault("age", null).toString();
+        String strGender =  userInfo.getOrDefault("gender", "").toString();
+        String strAge = userInfo.getOrDefault("age", "").toString();
 
         Gender gender = Gender.fromString(strGender);
         Age age = Age.fromString(strAge);
@@ -103,5 +108,34 @@ public class UserService {
         return accessToken;
     }
 
+    public String kakaoGetCode() {
 
+
+        try {
+            String reqURL= "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=1ad317e194df665ca44dcb82d11a7093&redirect_uri=http://localhost:8080/callback";
+
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            HashMap<String, Object> jsonMap = objectMapper.readValue(result, HashMap.class);
+
+            log.info(jsonMap.toString());
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
