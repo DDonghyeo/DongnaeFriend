@@ -15,4 +15,6 @@ public interface DongnaeImgRepository extends JpaRepository<DongnaeImg,Long> {
     Optional<DongnaeImg> findFirst(long dongnae_board_id);
 
     List<DongnaeImg> findAllByDongnaeBoard_Id(long id);
+
+    void deleteAllByDongnaeBoard_Id(Long board_id);
 }
