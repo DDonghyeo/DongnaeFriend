@@ -10,7 +10,7 @@ import java.io.IOException;
 public class FileUtil {
 
     public static void fileUpload(MultipartFile file, String fileName) throws IOException{
-        String filePath = "/home/ubuntu/app/src/main/resources/static/img/";
+        String filePath = "/static/img/";
 
         log.info("fileupload 들어옴!!");
         File dest = new File(filePath + fileName);
