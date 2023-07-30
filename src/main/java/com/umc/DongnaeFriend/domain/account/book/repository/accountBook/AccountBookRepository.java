@@ -1,20 +1,15 @@
 package com.umc.DongnaeFriend.domain.account.book.repository.accountBook;
 
-import com.umc.DongnaeFriend.domain.account.book.dto.AccountBookDto;
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
-import com.umc.DongnaeFriend.domain.account.book.service.AccountBookService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>, AccountBookRepositoryCustom {
 
-    //Optional<AccountBook> findByIdAndYearAndMonth(Long accountBookId, Integer year, Integer month);
     Optional<AccountBook> findByYearAndMonth(Integer year, Integer month);
     @Modifying
     @Query(value = "update AccountBook ab "

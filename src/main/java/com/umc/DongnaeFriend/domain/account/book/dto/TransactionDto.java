@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,13 +18,27 @@ public class TransactionDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TransactionRequest{
+
+        @NotNull(message = "년도는 필수입니다")
         private Integer year;
+
+        @NotNull(message = "월은 필수입니다")
         private Integer month;
+
+        @NotNull(message = "일은 필수입니다")
         private Integer day;
+
+        @NotNull(message = "지출 또는 수입을 선택해주세요")
         private Integer type;
+
+        @NotNull(message = "금액은 필수입니다")
         private Long price;
+
+        @NotNull(message = "카테고리는 필수입니다")
         private TransactionCategory transactionCategory;
+
         private PayCategory payCategory;
+
         private String categoryMemo;
 
         public Transaction toEntity(AccountBook accountBook){

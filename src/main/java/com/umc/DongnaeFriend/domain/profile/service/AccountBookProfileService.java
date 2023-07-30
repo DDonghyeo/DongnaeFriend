@@ -12,6 +12,8 @@ import com.umc.DongnaeFriend.domain.profile.dto.AccountBookProfileDto;
 import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,7 +44,7 @@ public class AccountBookProfileService {
             user = findUser();
         }else{
             user = userRepository.findById(userId)
-                    .orElseThrow();
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         }
         return user;
     }
@@ -67,6 +69,7 @@ public class AccountBookProfileService {
 
     /**
      * 가계부 공유 - 작성한 글 , 작성한 댓글의 게시글 조회
+     * TODO : 공감, 스크랩 글 조회 필요
      */
     public List<SharingDto.AccountBookProfileListResponse> getWrittenContent(Long userId, int category, Pageable pageable) {
         User user = checkUser(userId);
@@ -101,6 +104,6 @@ public class AccountBookProfileService {
     public User findUser() {
         Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findById((Long) userId)
-                .orElseThrow();
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

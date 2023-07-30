@@ -8,6 +8,8 @@ import com.umc.DongnaeFriend.domain.type.Gender;
 import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import com.umc.DongnaeFriend.global.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +25,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MyPageService {
 
-    /**
-     * 사용자 정보 확인 필요 !
-     */
     private final UserRepository userRepository;
-
-    //임시 유저 & 동네
-    Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
-    User user = User.builder().age(Age.AGE10).profileImage("profileImg").email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(30).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
-
 
     public MyPageDto.MyPageResponseDto getMyPage(){
         User user = findUser();
@@ -39,7 +33,6 @@ public class MyPageService {
     }
 
     public void updateMyPage(MyPageDto.MyPageRequestDto myPageRequest, MultipartFile image){
-       //User user = User.builder().age(Age.AGE10).profileImage("profileImg").email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
 
         User user = findUser();
         String fileName = "ProfileImage_" + user.getId().toString()+".png";
@@ -72,6 +65,6 @@ public class MyPageService {
     public User findUser(){
         Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findById((Long)userId)
-                .orElseThrow();
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

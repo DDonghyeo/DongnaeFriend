@@ -13,10 +13,10 @@ public class AccountBookDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AccountBookCategoryResponse{
+
         private TransactionCategory transactionCategory;
         private Long price;
     }
-
 
     @Getter
     @NoArgsConstructor

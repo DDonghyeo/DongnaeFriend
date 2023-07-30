@@ -1,6 +1,5 @@
 package com.umc.DongnaeFriend.domain.profile.dto;
 
-import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
 import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.Gender;
 import com.umc.DongnaeFriend.domain.user.entity.User;
