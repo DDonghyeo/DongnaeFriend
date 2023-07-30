@@ -38,6 +38,8 @@ public class ScrapService {
                     .dongnaeBoard(dongnaeBoard)
                     .user(user)
                     .build();
+
+            scrapRepository.save(scrap);
         }
 
         else {
