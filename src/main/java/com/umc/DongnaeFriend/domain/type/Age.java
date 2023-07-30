@@ -22,4 +22,17 @@ public enum Age {
     public String getAge() {
         return this.age;
     }
+
+    public static Age fromString(String strAge) {
+        if(strAge==""){
+            return null;
+        }
+
+        for(Age age : Age.values()){
+            if((age.getAge().charAt(0))==(strAge.charAt(0))){
+                return age;
+            }
+        }
+        return null;
+    }
 }

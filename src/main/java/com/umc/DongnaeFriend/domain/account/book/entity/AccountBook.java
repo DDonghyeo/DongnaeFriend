@@ -23,15 +23,16 @@ public class AccountBook extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    //@JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     private Long budget;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private Long expenditure;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private Long income;
 
     @Column(nullable = false)
@@ -39,4 +40,8 @@ public class AccountBook extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Integer month;
+
+    public void updateBudget(Long budget){
+        this.budget = budget;
+    }
 }
