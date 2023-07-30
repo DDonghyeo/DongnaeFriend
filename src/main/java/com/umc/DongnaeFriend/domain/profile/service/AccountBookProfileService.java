@@ -44,7 +44,7 @@ public class AccountBookProfileService {
             user = findUser();
         }else{
             user = userRepository.findById(userId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         }
         return user;
     }
@@ -104,6 +104,6 @@ public class AccountBookProfileService {
     public User findUser() {
         Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findById((Long) userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
