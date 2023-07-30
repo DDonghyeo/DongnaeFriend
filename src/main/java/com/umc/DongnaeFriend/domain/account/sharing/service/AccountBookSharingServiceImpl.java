@@ -13,11 +13,14 @@ import com.umc.DongnaeFriend.domain.type.Gender;
 import com.umc.DongnaeFriend.domain.type.SharingCategory;
 import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import com.umc.DongnaeFriend.global.exception.CustomException;
 import com.umc.DongnaeFriend.global.exception.ErrorCode;
+import com.umc.DongnaeFriend.global.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,11 +34,6 @@ import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
 @Service
 public class AccountBookSharingServiceImpl implements AccountBookSharingService {
 
-
-    //임시 유저
-    Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
-    User user = User.builder().profileImage("profileImage").id(1L).age(Age.AGE10).email("email").dongnae(dongnae).gender(Gender.FEMALE).infoCert(YesNo.NO).townCert(YesNo.NO).townCertCnt(10).id(1L).kakaoId(90L).nickname("nickname").refreshToken("refreshToken").build();
-
     @Autowired
     private SharingBoardRepository sharingBoardRepository;
 
@@ -48,6 +46,9 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
     @Autowired
     private SharingSympathyRepository sharingSympathyRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
     /*
      * [가계부 공유] 게시글 검색
@@ -55,11 +56,10 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
     @Override
     public List<SharingDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable) {
         //TODO : 전체 카테고리 처리
-        List<SharingBoard> sharingBoards = sharingBoardRepository.findByKeywordOrderByLikes(keyword, SharingCategory.valueOf(category).name(), pageable);
+        List<SharingBoard> sharingBoards = sharingBoardRepository.findByKeyword(keyword, SharingCategory.valueOf(category).name(), pageable);
         if (sharingBoards.isEmpty()) {
             throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
         }
-        log.info("board found" + sharingBoards.get(0).getId());
         return getListResponses(sharingBoards);
     }
 
@@ -68,7 +68,7 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      */
     @Override
     public void createPost(SharingDto.Request req) {
-
+        User user = getCurUser();
         sharingBoardRepository.save(req.toEntity(user));
         //TODO : Img 파일 업로드
     }
@@ -79,17 +79,16 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      */
     @Override
     public SharingDto.Response getBoard(long board_id) {
-        //TODO : User 식별자 필요.
-        Optional<SharingBoard> board = sharingBoardRepository.findById(board_id);
-        if (board.isEmpty()) {
-            throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
-        }
+        SharingBoard board = sharingBoardRepository.findById(board_id).orElseThrow(() ->
+                new CustomException(ErrorCode.NO_CONTENT_FOUND));
+
+        User user = getCurUser();
 
         //Get Images
         List<SharingImg> images = sharingImgRepository.findAllBySharingBoard_Id(board_id);
 
         //Writer인지 검사
-        boolean isWriter = Objects.equals(board.get().getUser().getId(), user.getId());
+        boolean isWriter = Objects.equals(board.getUser().getId(), user.getId());
 
         //LikeOrNot 검사
         boolean likeOrNot = !sharingSympathyRepository.findByUser_Id(user.getId()).isEmpty();
@@ -99,17 +98,17 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
         boolean scrapOrNot = false;
 
         return SharingDto.Response.builder()
-                .profileImage(user.getProfileImage())
-                .nickname(user.getNickname())
-                .category(board.get().getCategory().getValue())
-                .title(board.get().getTitle())
-                .content(board.get().getContent())
+                .profileImage(board.getUser().getProfileImage())
+                .nickname(board.getUser().getNickname())
+                .category(board.getCategory().getValue())
+                .title(board.getTitle())
+                .content(board.getContent())
                 .images(images.stream().map(SharingImg::getImageUrl).collect(Collectors.toList()))
-                .createdAt(getTime(board.get().getCreatedAt()))
+                .createdAt(getTime(board.getCreatedAt()))
                 .isWriter(isWriter)
                 .likeOrNot(likeOrNot)
                 .scrapOrNot(scrapOrNot)
-                .view(board.get().getView()).build();
+                .view(board.getView()).build();
     }
 
     /*
@@ -117,22 +116,41 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      */
     @Override
     public void updateBoard(long board_id, SharingDto.Request req) {
+
         SharingBoard board = sharingBoardRepository.findById(board_id).orElseThrow(
-                () -> new CustomException(ErrorCode.INVALID_VALUE));
+                () -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
+
+        //권한 검사
+        if (!board.getUser().getId().equals(getCurUser().getId())) throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
 
         board.updateBoard(req);
         sharingBoardRepository.save(board);
 
-        sharingImgRepository.deleteAllById(board_id);
-        //TODO: Img Upload
+        sharingImgRepository.findAllBySharingBoard_Id(board_id);
+
+        //TODO: File Upload
     }
 
     /*
-     * [가계부 공유] 게시글 수정
+     * [가계부 공유] 게시글 삭제
      */
     @Override
     public void deleteBoard(long board_id) {
+        User user = getCurUser();
+        Optional<SharingBoard> sharingBoard = sharingBoardRepository.findById(board_id);
+        if (sharingBoard.isEmpty()) {
+            throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
+        }
+
+        if (!Objects.equals(sharingBoard.get().getUser().getId(), user.getId())) {
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+        }
+
+
+        //게시글 삭제
         sharingBoardRepository.deleteById(board_id);
+        //이미지 삭제
+        sharingImgRepository.findAllBySharingBoard_Id(board_id);
     }
 
 
@@ -161,5 +179,13 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
                         )
                         .build())
                 .collect(Collectors.toList());
+    }
+
+
+    private User getCurUser() {
+        Long user_id = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById(user_id).orElseThrow(() ->
+                new CustomException(ErrorCode.UNAUTHORIZED_MEMBER)
+        );
     }
 }

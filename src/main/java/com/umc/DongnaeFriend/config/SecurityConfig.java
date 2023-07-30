@@ -25,6 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/login").permitAll() // 인증 없이 접근 허용하는 URL
                 .antMatchers("/user/reissuance").permitAll() // 인증 없이 접근 허용하는 URL
+                .antMatchers("/kakao").permitAll() // 카카오 토큰 추출(임시)
+                .antMatchers("/callback").permitAll() // 카카오 토큰 추출(임시)
                 .anyRequest().authenticated(); // 그 외의 URL은 인증 필요
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
