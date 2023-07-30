@@ -5,6 +5,8 @@ import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.entity.Transaction;
 import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountBookRepository;
 import com.umc.DongnaeFriend.domain.account.book.repository.transaction.TransactionRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -25,20 +27,14 @@ public class TransactionService {
     @Transactional
     public void createTransaction(TransactionDto.TransactionRequest request){
 
-        log.info("Year : " + request.getYear() + " Month : " + request.getMonth());
         AccountBook accountBook = findTarget(request.getYear(), request.getMonth());
 
         transactionRepository.save(request.toEntity(accountBook));
 
-        // AccountBook income, expenditure 값 변경
-
+        // Type=1이면 수입, 0이면 지출
         if(request.getType()==1){
-            log.info("Price 추가 : " + request.getPrice());
-
             accountBookRepository.updateAccountBookIncome(accountBook.getId(), request.getPrice());
         }else{
-            log.info("Price 추가 : " + request.getPrice());
-
             accountBookRepository.updateAccountBookExpenditure(accountBook.getId(), request.getPrice());
         }
     }
@@ -54,16 +50,14 @@ public class TransactionService {
     @Transactional
     public void deleteTransaction(Long transactionId){
 
-        Transaction transaction = transactionRepository.findById(transactionId).orElseThrow();
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
         AccountBook accountBook = findTarget(transaction.getYear(), transaction.getMonth());
 
-        // AccountBook income, expenditure 값이 변경되어야 함.
+
         if(transaction.getType()==1){
-            log.info("Price 삭제: " + transaction.getPrice());
             accountBookRepository.updateAccountBookIncomeDelete(accountBook.getId(), transaction.getPrice());
         }else{
-            log.info("Price 삭제 : " + transaction.getPrice());
-
             accountBookRepository.updateAccountBookExpenditureDelete(accountBook.getId(), transaction.getPrice());
         }
         transactionRepository.deleteById(transaction.getId());
@@ -72,12 +66,12 @@ public class TransactionService {
     // 지출 또는 수입 내역 수정
     @Transactional
     public void updateTransaction(TransactionDto.TransactionRequest request, Long transactionId){
-        Transaction transaction = transactionRepository.findById(transactionId).orElseThrow();
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
         AccountBook accountBook = findTarget(transaction.getYear(), transaction.getMonth());
 
         Transaction updateTrans = request.toEntity(accountBook);
         Long priceGap = updateTrans.getPrice()-transaction.getPrice();
-        log.info("priceGap : " + priceGap);
 
         if(transaction.getType()==1){
             accountBookRepository.updateAccountBookIncomeEdit(accountBook.getId(), priceGap);
@@ -89,6 +83,7 @@ public class TransactionService {
     }
 
     private AccountBook findTarget(Integer year, Integer month){
-        return accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
+        return accountBookRepository.findByYearAndMonth(year, month)
+                .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
     }
 }

@@ -12,6 +12,8 @@ import com.umc.DongnaeFriend.domain.profile.dto.DongnaeProfileDto;
 import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,7 +44,7 @@ public class DongnaeProfileService {
             user = findUser();
         }else{
             user = userRepository.findById(userId)
-                    .orElseThrow();
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         }
         return user;
     }
@@ -99,6 +101,6 @@ public class DongnaeProfileService {
     public User findUser() {
         Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findById((Long) userId)
-                .orElseThrow();
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

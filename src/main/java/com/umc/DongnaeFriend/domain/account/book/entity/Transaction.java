@@ -40,7 +40,7 @@ public class Transaction extends BaseTimeEntity {
     private PayCategory payCategory;  //현금, 체크카드 등
 
     @Enumerated(value = STRING)
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private TransactionCategory transactionCategory;  //식비, 교육 등
 
     @Column(columnDefinition = "MEDIUMTEXT")
