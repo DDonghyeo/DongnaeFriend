@@ -103,9 +103,4 @@ public class DongnaeBoardController {
         dongnaeBoardService.deleteBoard(board_id);
         return ResponseEntity.ok("요청에 성공했습니다.");
     }
-
-
-
-
-
 }
