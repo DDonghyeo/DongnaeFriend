@@ -17,4 +17,6 @@ spring:
     password: df1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: update
+jwt:
+  secret-key: 6B64DCA4EA2F53EDIKU9AAB215FE7
