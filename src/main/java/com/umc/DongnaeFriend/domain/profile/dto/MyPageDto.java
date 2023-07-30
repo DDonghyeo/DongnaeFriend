@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 public class MyPageDto {
 
     @Getter
@@ -34,18 +36,16 @@ public class MyPageDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MyPageRequestDto{
+
+        @NotNull(message = "닉네임은 필수입니다.")
         private String nickname;
-        private Age age;
-        //private String profileImage;
-        private Gender gender;
+
+        @NotNull(message = "공개/비공개 여부를 결정해주세요.")
         private YesNo infoCert;
 
         public User toEntity(){
             return User.builder()
                     .nickname(nickname)
-                    //.profileImage(profileImage)
-                    .age(age)
-                    .gender(gender)
                     .infoCert(infoCert)
                     .build();
         }
