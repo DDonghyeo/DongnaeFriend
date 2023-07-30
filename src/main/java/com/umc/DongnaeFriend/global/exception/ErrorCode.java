@@ -12,8 +12,13 @@ public enum ErrorCode {
     /* 10* 가계부 */
 
     /* 20* 동네정보 */
+    POST_NOT_EXISTS(BAD_REQUEST, 200, "없는 게시글입니다."),
+    COMMENT_NOT_EXISTS(BAD_REQUEST, 201, "없는 댓글입니다."),
 
     /* 50* 스크랩 */
+
+    /* 60* 신고 */
+    REPORT_ALREADY_EXISTS(BAD_REQUEST, 600, "이미 신고 처리가 되었습니다."),
 
     /* 200 NO_CONTENT : 자료를 찾을 수 없음 */
     NO_CONTENT_FOUND(NO_CONTENT, 204, "요청된 자료를 찾을 수 없습니다."),
@@ -30,7 +35,7 @@ public enum ErrorCode {
     UNAUTHORIZED_MEMBER(UNAUTHORIZED,401, "현재 내 계정 정보가 존재하지 않습니다"),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
-    MEMBER_NOT_FOUND(NOT_FOUND,404, "해당 유저 정보를 찾을 수 없습니다"),
+    USER_NOT_FOUND(NOT_FOUND,404, "해당 유저 정보를 찾을 수 없습니다"),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, 404,"로그아웃 된 사용자입니다"),
     NOT_FOLLOW(NOT_FOUND,404, "팔로우 중이지 않습니다"),
 
