@@ -40,46 +40,4 @@ public class KakaoTokenController {
 
         return "html/index";
     }
-
-    @GetMapping("/callback")
-    public String callback(Model model, @RequestParam("code") String code) throws IOException {
-
-        try {
-//------kakao POST 요청------
-            String reqURL = "https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=1ad317e194df665ca44dcb82d11a7093&code=" + code;
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line = "";
-            String result = "";
-
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
-            });
-
-            String accessToken = (String) jsonMap.get("access_token");
-
-            //-------------------------------------------------서버 로그인----------------------------------------------------
-
-            HashMap<String, Object> userInfo = kakaoService.getUserInfo(accessToken);
-            UserDto.Response response =  userService.userValidation(userInfo);
-
-            model.addAttribute("token","Bearer "+ response.getAccessToken());
-
-            return "html/token";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-
 }

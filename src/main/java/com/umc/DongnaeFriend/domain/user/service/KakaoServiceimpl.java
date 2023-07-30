@@ -2,7 +2,9 @@ package com.umc.DongnaeFriend.domain.user.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.umc.DongnaeFriend.domain.user.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -19,6 +21,9 @@ public class KakaoServiceimpl implements KakaoService {
 
 //    @Autowired
 //    public IACDao dao;
+
+    @Autowired
+    private UserService userService;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -79,6 +84,36 @@ public class KakaoServiceimpl implements KakaoService {
         userInfo.put("gender", gender);
 
         return userInfo;
+    }
+
+    @Override
+    public String getAccessTokenFromKakao(String client_id, String code) throws IOException {
+
+        //------kakao POST 요청------
+        String reqURL = "https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=" + client_id + "&code=" + code;
+        URL url = new URL(reqURL);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+        String line = "";
+        String result = "";
+
+        while ((line = br.readLine()) != null) {
+            result += line;
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
+        });
+
+        log.info("Response Bosy : " + result);
+
+        String accessToken = (String) jsonMap.get("access_token");
+
+
+        return accessToken;
     }
 
 }
