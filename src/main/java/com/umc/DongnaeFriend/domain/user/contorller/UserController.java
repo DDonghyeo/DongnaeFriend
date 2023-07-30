@@ -40,7 +40,7 @@ public class UserController {
      * 인증 절차
      */
     @PostMapping("/user/login")
-    public ResponseEntity<?> userLogin(@RequestParam("accessToken") String accessToken, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<?> userLogin(@RequestParam("accessToken") String accessToken) {
         log.info("LoginController 진입");
 
 //        if (!type.equals("kakao")) {
@@ -81,11 +81,12 @@ public class UserController {
      * 인가코드를 입력 받으면, 카카오에서 access_token을 받아온다.
      */
     @GetMapping("/callback")
-    public @ResponseBody ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
+    public @ResponseBody ResponseEntity<?> callback(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
 
         log.info("code : "+code);
         String kakao_accessToken = kakaoService.getAccessTokenFromKakao(client_id, code);//kakao_access_token
-        return ResponseEntity.ok(kakao_accessToken);
+
+        return userLogin(kakao_accessToken);
     }
 
 }
