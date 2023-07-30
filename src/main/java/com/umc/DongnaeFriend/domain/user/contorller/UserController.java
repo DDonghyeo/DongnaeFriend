@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/user/reissuance")
-    public ResponseEntity<?> reiussnaceToken(String refreshToken) {
+    public ResponseEntity<?> reiussnaceToken(@RequestParam("refreshToken") String refreshToken) {
         try {
 
             //토큰 재발급
