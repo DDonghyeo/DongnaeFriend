@@ -18,13 +18,15 @@ permissions:
   contents: read
 
 jobs:
-  build-with-gradle:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: production 브랜치로 이동
+    deploy:
+      name: Deploy
+      runs-on: ubuntu-latest
+      environment: production
+
+      steps:
+      # (1) 기본 체크아웃
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: production
 
       # (2) JDK 11 세팅
       - name: Set up JDK 11
