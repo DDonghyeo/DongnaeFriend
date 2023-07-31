@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/account-books/sharing/likes")
+@RequestMapping("/account-books/sharing/comments/likes")
 public class SharingCommentLikeController {
     private final SharingCommentLikeService sharingCommentLikeService;
 
