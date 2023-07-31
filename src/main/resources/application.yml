@@ -14,9 +14,20 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/dongnae?characterEncoding=UTF-8&serverTimezone=UTC&useLegacyDatetimeCode=false
     username: dongnae
-    password: df1234
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate.ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+  thymeleaf:
+    cache: false
+
+kakao:
+  client_id: 2ec872fb1ee5979221c7148d92f86c2f
+
 jwt:
   secret-key: 6B64DCA4EA2F53EDIKU9AAB215FE7
+

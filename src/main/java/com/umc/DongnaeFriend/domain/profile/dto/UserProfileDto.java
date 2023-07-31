@@ -15,7 +15,7 @@ public class UserProfileDto{
     public static class UserProfileResponseDto {
         private String nickname;
         private String profileImage;
-        private String town;
+        //private String town;
         private Age age;
         private Gender gender;
 
@@ -23,7 +23,7 @@ public class UserProfileDto{
             return new UserProfileDto.UserProfileResponseDto(
                     user.getNickname(),
                     user.getProfileImage(),
-                    user.getDongnae().getTownName(),
+                    //user.getDongnae().getTownName(),
                     user.getAge(),
                     user.getGender());
         }

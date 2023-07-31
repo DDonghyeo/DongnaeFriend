@@ -6,6 +6,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.umc.DongnaeFriend.domain.BaseTimeEntity;
+import com.umc.DongnaeFriend.domain.account.sharing.dto.ReqSharingCommentDto;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import java.util.List;
 import javax.persistence.*;
@@ -43,4 +44,8 @@ public class SharingComment extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String content;
+
+    public void modifyComment(ReqSharingCommentDto reqSharingCommentDto) {
+        this.content = reqSharingCommentDto.getContent();
+    }
 }

@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
     /* 10* 가계부 */
-
+    MEMO_LIMIT(BAD_REQUEST, 10, "메모는 8개까지 작성 가능합니다."),
     /* 20* 동네정보 */
     POST_NOT_EXISTS(BAD_REQUEST, 200, "없는 게시글입니다."),
     COMMENT_NOT_EXISTS(BAD_REQUEST, 201, "없는 댓글입니다."),

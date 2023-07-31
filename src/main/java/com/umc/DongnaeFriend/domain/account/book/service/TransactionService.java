@@ -5,13 +5,19 @@ import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
 import com.umc.DongnaeFriend.domain.account.book.entity.Transaction;
 import com.umc.DongnaeFriend.domain.account.book.repository.accountBook.AccountBookRepository;
 import com.umc.DongnaeFriend.domain.account.book.repository.transaction.TransactionRepository;
+import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -20,25 +26,24 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final AccountBookRepository accountBookRepository;
+    private final UserRepository userRepository;
 
     // 지출 또는 수입 내역 추가
     @Transactional
     public void createTransaction(TransactionDto.TransactionRequest request){
+        User user = findUser();
 
-        log.info("Year : " + request.getYear() + " Month : " + request.getMonth());
         AccountBook accountBook = findTarget(request.getYear(), request.getMonth());
 
+        if (!Objects.equals(accountBook.getUser().getId(), user.getId())) {
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+        }
         transactionRepository.save(request.toEntity(accountBook));
 
-        // AccountBook income, expenditure 값 변경
-
+        // Type=1이면 수입, 0이면 지출
         if(request.getType()==1){
-            log.info("Price 추가 : " + request.getPrice());
-
             accountBookRepository.updateAccountBookIncome(accountBook.getId(), request.getPrice());
         }else{
-            log.info("Price 추가 : " + request.getPrice());
-
             accountBookRepository.updateAccountBookExpenditure(accountBook.getId(), request.getPrice());
         }
     }
@@ -53,17 +58,19 @@ public class TransactionService {
     // 지출 또는 수입 내역 삭제
     @Transactional
     public void deleteTransaction(Long transactionId){
+        User user = findUser();
 
-        Transaction transaction = transactionRepository.findById(transactionId).orElseThrow();
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
         AccountBook accountBook = findTarget(transaction.getYear(), transaction.getMonth());
 
-        // AccountBook income, expenditure 값이 변경되어야 함.
+        if (!Objects.equals(accountBook.getUser().getId(), user.getId())) {
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+        }
+
         if(transaction.getType()==1){
-            log.info("Price 삭제: " + transaction.getPrice());
             accountBookRepository.updateAccountBookIncomeDelete(accountBook.getId(), transaction.getPrice());
         }else{
-            log.info("Price 삭제 : " + transaction.getPrice());
-
             accountBookRepository.updateAccountBookExpenditureDelete(accountBook.getId(), transaction.getPrice());
         }
         transactionRepository.deleteById(transaction.getId());
@@ -72,12 +79,18 @@ public class TransactionService {
     // 지출 또는 수입 내역 수정
     @Transactional
     public void updateTransaction(TransactionDto.TransactionRequest request, Long transactionId){
-        Transaction transaction = transactionRepository.findById(transactionId).orElseThrow();
+        User user = findUser();
+
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
         AccountBook accountBook = findTarget(transaction.getYear(), transaction.getMonth());
+
+        if (!Objects.equals(accountBook.getUser().getId(), user.getId())) {
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+        }
 
         Transaction updateTrans = request.toEntity(accountBook);
         Long priceGap = updateTrans.getPrice()-transaction.getPrice();
-        log.info("priceGap : " + priceGap);
 
         if(transaction.getType()==1){
             accountBookRepository.updateAccountBookIncomeEdit(accountBook.getId(), priceGap);
@@ -89,6 +102,13 @@ public class TransactionService {
     }
 
     private AccountBook findTarget(Integer year, Integer month){
-        return accountBookRepository.findByYearAndMonth(year, month).orElseThrow();
+        return accountBookRepository.findByYearAndMonth(year, month)
+                .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
+    }
+
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
