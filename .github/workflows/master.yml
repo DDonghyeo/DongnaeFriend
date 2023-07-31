@@ -80,5 +80,5 @@ jobs:
           aws deploy create-deployment \
           --application-name DongnaeFriend \
           --deployment-group-name dongnae-group \
-          --s3-location bucket=dongnae-bucket,bundleType=zip,key=coinTalk.zip[S3버킷 속 압축파일] \
+          --s3-location bucket=dongnae-bucket,bundleType=zip,key=coinTalk.zip \
           --region ap-northeast-2
