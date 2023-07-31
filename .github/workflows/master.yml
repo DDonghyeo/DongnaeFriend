@@ -48,19 +48,19 @@ jobs:
 
       # Jar 파일 Copy
       - name: Copy Jar
-        run: cp ./build/libs/*.jar ./deploy/
+        run: cp ./build/libs/*.jar ./app/
 
       # appspec.yml Copy
       - name: Copy appspec
-        run: cp ./appspec.yml ./deploy/
+        run: cp ./appspec.yml ./app/
 
       # script file Copy
       - name: Copy shell
-        run: cp ./scripts/* ./deploy/
+        run: cp ./scripts/* ./app/
 
       # 압축파일 형태로 전달
       - name: Make zip file
-        run: zip -r -qq -j ./dongnae-bucket-build.zip ./deploy/
+        run: zip -r -qq -j ./dongnae-bucket-build.zip ./app/
 
       # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
       - name: Configure AWS credentials
