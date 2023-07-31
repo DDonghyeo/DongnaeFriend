@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="/home/ubuntu/app/deploy"
-JAR_FILE="$PROJECT_ROOT/spring-webapp.jar"
+REPOSITORY="/home/ubuntu/app"
 
-APP_LOG="$PROJECT_ROOT/application.log"
-ERROR_LOG="$PROJECT_ROOT/error.log"
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
+echo "> Build 파일 복사"
+echo "> cp $REPOSITORY/deploy/*.jar $REPOSITORY/"
 
-TIME_NOW=$(date +%c)
+cp $REPOSITORY/deloy/*.jar $REPOSITORY/
 
-# build 파일 복사
-echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
-cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
+echo "> 새 어플리케이션 배포"
+JAR_NAME=$(ls -tr $REPOSITORY/*.jar | tail -n 1)
 
-# jar 파일 실행
-echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
+echo "> JAR Name: $JAR_NAME"
+
+echo "> $JAR_NAME 에 실행권한 추가"
+
+chmod +x $JAR_NAME
+
+echo "> $JAR_NAME 실행"
+
 nohup java -jar \
         -Dspring.config.location=/home/ubuntu/app/application.yml \
-        $JAR_FILE > $APP_LOG 2> $ERROR_LOG &
+        $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
 
-CURRENT_PID=$(pgrep -f $JAR_FILE)
-echo "$TIME_NOW > 실행된 프로세스 아이디 $CURRENT_PID 입니다." >> $DEPLOY_LOG
+#CURRENT_PID=$(pgrep -f $JAR_FILE)
+#echo "$TIME_NOW > 실행된 프로세스 아이디 $CURRENT_PID 입니다." >> $DEPLOY_LOG
