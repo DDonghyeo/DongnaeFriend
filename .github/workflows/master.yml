@@ -11,8 +11,8 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: dongnae-bucket
-  CODE_DEPLOY_APPLICATION_NAME: dongnaefriend
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dongnae-groups
+  CODE_DEPLOY_APPLICATION_NAME: dongnae-deploy
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dongnae-group
 
 permissions:
   contents: read
