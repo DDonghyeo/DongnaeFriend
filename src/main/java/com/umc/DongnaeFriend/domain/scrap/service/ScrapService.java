@@ -27,6 +27,8 @@ public class ScrapService {
                     .sharingBoard(sharingBoard)
                     .user(user)
                     .build();
+
+            scrapRepository.save(scrap);
         }
 
         // 동네정보
