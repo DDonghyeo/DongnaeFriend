@@ -2,6 +2,7 @@ package com.umc.DongnaeFriend.domain.dongnae.service;
 
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
+import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeImg;
 import com.umc.DongnaeFriend.domain.dongnae.respository.*;
@@ -100,7 +101,11 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
     @Override
     public void createBoard(DongnaeBoardDto.Request req) {
         User user = getCurUser();
-        dongnaeBoardRepository.save(req.toEntity(user,user.getDongnae()));
+        Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
+
+        dongnaeRepository.save(dongnae);
+        // 임시 동네 저장
+        dongnaeBoardRepository.save(req.toEntity(user,/*user.getDongnae()*/dongnae));
     }
 
 
