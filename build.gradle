@@ -49,13 +49,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
-//tasks.named('test') {
-//	useJUnitPlatform()
-//}
-
-jar {
-	enabled = false
+tasks.named('test') {
+	useJUnitPlatform()
 }
+
+//jar {
+//	enabled = false
+//}
 
 // Qtype 생성 경로
 def querydslDir = "$buildDir/generated/querydsl"
