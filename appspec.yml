@@ -1,8 +1,9 @@
 version: 0.0
 os: linux
+
 files:
   - source: /
-    destination: /home/ubuntu/app/
+    destination: /home/ubuntu/app
     overwrite: yes
 
 permissions:
@@ -12,7 +13,11 @@ permissions:
     group: ubuntu
 
 hooks:
-  ApplicationStart:
-    - location: deploy.sh
+  AfterInstall:
+    - location: scripts/stop.sh
+      mode: '755'
       timeout: 60
-      runas: ubuntu
+  ApplicationStart:
+    - location: scripts/start.sh
+      mode: '755'
+      timeout: 60

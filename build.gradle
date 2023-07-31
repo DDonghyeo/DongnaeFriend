@@ -53,9 +53,9 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//jar {
-//	enabled = false
-//}
+jar {
+	enabled = false
+}
 
 // Qtype 생성 경로
 def querydslDir = "$buildDir/generated/querydsl"
