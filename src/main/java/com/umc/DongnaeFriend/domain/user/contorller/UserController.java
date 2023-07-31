@@ -8,6 +8,7 @@ import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import com.umc.DongnaeFriend.global.util.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("")
 @Slf4j
 public class UserController {
 
@@ -31,14 +32,15 @@ public class UserController {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-
+    @Value("${kakao.client_id}")
+    private String client_id;
 
     /**
      * 유저 로그인 / 회원가입
      * 인증 절차
      */
-    @PostMapping("/login")
-    public ResponseEntity<?> userLogin(@RequestParam("accessToken") String accessToken, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+    @PostMapping("/user/login")
+    public ResponseEntity<?> userLogin(@RequestParam("accessToken") String accessToken) {
         log.info("LoginController 진입");
 
 //        if (!type.equals("kakao")) {
@@ -63,18 +65,30 @@ public class UserController {
     }
 
     @PostMapping("/user/reissuance")
-    public ResponseEntity<?> reiussnaceToken(String refreshToken) {
+    public ResponseEntity<?> reiussnaceToken(@RequestParam("refreshToken") String refreshToken) {
         try {
 
             //토큰 재발급
             String access_token = userService.createAccessTokenFromRefreshToken(refreshToken);
-            return ResponseEntity.ok(access_token);
+            Map<String,Object> accessToken = new HashMap<>();
+            accessToken.put("accessToken",access_token);
+            return ResponseEntity.ok(accessToken);
         } catch (Exception e) {
             // RefreshToken만료
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
     }
 
+    /**
+     * 인가코드를 입력 받으면, 카카오에서 access_token을 받아온다.
+     */
+    @GetMapping("/callback")
+    public @ResponseBody ResponseEntity<?> callback(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
 
+        log.info("code : "+code);
+        String kakao_accessToken = kakaoService.getAccessTokenFromKakao(client_id, code);//kakao_access_token
+
+        return userLogin(kakao_accessToken);
+    }
 
 }
