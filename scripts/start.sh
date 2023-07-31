@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-REPOSITORY="/home/ubuntu/app"
+REPOSITORY=/home/ubuntu/app
 
 echo "> Build 파일 복사"
 echo "> cp $REPOSITORY/deploy/*.jar $REPOSITORY/"
