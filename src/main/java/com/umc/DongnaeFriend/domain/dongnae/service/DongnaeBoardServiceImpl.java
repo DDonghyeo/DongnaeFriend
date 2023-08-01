@@ -100,13 +100,12 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
      */
     @Override
     public void createBoard(DongnaeBoardDto.Request req) {
-//        User user = getCurUser();
-        Optional<User> user = userRepository.findById(1L);
+        User user = getCurUser();
         Dongnae dongnae = Dongnae.builder().id(1L).gu("서울구").dong("서울동").city("서울시").townName("무슨마을").build();
 
         dongnaeRepository.save(dongnae);
         // 임시 동네 저장
-        dongnaeBoardRepository.save(req.toEntity(user.get(),/*user.getDongnae()*/dongnae));
+        dongnaeBoardRepository.save(req.toEntity(user,/*user.getDongnae()*/dongnae));
     }
 
 
