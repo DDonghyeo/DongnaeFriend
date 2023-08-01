@@ -4,6 +4,7 @@ import com.umc.DongnaeFriend.domain.account.sharing.dto.SharingDto;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingComment;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingImg;
+import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingSympathy;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingBoardRepository;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentRepository;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingImgRepository;
@@ -77,9 +78,12 @@ public class AccountBookProfileService {
         List<SharingBoard> sharingBoardList;
         if(category==0){
             sharingBoardList= sharingBoardRepository.findAllByUserId(user.getId(), pageable);
-        }else{
+        }else if(category==1){
             sharingBoardList = sharingCommentRepository.getCommentByUserIdAndBoard(user.getId())
                     .stream().map(SharingComment::getSharingBoard).distinct().collect(Collectors.toList());
+        }else{
+            sharingBoardList = sharingSympathyRepository.getSharingSympathyByUserId(user.getId())
+                    .stream().map(SharingSympathy::getSharingBoard).collect(Collectors.toList());
         }
         return getProfileListResponse(sharingBoardList);
     }

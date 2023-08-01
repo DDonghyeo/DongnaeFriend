@@ -18,4 +18,8 @@ public interface SharingSympathyRepository extends JpaRepository<SharingSympathy
     int countAllBySharingBoardId(Long sharing_board_id);
     int countAllByUserId(Long userId);
     List<SharingSympathy> findByUser_Id(long user_id);
+
+    @Query(value = "select s from SharingSympathy s join fetch s.sharingBoard sb " +
+            "where s.user.id = :userId order by s.createdAt desc")
+    List<SharingSympathy> getSharingSympathyByUserId(@Param("userId") Long userId);
 }
