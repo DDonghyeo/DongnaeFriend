@@ -19,15 +19,25 @@ public class SharingSympathyService {
         // 게시판 가져오기
         SharingBoard sharingBoard = sharingSympathyRepository.findBySharingBoardId(accountBookId);
 
-        // 공감 데이터 저장하기
-        SharingSympathy sharingSympathy = SharingSympathy.builder()
-                .sharingBoard(sharingBoard)
-                .user(user)
-                .build();
+        // 공감 유무 확인하기
+        SharingSympathy sharingSympathyExist = sharingSympathyRepository.findBySharingBoardId(sharingBoard);
 
-        sharingSympathyRepository.save(sharingSympathy);
+        if (sharingSympathyExist == null) {
+            // 공감 데이터 저장하기
+            SharingSympathy sharingSympathy = SharingSympathy.builder()
+                    .sharingBoard(sharingBoard)
+                    .user(user)
+                    .build();
 
-        return "[가계부 공유] 공감 성공";
+            sharingSympathyRepository.save(sharingSympathy);
+
+            return "[가계부 공유] 공감 성공";
+        }
+
+        // 공감 데이터 삭제하기
+        sharingSympathyRepository.delete(sharingSympathyExist);
+
+        return "[가계부 공유] 공감 삭제 성공";
     }
 
 }
