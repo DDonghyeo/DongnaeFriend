@@ -22,26 +22,42 @@ public class ScrapService {
         if (!(reqScrapDto.getAccountBookId() == null)) {
             SharingBoard sharingBoard = scrapRepository.findBySharingBoardId(reqScrapDto.getAccountBookId());
 
-            // 스크랩 정보 저장
-            Scrap scrap = Scrap.builder()
-                    .sharingBoard(sharingBoard)
-                    .user(user)
-                    .build();
+            // 스크랩 여부
+            Scrap scrapExist = scrapRepository.findBySharingBoardId(sharingBoard);
 
-            scrapRepository.save(scrap);
+            if (scrapExist == null) {
+                // 스크랩 정보 저장
+                Scrap scrap = Scrap.builder()
+                        .sharingBoard(sharingBoard)
+                        .user(user)
+                        .build();
+
+                scrapRepository.save(scrap);
+            }
+            else {
+                scrapRepository.delete(scrapExist);
+            }
         }
 
         // 동네정보
         else if (!(reqScrapDto.getTownInformationId() == null)) {
             DongnaeBoard dongnaeBoard = scrapRepository.findByDongnaeBoardId(reqScrapDto.getTownInformationId());
 
-            // 스크랩 정보 저장
-            Scrap scrap = Scrap.builder()
-                    .dongnaeBoard(dongnaeBoard)
-                    .user(user)
-                    .build();
+            // 스크랩 여부
+            Scrap scrapExist = scrapRepository.findByDongnaeBoardId(dongnaeBoard);
 
-            scrapRepository.save(scrap);
+            if (scrapExist == null) {
+                // 스크랩 정보 저장
+                Scrap scrap = Scrap.builder()
+                        .dongnaeBoard(dongnaeBoard)
+                        .user(user)
+                        .build();
+
+                scrapRepository.save(scrap);
+            }
+            else {
+                scrapRepository.delete(scrapExist);
+            }
         }
 
         else {
