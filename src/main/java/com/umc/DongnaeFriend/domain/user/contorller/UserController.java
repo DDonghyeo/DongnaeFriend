@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("")
@@ -65,12 +66,14 @@ public class UserController {
     }
 
     @PostMapping("/user/reissuance")
-    public ResponseEntity<?> reiussnaceToken(String refreshToken) {
+    public ResponseEntity<?> reiussnaceToken(@RequestParam("refreshToken") String refreshToken) {
         try {
 
             //토큰 재발급
             String access_token = userService.createAccessTokenFromRefreshToken(refreshToken);
-            return ResponseEntity.ok(access_token);
+            Map<String,Object> accessToken = new HashMap<>();
+            accessToken.put("accessToken",access_token);
+            return ResponseEntity.ok(accessToken);
         } catch (Exception e) {
             // RefreshToken만료
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
