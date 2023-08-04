@@ -14,6 +14,9 @@ public interface SharingSympathyRepository extends JpaRepository<SharingSympathy
     User findByUserId(@Param("user_id") Long user_id);
     @Query("SELECT sb FROM SharingBoard sb WHERE sb.id = :sharing_board_id")
     SharingBoard findBySharingBoardId(@Param("sharing_board_id") Long sharing_board_id);
+    @Query(value = "SELECT sharing_sympathy.* FROM sharing_sympathy WHERE sharing_sympathy.sharing_board_id = :sharing_board_id", nativeQuery = true)
+    SharingSympathy findBySharingBoardId(@Param("sharing_board_id") SharingBoard sharing_board_id);
+
 
     int countAllBySharingBoardId(Long sharing_board_id);
     int countAllByUserId(Long userId);

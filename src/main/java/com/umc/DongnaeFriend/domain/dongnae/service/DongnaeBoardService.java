@@ -23,4 +23,6 @@ public interface DongnaeBoardService {
     void updateBoard(long board_id, DongnaeBoardDto.Request request) throws AuthenticationException;
 
     void deleteBoard(long board_id) throws AuthenticationException;
+
+    String postLike(long board_id) throws AuthenticationException;
 }

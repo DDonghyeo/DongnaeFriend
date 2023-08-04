@@ -1,10 +1,12 @@
 package com.umc.DongnaeFriend.domain.dongnae.service;
 
+import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingSympathy;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
 import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeImg;
+import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeSympathy;
 import com.umc.DongnaeFriend.domain.dongnae.respository.*;
 import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
 import com.umc.DongnaeFriend.domain.user.entity.User;
@@ -14,11 +16,14 @@ import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -188,6 +193,33 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     }
 
+    @Override
+    public String postLike(long board_id) {
+        User user = getCurUser();
+
+        Optional<DongnaeBoard> board = dongnaeBoardRepository.findById(board_id);
+
+        // 공감 유무 확인하기
+        DongnaeSympathy dongnaeSympathyExist = dongnaeSympathyRepository.findByDongnaeBoardId(board.get());
+
+        if (dongnaeSympathyExist == null) {
+            // 공감 데이터 저장하기
+            DongnaeSympathy dongnaeSympathy = DongnaeSympathy.builder()
+                    .dongnaeBoard(board.get())
+                    .user(user)
+                    .build();
+
+            dongnaeSympathyRepository.save(dongnaeSympathy);
+
+            return "[동네정보] 공감 성공";
+        }
+
+        // 공감 데이터 삭제하기
+        dongnaeSympathyRepository.delete(dongnaeSympathyExist);
+
+        return "[동네정보] 공감 삭제 성공";
+    }
+
 
     //ListResponse 변환
     private List<DongnaeBoardDto.ListResponse> getListResponses(List<DongnaeBoard> dongnaeBoardList) {
@@ -222,6 +254,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
                 new CustomException(ErrorCode.UNAUTHORIZED_MEMBER)
         );
     }
+
 }
 
 
