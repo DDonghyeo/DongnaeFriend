@@ -26,5 +26,10 @@ public class DongnaeCommentController {
         return "";
     }
 
-
+    // [동네정보] 댓글 삭제
+    @DeleteMapping("/{commentId}")
+    public String deleteComment(@PathVariable("commentId") Long commentId) {
+        dongnaeCommentService.deleteComment(commentId);
+        return "";
+    }
 }

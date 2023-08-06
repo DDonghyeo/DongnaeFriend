@@ -73,4 +73,13 @@ public class DongnaeCommentService {
         return "댓글 수정 성공";
     }
 
+    public String deleteComment(Long commentId) {
+        // 댓글 찾기
+        Optional<DongnaeComment> dongnaeCommentOptional = dongnaeCommentRepository.findById(commentId);
+        DongnaeComment dongnaeComment = dongnaeCommentOptional.get();
+
+        dongnaeCommentRepository.delete(dongnaeComment);
+
+        return "댓글 삭제 성공";
+    }
 }
