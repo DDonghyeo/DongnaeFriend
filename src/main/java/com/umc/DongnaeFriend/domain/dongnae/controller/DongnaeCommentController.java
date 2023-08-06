@@ -32,4 +32,12 @@ public class DongnaeCommentController {
         dongnaeCommentService.deleteComment(commentId);
         return "";
     }
+
+    // [동네정보] 댓글 좋아요
+    @PostMapping("/likes/{commentId}")
+    public String postCommentLike(@PathVariable("commentId") Long commentId) {
+        dongnaeCommentService.newLike(commentId);
+        return "";
+    }
+
 }
