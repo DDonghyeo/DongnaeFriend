@@ -19,5 +19,12 @@ public class DongnaeCommentController {
         return "";
     }
 
+    // [동네정보] 댓글 수정
+    @PutMapping("/{commentId}")
+    public String putComment(@PathVariable("commentId") Long commentId,  @RequestBody DongnaeCommentDto dongnaeCommentDto) {
+        dongnaeCommentService.modifyComment(commentId, dongnaeCommentDto);
+        return "";
+    }
+
 
 }

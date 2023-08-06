@@ -1,5 +1,6 @@
 package com.umc.DongnaeFriend.domain.dongnae.service;
 
+import com.umc.DongnaeFriend.domain.account.sharing.dto.ReqSharingCommentDto;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingComment;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeCommentDto;
@@ -58,4 +59,18 @@ public class DongnaeCommentService {
 
         return "댓글 등록 성공";
     }
+
+    // [동네정보] 댓글 수정
+    public String modifyComment(Long commentId, DongnaeCommentDto dongnaeCommentDto) {
+        // 댓글 찾기
+        Optional<DongnaeComment> dongnaeCommentOptional = dongnaeCommentRepository.findById(commentId);
+        DongnaeComment dongnaeComment = dongnaeCommentOptional.get();
+
+        dongnaeComment.modifyComment(dongnaeCommentDto);
+
+        dongnaeCommentRepository.save(dongnaeComment);
+
+        return "댓글 수정 성공";
+    }
+
 }
