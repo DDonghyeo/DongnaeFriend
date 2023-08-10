@@ -83,6 +83,7 @@ public class AccountBookService {
 
     public User findUser() {
         Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return userRepository.findById((Long) userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }

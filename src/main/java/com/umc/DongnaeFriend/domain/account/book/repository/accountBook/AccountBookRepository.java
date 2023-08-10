@@ -11,6 +11,12 @@ import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>, AccountBookRepositoryCustom {
 
+    /*@Query(value = "select ab " +
+            "from AccountBook  ab " +
+            "where ab.year = :year and ab.month = :month and ab.user.id = :userId")
+    Optional<AccountBook> findByYearAndMonthAndUser(@Param("year")Integer year, @Param("month")Integer month, @Param("userId")Long userId);
+*/
+
     Optional<AccountBook> findByYearAndMonthAndUser(Integer year, Integer month, User user);
     @Modifying
     @Query(value = "update AccountBook ab "
