@@ -102,7 +102,8 @@ public class TransactionService {
     }
 
     private AccountBook findTarget(Integer year, Integer month){
-        return accountBookRepository.findByYearAndMonth(year, month)
+        User user = findUser();
+        return accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
     }
 

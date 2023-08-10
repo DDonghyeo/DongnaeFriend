@@ -29,13 +29,17 @@ public class AccountBookService {
     @Transactional
     public void createBudget(Integer year, Integer month, Long budget){
         User user = findUser();
-        accountBookRepository.save(AccountBookDto.BudgetRequest.toEntity(year, month, budget, user));
+        if (accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId()).isEmpty()) {
+            accountBookRepository.save(AccountBookDto.BudgetRequest.toEntity(year, month, budget, user));
+        }else{
+            throw new CustomException(ErrorCode.ACCOUNTBOOK_ALREADY_EXISTS);
+        }
     }
 
     // 가계부 예산 설정 조회
     public AccountBookDto.BudgetResponse getBudget(Integer year, Integer month){
         User user = findUser();
-        AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month)
+        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
                 .orElseThrow(() ->  new CustomException(ErrorCode.NO_CONTENT_FOUND));
         return AccountBookDto.BudgetResponse.of(accountBook.getId(),accountBook.getBudget());
     }
@@ -45,7 +49,7 @@ public class AccountBookService {
     public void updateBudget(Integer year, Integer month, Long budget){
         User user = findUser();
 
-        AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month)
+        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
                 .orElseThrow(() ->  new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
         if (!Objects.equals(accountBook.getUser().getId(), user.getId())) {
@@ -59,7 +63,7 @@ public class AccountBookService {
     public AccountBookDto.AccountBookResponse getAccountBookResponse(Integer year, Integer month) {
         User user = findUser();
 
-        AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month)
+        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
                 .orElseThrow(() ->  new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
         if (!Objects.equals(accountBook.getUser().getId(), user.getId())) {

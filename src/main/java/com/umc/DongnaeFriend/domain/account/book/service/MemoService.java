@@ -30,7 +30,8 @@ public class MemoService {
     // 메모 전체 조회 -> 리스트
     public MemoDto.MemoListResponse getMemoList(Integer year, Integer month){
 
-        AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month)
+        User user = findUser();
+        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
                 .orElseThrow(() ->  new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
         List<Memo> memoList = memoRepository.findMemoListByAccountBookId(accountBook.getId());
@@ -42,7 +43,7 @@ public class MemoService {
     public void createMemo(MemoDto.MemoRequest memoRequest, Integer year, Integer month){
 
         User user = findUser();
-        AccountBook accountBook = accountBookRepository.findByYearAndMonth(year, month)
+        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
         if (!Objects.equals(accountBook.getUser().getId(), user.getId())) {

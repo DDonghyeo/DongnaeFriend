@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>, AccountBookRepositoryCustom {
 
-    Optional<AccountBook> findByYearAndMonth(Integer year, Integer month);
+    Optional<AccountBook> findByYearAndMonthAndUser(Integer year, Integer month, Long userId);
     @Modifying
     @Query(value = "update AccountBook ab "
             + "set ab.expenditure = ab.expenditure + :expenditure "
