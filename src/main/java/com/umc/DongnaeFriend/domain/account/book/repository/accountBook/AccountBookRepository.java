@@ -1,6 +1,7 @@
 package com.umc.DongnaeFriend.domain.account.book.repository.accountBook;
 
 import com.umc.DongnaeFriend.domain.account.book.entity.AccountBook;
+import com.umc.DongnaeFriend.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>, AccountBookRepositoryCustom {
 
-    Optional<AccountBook> findByYearAndMonthAndUser(Integer year, Integer month, Long userId);
+    Optional<AccountBook> findByYearAndMonthAndUser(Integer year, Integer month, User user);
     @Modifying
     @Query(value = "update AccountBook ab "
             + "set ab.expenditure = ab.expenditure + :expenditure "

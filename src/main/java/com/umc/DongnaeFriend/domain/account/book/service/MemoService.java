@@ -31,7 +31,7 @@ public class MemoService {
     public MemoDto.MemoListResponse getMemoList(Integer year, Integer month){
 
         User user = findUser();
-        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
+        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user)
                 .orElseThrow(() ->  new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
         List<Memo> memoList = memoRepository.findMemoListByAccountBookId(accountBook.getId());
@@ -43,7 +43,7 @@ public class MemoService {
     public void createMemo(MemoDto.MemoRequest memoRequest, Integer year, Integer month){
 
         User user = findUser();
-        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user.getId())
+        AccountBook accountBook = accountBookRepository.findByYearAndMonthAndUser(year, month, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
         if (!Objects.equals(accountBook.getUser().getId(), user.getId())) {
