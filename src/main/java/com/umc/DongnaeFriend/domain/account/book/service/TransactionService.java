@@ -102,10 +102,10 @@ public class TransactionService {
     }
 
     private AccountBook findTarget(Integer year, Integer month){
-        return accountBookRepository.findByYearAndMonth(year, month)
+        User user = findUser();
+        return accountBookRepository.findByYearAndMonthAndUser(year, month, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.NO_CONTENT_FOUND));
     }
-
     public User findUser() {
         Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findById((Long) userId)
