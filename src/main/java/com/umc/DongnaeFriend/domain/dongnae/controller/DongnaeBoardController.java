@@ -103,4 +103,13 @@ public class DongnaeBoardController {
         dongnaeBoardService.deleteBoard(board_id);
         return ResponseEntity.ok("요청에 성공했습니다.");
     }
+
+    // [동네정보] 게시글 공감
+    @PostMapping("/likes/{townInformationId}")
+    public ResponseEntity<?> postLike(@PathVariable("townInformationId") int board_id) throws AuthenticationException {
+        dongnaeBoardService.postLike(board_id);
+        return ResponseEntity.ok("요청에 성공했습니다.");
+    }
+
+  
 }
