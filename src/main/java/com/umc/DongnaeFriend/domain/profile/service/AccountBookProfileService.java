@@ -73,7 +73,6 @@ public class AccountBookProfileService {
 
     /**
      * 가계부 공유 - 작성한 글 , 작성한 댓글의 게시글 조회
-     * TODO : 공감, 스크랩 글 조회 필요
      */
     public List<SharingDto.AccountBookProfileListResponse> getWrittenContent(Long userId, int category, Pageable pageable) {
         User user = checkUser(userId);
