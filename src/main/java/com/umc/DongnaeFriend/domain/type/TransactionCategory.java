@@ -29,7 +29,7 @@ public enum TransactionCategory {
     ALLOWANCE(16, "용돈"),
     TRANSFER(17, "이월"),
     WITHDRAW(18, "자산인출"),
-    INCOME_ETC(18, "기타(수입)");
+    INCOME_ETC(19, "기타(수입)");
 
     private final Integer value;
     private final String category;

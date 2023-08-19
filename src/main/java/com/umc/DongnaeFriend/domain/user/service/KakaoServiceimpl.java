@@ -108,7 +108,7 @@ public class KakaoServiceimpl implements KakaoService {
         Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
         });
 
-        log.info("Response Bosy : " + result);
+        log.info("Response Body : " + result);
 
         String accessToken = (String) jsonMap.get("access_token");
 
