@@ -22,6 +22,7 @@ public class MyPageDto {
         private String town;
         private Age age;
         private Gender gender;
+        private YesNo infoCert;
 
         public static MyPageResponseDto of(User user, UserLocationDto userLocation){
             return new MyPageResponseDto(
@@ -29,7 +30,8 @@ public class MyPageDto {
                     user.getProfileImage(),
                     userLocation.getTown(),
                     user.getAge(),
-                    user.getGender());
+                    user.getGender(),
+                    user.getInfoCert());
         }
     }
     @Getter
