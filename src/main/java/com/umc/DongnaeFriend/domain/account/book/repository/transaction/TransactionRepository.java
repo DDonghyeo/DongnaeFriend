@@ -13,9 +13,9 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, TransactionRepositoryCustom {
 
-    @Query(value = "select t from Transaction t where t.year = :year and t.month = :month and t.day = :day")
-    List<Transaction> findByYearAndMonth(@Param("year") Integer year, @Param("month") Integer month,
-                                         @Param("day") Integer day, Pageable pageable);
+    @Query(value = "select t from Transaction t where t.year = :year and t.month = :month and t.day = :day and t.accountBook.user.id = :userId")
+    List<Transaction> findByYearAndMonthAndUser(@Param("year") Integer year, @Param("month") Integer month,
+                                                @Param("day") Integer day, @Param("userId") Long userId, Pageable pageable);
 
 /*    @Query(value = "select new com.umc.DongnaeFriend.domain.account.book.dto.TransactionDto.TransactionByCategory(tr.transactionCategory, SUM(tr.price)) " +
             "from Transaction tr " +

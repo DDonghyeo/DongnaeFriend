@@ -19,4 +19,6 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     Scrap findBySharingBoardId(@Param("sharing_board_id") SharingBoard sharing_board_id);
     @Query(value = "SELECT scrap.* FROM scrap WHERE scrap.dongnae_board_id = :dongnae_board_id", nativeQuery = true)
     Scrap findByDongnaeBoardId(@Param("dongnae_board_id") DongnaeBoard dongnae_board_id);
+
+
 }
