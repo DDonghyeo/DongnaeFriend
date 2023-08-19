@@ -63,6 +63,5 @@ public class Transaction extends BaseTimeEntity {
         this.day = request.getDay();
         this.price = request.getPrice();
         this.payCategory = request.getPayCategory();
-
     }
 }

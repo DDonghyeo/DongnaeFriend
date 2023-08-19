@@ -10,6 +10,7 @@ import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeImgRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeSympathyRepository;
 import com.umc.DongnaeFriend.domain.profile.dto.DongnaeProfileDto;
 import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
+import com.umc.DongnaeFriend.domain.scrap.repository.ScrapRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import com.umc.DongnaeFriend.global.exception.CustomException;
@@ -36,6 +37,7 @@ public class DongnaeProfileService {
     private final DongnaeBoardRepository dongnaeBoardRepository;
     private final DongnaeImgRepository dongnaeImgRepository;
     private final UserRepository userRepository;
+    private final ScrapRepository scrapRepository;
 
     // 본인 or 타사용자 확인
     private User checkUser(Long userId){
@@ -77,7 +79,7 @@ public class DongnaeProfileService {
         List<DongnaeBoard> dongnaeBoardList;
         if(category==0){
             dongnaeBoardList= dongnaeBoardRepository.findAllByUserId(user.getId());
-        }else{
+        }else /*if(category==1)*/{
             dongnaeBoardList = commentRepository.getCommentByUserIdAndBoard(user.getId())
                     .stream().map(DongnaeComment::getDongnaeBoard).distinct().collect(Collectors.toList());
         }

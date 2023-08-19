@@ -51,7 +51,9 @@ public class TransactionService {
     // 지출 또는 수입 내역 조회
     public TransactionDto.TransactionListResponse getTransactions(Integer year, Integer month, Integer day, Pageable pageable){
 
-        List<Transaction> transactionList  = transactionRepository.findByYearAndMonth(year, month, day, pageable);
+        User user = findUser();
+
+        List<Transaction> transactionList  = transactionRepository.findByYearAndMonthAndUser(year, month, day, user.getId(), pageable);
         return TransactionDto.TransactionListResponse.of(transactionList);
     }
 
