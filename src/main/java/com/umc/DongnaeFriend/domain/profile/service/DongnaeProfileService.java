@@ -4,12 +4,14 @@ import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeComment;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeImg;
+import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeSympathy;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeBoardRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeCommentRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeImgRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeSympathyRepository;
 import com.umc.DongnaeFriend.domain.profile.dto.DongnaeProfileDto;
 import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
+import com.umc.DongnaeFriend.domain.scrap.entity.Scrap;
 import com.umc.DongnaeFriend.domain.scrap.repository.ScrapRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
@@ -71,17 +73,22 @@ public class DongnaeProfileService {
 
     /**
      * 동네정보 - 작성한 글 , 작성한 댓글의 게시글 조회
-     * TODO : 공감, 스크랩 글 조회
      */
     public List<DongnaeBoardDto.DongnaeProfileListResponse> getWrittenContent(Long userId, int category, Pageable pageable) {
         User user = checkUser(userId);
 
         List<DongnaeBoard> dongnaeBoardList;
-        if(category==0){
+        if(category==0){ // 작성한 글
             dongnaeBoardList= dongnaeBoardRepository.findAllByUserId(user.getId());
-        }else /*if(category==1)*/{
+        }else if(category==1){ // 댓글
             dongnaeBoardList = commentRepository.getCommentByUserIdAndBoard(user.getId())
                     .stream().map(DongnaeComment::getDongnaeBoard).distinct().collect(Collectors.toList());
+        } else if (category == 2) { // 스크랩
+            dongnaeBoardList = scrapRepository.findAllByUserId(user.getId())
+                    .stream().map(Scrap::getDongnaeBoard).collect(Collectors.toList());
+        }else{ // 공감
+            dongnaeBoardList = dongnaeSympathyRepository.findAllByUserId(user.getId())
+                    .stream().map(DongnaeSympathy::getDongnaeBoard).collect(Collectors.toList());
         }
         return getProfileListResponse(dongnaeBoardList);
     }

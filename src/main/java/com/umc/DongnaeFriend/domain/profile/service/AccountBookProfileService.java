@@ -11,6 +11,8 @@ import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingImgReposit
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingSympathyRepository;
 import com.umc.DongnaeFriend.domain.profile.dto.AccountBookProfileDto;
 import com.umc.DongnaeFriend.domain.profile.dto.UserProfileDto;
+import com.umc.DongnaeFriend.domain.scrap.entity.Scrap;
+import com.umc.DongnaeFriend.domain.scrap.repository.ScrapRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import com.umc.DongnaeFriend.global.exception.CustomException;
@@ -37,6 +39,7 @@ public class AccountBookProfileService {
     private final SharingCommentRepository sharingCommentRepository;
     private final SharingSympathyRepository sharingSympathyRepository;
     private final SharingImgRepository sharingImgRepository;
+    private final ScrapRepository scrapRepository;
 
     // 본인 or 타사용자 확인
     private User checkUser(Long userId){
@@ -81,6 +84,9 @@ public class AccountBookProfileService {
         }else if(category==1){
             sharingBoardList = sharingCommentRepository.getCommentByUserIdAndBoard(user.getId())
                     .stream().map(SharingComment::getSharingBoard).distinct().collect(Collectors.toList());
+        }else if(category==2){
+            sharingBoardList = scrapRepository.findAllByUserId(user.getId())
+                    .stream().map(Scrap::getSharingBoard).collect(Collectors.toList());
         }else{
             sharingBoardList = sharingSympathyRepository.getSharingSympathyByUserId(user.getId())
                     .stream().map(SharingSympathy::getSharingBoard).collect(Collectors.toList());
