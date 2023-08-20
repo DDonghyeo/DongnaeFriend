@@ -77,7 +77,7 @@ public class AccountBookService {
                 .income(accountBook.getIncome())
                 .expenditure(accountBook.getExpenditure())
                 .budget(accountBook.getBudget()+accountBook.getIncome()-accountBook.getExpenditure())
-                .expense(accountBookRepository.getAccountBook(year,month))
+                .expense(accountBookRepository.getAccountBook(year,month, user))
                 .build();
     }
 
