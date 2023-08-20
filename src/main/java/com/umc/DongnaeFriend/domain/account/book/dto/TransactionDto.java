@@ -62,24 +62,24 @@ public class TransactionDto {
     public static class TransactionResponse{
         private Long id;
         private Integer type;
-        private TransactionCategory transactionCategory;
+        private Integer transactionCategory;
         private Integer year;
         private Integer month;
         private Integer day;
         private Long price;
-        private PayCategory payCategory;
+        private Integer payCategory;
         private String memo;
 
         public static TransactionResponse from(Transaction transaction){
             return new TransactionResponse(
                     transaction.getId(),
                     transaction.getType(),
-                    transaction.getTransactionCategory(),
+                    transaction.getTransactionCategory().getValue(),
                     transaction.getYear(),
                     transaction.getMonth(),
                     transaction.getDay(),
                     transaction.getPrice(),
-                    transaction.getPayCategory(),
+                    transaction.getPayCategory().getValue(),
                     transaction.getCategoryMemo());
         }
     }
