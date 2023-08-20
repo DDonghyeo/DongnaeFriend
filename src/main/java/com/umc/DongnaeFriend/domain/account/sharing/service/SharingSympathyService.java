@@ -4,17 +4,22 @@ import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingSympathy;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingSympathyRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class SharingSympathyService {
     private final SharingSympathyRepository sharingSympathyRepository;
+    private final UserRepository userRepository;
+
 
     public String newSympathy(Long accountBookId){
-        // !임시! 유저 가져오기
-        User user = sharingSympathyRepository.findByUserId(1L);
+        User user = findUser();
 
         // 게시판 가져오기
         SharingBoard sharingBoard = sharingSympathyRepository.findBySharingBoardId(accountBookId);
@@ -40,4 +45,9 @@ public class SharingSympathyService {
         return "[가계부 공유] 공감 삭제 성공";
     }
 
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 }
