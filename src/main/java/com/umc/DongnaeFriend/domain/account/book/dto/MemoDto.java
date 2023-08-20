@@ -57,6 +57,7 @@ public class MemoDto {
             return Memo.builder()
                     .accountBook(accountBook)
                     .memo(memo)
+                    .done(done)
                     .build();
         }
     }
