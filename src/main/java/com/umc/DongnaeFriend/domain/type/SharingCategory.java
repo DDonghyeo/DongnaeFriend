@@ -18,7 +18,7 @@ public enum SharingCategory {
 
     public static SharingCategory valueOf(Integer value) {
         for (SharingCategory category : SharingCategory.values()) {
-            if (category.getValue().equals(value)) {
+            if (category.getValue() ==value) {
                 return category;
             } else throw new CustomException(ErrorCode.INVALID_VALUE);
         }
