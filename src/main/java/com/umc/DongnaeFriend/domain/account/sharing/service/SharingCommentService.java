@@ -1,7 +1,6 @@
 package com.umc.DongnaeFriend.domain.account.sharing.service;
 
 import com.umc.DongnaeFriend.domain.account.sharing.dto.ReqSharingCommentDto;
-import com.umc.DongnaeFriend.domain.account.sharing.dto.ResSharingCommentList;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingComment;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentRepository;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -25,26 +23,26 @@ public class SharingCommentService {
         // 게시판 가져오기
         SharingBoard sharingBoard = sharingCommentRepository.findBySharingBoardId(accountBookId);
 
-        // 대댓글 등록
-        if (!(reqSharingCommentDto.getParentCommentId() == null)){
-            // 부모 댓글 가져오기
-            Optional<SharingComment> parentCommentOptional = sharingCommentRepository.findById(reqSharingCommentDto.getParentCommentId());
-            SharingComment parentComment = parentCommentOptional.get();
-
-            // 댓글 빌드
-            SharingComment comment = SharingComment.builder()
-                    .parentComment(parentComment)
-                    .content(reqSharingCommentDto.getContent())
-                    .isDeleted(false)
-                    .sharingBoard(sharingBoard)
-                    .user(user)
-                    .build();
-
-            sharingCommentRepository.save(comment);
-
-            return "대댓글 등록 성공";
-
-        }
+//        // 대댓글 등록
+//        if (!(reqSharingCommentDto.getParentCommentId() == null)){
+//            // 부모 댓글 가져오기
+//            Optional<SharingComment> parentCommentOptional = sharingCommentRepository.findById(reqSharingCommentDto.getParentCommentId());
+//            SharingComment parentComment = parentCommentOptional.get();
+//
+//            // 댓글 빌드
+//            SharingComment comment = SharingComment.builder()
+//                    .parentComment(parentComment)
+//                    .content(reqSharingCommentDto.getContent())
+//                    .isDeleted(false)
+//                    .sharingBoard(sharingBoard)
+//                    .user(user)
+//                    .build();
+//
+//            sharingCommentRepository.save(comment);
+//
+//            return "대댓글 등록 성공";
+//
+//        }
 
         // 댓글 등록
         SharingComment comment = SharingComment.builder()
@@ -84,18 +82,13 @@ public class SharingCommentService {
     }
 
     // [가계부 공유] 댓글 목록 조회
-    public ResSharingCommentList getCommentList(Long accountBookId) {
+    public ReqSharingCommentDto.CommentListResponse getList(Long accountBookId) {
         // 게시판 가져오기
         SharingBoard sharingBoard = sharingCommentRepository.findBySharingBoardId(accountBookId);
 
-        List<SharingComment> commentList = sharingCommentRepository.findAllByBoard(sharingBoard);
+        List<SharingComment> list = sharingCommentRepository.findAllByBoard(sharingBoard);
 
-        ResSharingCommentList resSharingCommentList = ResSharingCommentList.builder()
-                .totalCount(commentList.size())
-                .commentList(sharingCommentRepository.findAllByBoard(sharingBoard))
-                .build();
-
-        return resSharingCommentList;
+        return ReqSharingCommentDto.CommentListResponse.of(list);
     }
 
 }
