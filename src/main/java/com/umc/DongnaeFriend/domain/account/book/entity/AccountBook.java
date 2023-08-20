@@ -27,6 +27,7 @@ public class AccountBook extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Range(min=0)
     private Long budget;
 
     //@Column(nullable = false)
