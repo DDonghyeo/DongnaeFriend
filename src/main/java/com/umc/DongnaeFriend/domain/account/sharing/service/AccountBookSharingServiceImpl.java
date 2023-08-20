@@ -84,6 +84,8 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
 
         User user = getCurUser();
 
+        board.updateView();
+
         //Get Images
         List<SharingImg> images = sharingImgRepository.findAllBySharingBoard_Id(board_id);
 
