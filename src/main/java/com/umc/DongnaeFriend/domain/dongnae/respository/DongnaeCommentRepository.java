@@ -1,5 +1,6 @@
 package com.umc.DongnaeFriend.domain.dongnae.respository;
 
+import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeCommentDto;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeComment;
 import com.umc.DongnaeFriend.domain.user.entity.User;
@@ -23,4 +24,8 @@ public interface DongnaeCommentRepository extends JpaRepository<DongnaeComment, 
 
     @Query("SELECT db FROM DongnaeBoard db WHERE db.id = :dongnae_board_id")
     DongnaeBoard findByDongnaeBoardId(@Param("dongnae_board_id") Long dongnae_board_id);
+
+    @Query(value = "SELECT dongnae_comment.* FROM dongnae_comment WHERE dongnae_comment.dongnae_board_id = :dongnae_board_id", nativeQuery = true)
+    List<DongnaeComment> findListByBoardId(@Param("dongnae_board_id") DongnaeBoard dongnae_board_id);
+
 }
