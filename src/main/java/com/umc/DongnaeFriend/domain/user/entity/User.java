@@ -24,7 +24,7 @@ import org.springframework.lang.Nullable;
 public class User extends BaseTimeEntity {
 
     @Id
-    //@GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
