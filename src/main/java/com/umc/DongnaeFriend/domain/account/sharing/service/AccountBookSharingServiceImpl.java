@@ -10,6 +10,7 @@ import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingSympathyRe
 import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
 import com.umc.DongnaeFriend.domain.type.Age;
 import com.umc.DongnaeFriend.domain.type.Gender;
+import org.springframework.transaction.annotation.Propagation;
 import com.umc.DongnaeFriend.domain.type.SharingCategory;
 import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
@@ -27,7 +28,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
 
 @Slf4j
@@ -117,6 +119,7 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      * [가계부 공유] 게시글 수정
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateBoard(long board_id, SharingDto.Request req) {
 
         SharingBoard board = sharingBoardRepository.findById(board_id).orElseThrow(
