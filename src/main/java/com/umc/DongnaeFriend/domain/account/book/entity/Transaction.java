@@ -58,6 +58,7 @@ public class Transaction extends BaseTimeEntity {
     public void updateTransaction(TransactionDto.TransactionRequest request, AccountBook accountBook){
         this.accountBook = accountBook;
         this.categoryMemo = request.getCategoryMemo();
+        this.transactionCategory = request.getTransactionCategory();
         this.year = request.getYear();
         this.month =request.getMonth();
         this.day = request.getDay();
