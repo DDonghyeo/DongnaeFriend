@@ -5,17 +5,23 @@ import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingCommentLike;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentLikeRepository;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeCommentLike;
 import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class SharingCommentLikeService {
     private final SharingCommentLikeRepository sharingCommentLikeRepository;
+    private final UserRepository userRepository;
+
 
     public String newLike(Long commentId) {
-        // !임시! 유저 가져오기
-        User user = sharingCommentLikeRepository.findByUserId(1L);
+
+        User user = findUser();
 
         // 댓글 가져오기
         SharingComment sharingComment = sharingCommentLikeRepository.findByCommentId(commentId);
@@ -37,5 +43,11 @@ public class SharingCommentLikeService {
         sharingCommentLikeRepository.delete(sharingCommentLikeExist);
 
         return "가계부 공유 댓글 좋아요 삭제 성공";
+    }
+
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

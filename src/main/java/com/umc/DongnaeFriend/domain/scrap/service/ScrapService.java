@@ -6,17 +6,22 @@ import com.umc.DongnaeFriend.domain.scrap.dto.ReqScrapDto;
 import com.umc.DongnaeFriend.domain.scrap.entity.Scrap;
 import com.umc.DongnaeFriend.domain.scrap.repository.ScrapRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class ScrapService {
     private final ScrapRepository scrapRepository;
+    private final UserRepository userRepository;
 
     public String newScrap(ReqScrapDto reqScrapDto) {
-        // !임시! 유저 가져오기
-        User user = scrapRepository.findByUserId(1L);
+
+        User user = findUser();
 
         // 가계부 공유
         if (!(reqScrapDto.getAccountBookId() == null)) {
@@ -65,5 +70,11 @@ public class ScrapService {
         }
 
         return "스크랩 성공";
+    }
+
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
