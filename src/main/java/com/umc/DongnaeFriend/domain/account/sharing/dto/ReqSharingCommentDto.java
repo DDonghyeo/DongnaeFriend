@@ -17,6 +17,7 @@ public class ReqSharingCommentDto {
     public static ReqSharingCommentDto from(SharingComment sharingComment) {
         return new ReqSharingCommentDto(
                 sharingComment.getContent()
+
         );
     }
 
