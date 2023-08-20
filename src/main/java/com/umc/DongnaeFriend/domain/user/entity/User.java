@@ -24,7 +24,7 @@ import org.springframework.lang.Nullable;
 public class User extends BaseTimeEntity {
 
     @Id
-    //@GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -68,7 +68,7 @@ public class User extends BaseTimeEntity {
         updateNickname(updateUser.nickname);
         updateGender(updateUser.gender);
         updateAge(updateUser.age);
-        updateProfileImage(this.profileImage);
+        updateProfileImage(updateUser.profileImage);
         updateInfoCert(updateUser.infoCert);
     }
 
