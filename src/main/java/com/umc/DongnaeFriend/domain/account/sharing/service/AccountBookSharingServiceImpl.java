@@ -80,6 +80,7 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      * [가계부 공유] 게시글 상세 조회
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public SharingDto.Response getBoard(long board_id) {
         SharingBoard board = sharingBoardRepository.findById(board_id).orElseThrow(() ->
                 new CustomException(ErrorCode.NO_CONTENT_FOUND));
