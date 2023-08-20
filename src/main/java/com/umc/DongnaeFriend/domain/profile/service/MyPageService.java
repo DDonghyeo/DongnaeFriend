@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 
 @Slf4j
@@ -32,6 +33,7 @@ public class MyPageService {
         return MyPageDto.MyPageResponseDto.of(user, getUserLocation());
     }
 
+    @Transactional
     public void updateMyPage(MyPageDto.MyPageRequestDto myPageRequest, MultipartFile image){
 
         User user = findUser();

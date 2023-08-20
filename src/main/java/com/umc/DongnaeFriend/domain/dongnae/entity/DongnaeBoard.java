@@ -61,4 +61,7 @@ public class DongnaeBoard extends BaseTimeEntity {
     }
 
 
+    public void updateView() {
+        this.view +=1;
+    }
 }

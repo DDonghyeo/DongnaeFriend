@@ -20,4 +20,6 @@ public interface DongnaeSympathyRepository extends JpaRepository<DongnaeSympathy
     @Query(value = "SELECT dongnae_sympathy.* FROM dongnae_sympathy WHERE dongnae_sympathy.dongnae_board_id = :dongnae_board_id", nativeQuery = true)
     DongnaeSympathy findByDongnaeBoardId(@Param("dongnae_board_id") DongnaeBoard dongnae_board_id);
 
+    @Query(value = "SELECT dongnae_sympathy.* FROM dongnae_sympathy WHERE dongnae_sympathy.user_id = :user_id", nativeQuery = true)
+    List<DongnaeSympathy> findAllByUserId(@Param("user_id") Long user_id);
 }
