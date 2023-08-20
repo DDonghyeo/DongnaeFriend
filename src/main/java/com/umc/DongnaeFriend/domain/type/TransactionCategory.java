@@ -35,7 +35,7 @@ public enum TransactionCategory {
     private final String category;
 
     @JsonValue
-    public String geCategory() {
+    public String getCategory() {
         return this.category;
     }
 }

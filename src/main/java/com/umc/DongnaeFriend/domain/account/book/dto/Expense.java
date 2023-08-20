@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Expense {
-    public TransactionCategory category;
+    public TransactionCategory transactionCategory;
     public long price;
 }
