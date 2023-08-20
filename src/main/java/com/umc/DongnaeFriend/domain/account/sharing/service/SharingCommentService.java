@@ -5,7 +5,11 @@ import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingComment;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +19,11 @@ import java.util.Optional;
 @Service
 public class SharingCommentService {
     private final SharingCommentRepository sharingCommentRepository;
+    private final UserRepository userRepository;
 
     public String newComment(Long accountBookId, ReqSharingCommentDto reqSharingCommentDto) {
-        // !임시! 유저 가져오기
-        User user = sharingCommentRepository.findByUserId(1L);
+
+        User user = findUser();
 
         // 게시판 가져오기
         SharingBoard sharingBoard = sharingCommentRepository.findBySharingBoardId(accountBookId);
@@ -91,4 +96,10 @@ public class SharingCommentService {
         return ReqSharingCommentDto.CommentListResponse.of(list);
     }
 
+
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 }

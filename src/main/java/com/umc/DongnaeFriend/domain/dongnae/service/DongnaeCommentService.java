@@ -8,7 +8,11 @@ import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeCommentLike;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeCommentLikeRepository;
 import com.umc.DongnaeFriend.domain.dongnae.respository.DongnaeCommentRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
+import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.exception.CustomException;
+import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +23,11 @@ import java.util.Optional;
 public class DongnaeCommentService {
     private final DongnaeCommentRepository dongnaeCommentRepository;
     private final DongnaeCommentLikeRepository dongnaeCommentLikeRepository;
+    private final UserRepository userRepository;
 
 
     public String newComment(Long townInformationId, DongnaeCommentDto dongnaeCommentDto) {
-        // !임시! 유저 가져오기
-        User user = dongnaeCommentRepository.findByUserId(1L);
+        User user = findUser();
 
         // 게시판 가져오기
         DongnaeBoard dongnaeBoard = dongnaeCommentRepository.findByDongnaeBoardId(townInformationId);
@@ -86,8 +90,7 @@ public class DongnaeCommentService {
     }
 
     public String newLike(Long commentId) {
-        // !임시! 유저 가져오기
-        User user = dongnaeCommentRepository.findByUserId(1L);
+        User user = findUser();
 
         // 댓글 가져오기
         Optional<DongnaeComment> dongnaeCommentOptional = dongnaeCommentRepository.findById(commentId);
@@ -120,5 +123,11 @@ public class DongnaeCommentService {
         List<DongnaeComment> list = dongnaeCommentRepository.findListByBoardId(dongnaeBoard);
         return DongnaeCommentDto.CommentListResponse.of(list);
 
+    }
+
+    public User findUser() {
+        Object userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById((Long) userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
