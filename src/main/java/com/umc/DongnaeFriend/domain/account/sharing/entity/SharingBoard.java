@@ -51,4 +51,8 @@ public class SharingBoard extends BaseTimeEntity {
         this.title = req.getTitle();
         this.content = req.getContent();
     }
+
+    public void updateView() {
+        this.view+=1;
+    }
 }

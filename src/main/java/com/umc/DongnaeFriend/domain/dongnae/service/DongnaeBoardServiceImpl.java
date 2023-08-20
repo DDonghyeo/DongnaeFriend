@@ -126,6 +126,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
         DongnaeBoard board = dongnaeBoardRepository.findById(board_id).orElseThrow(() ->
                 new CustomException(ErrorCode.NO_CONTENT_FOUND));
 
+        board.updateView();
 
         //Get Images
         List<DongnaeImg> images = dongnaeImgRepository.findAllByDongnaeBoard_Id(board_id);
@@ -254,7 +255,6 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
                 new CustomException(ErrorCode.UNAUTHORIZED_MEMBER)
         );
     }
-
 }
 
 
