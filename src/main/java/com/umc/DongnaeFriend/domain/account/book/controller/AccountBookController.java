@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -18,18 +19,18 @@ public class AccountBookController {
     private final AccountBookService accountBookService;
 
     @GetMapping("/budget")
-    public ResponseEntity<AccountBookDto.BudgetResponse> getBudget(@RequestParam(value = "year") Integer year,
-                                                                   @RequestParam(value = "month")
-                                                                  @Max(value = 12, message = "12월까지만 입력해주세요") Integer month){
+    public ResponseEntity<AccountBookDto.BudgetResponse> getBudget(@Valid @RequestParam(value = "year") Integer year,
+                                                                   @Valid @RequestParam(value = "month")
+                                                                  @Max(value = 12, message = "12월까지만 입력해주세요") int month){
         return ResponseEntity.status(HttpStatus.OK).body(accountBookService.getBudget(year, month));
     }
 
     @PostMapping("/budget")
-    public ResponseEntity<?> createBudget(@RequestParam(value = "year") Integer year,
-                             @RequestParam(value = "month")
-                                            @Max(value = 12, message = "12월까지만 입력해주세요") Integer month,
-                             @RequestParam(value = "amount")
-                                              @Min(value =0, message = "예산은 0원 이상이어야 합니다") Long budget){
+    public ResponseEntity<?> createBudget(@Valid @RequestParam(value = "year") Integer year,
+                                          @Valid @RequestParam(value = "month")
+                                            @Max(value = 12, message = "12월까지만 입력해주세요") int month,
+                                          @Valid @RequestParam(value = "amount")
+                                              @Min(value =0, message = "예산은 0원 이상이어야 합니다") long budget){
         accountBookService.createBudget(year, month, budget);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -38,9 +39,9 @@ public class AccountBookController {
     @PutMapping("/budget")
     public ResponseEntity<?> updateBudget(@RequestParam(value = "year") Integer year,
                              @RequestParam(value = "month")
-                                            @Max(value = 12, message = "12월까지만 입력해주세요") Integer month,
+                                            @Max(value = 12, message = "12월까지만 입력해주세요") int month,
                              @RequestParam(value = "amount")
-                                              @Min(value =0, message = "예산은 0원 이상이어야 합니다") Long budget){
+                                              @Min(value =0, message = "예산은 0원 이상이어야 합니다") long budget){
         accountBookService.updateBudget(year, month, budget);
 
         return new ResponseEntity<>(HttpStatus.OK);

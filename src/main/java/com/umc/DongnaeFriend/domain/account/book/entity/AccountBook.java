@@ -8,7 +8,8 @@ import static lombok.AccessLevel.PROTECTED;
 import com.umc.DongnaeFriend.domain.BaseTimeEntity;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import javax.persistence.*;
-import lombok.*;;
+import lombok.*;
+import org.hibernate.validator.constraints.Range;;
 
 @Getter
 @Builder
@@ -26,6 +27,7 @@ public class AccountBook extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Range(min=0)
     private Long budget;
 
     //@Column(nullable = false)
@@ -35,9 +37,11 @@ public class AccountBook extends BaseTimeEntity {
     private Long income;
 
     @Column(nullable = false)
+    @Range(min=2000, max=2500)
     private Integer year;
 
     @Column(nullable = false)
+    @Range(min=1, max=12)
     private Integer month;
 
     public void updateBudget(Long budget){
