@@ -62,7 +62,7 @@ public class TransactionDto {
     public static class TransactionResponse{
         private Long id;
         private Integer type;
-        private Integer transactionCategory;
+        private TransactionCategory transactionCategory;
         private Integer year;
         private Integer month;
         private Integer day;
@@ -74,7 +74,7 @@ public class TransactionDto {
             return new TransactionResponse(
                     transaction.getId(),
                     transaction.getType(),
-                    transaction.getTransactionCategory().getValue(),
+                    transaction.getTransactionCategory(),
                     transaction.getYear(),
                     transaction.getMonth(),
                     transaction.getDay(),
