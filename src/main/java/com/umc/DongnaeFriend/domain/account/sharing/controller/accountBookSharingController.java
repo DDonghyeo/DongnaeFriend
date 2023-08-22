@@ -36,8 +36,7 @@ public class accountBookSharingController {
     @GetMapping("/search")
 
     public ResponseEntity<?> searchAll(@RequestParam("keyword") String keyword, @RequestParam("category") int category, Pageable pageable) {
-        List<SharingDto.ListResponse> res = accountBookSharingService.searchByKeyword(keyword, category, pageable);
-        return ResponseEntity.ok(res);
+        return ResponseEntity.ok(accountBookSharingService.searchByKeyword(keyword, category, pageable));
     }
 
     /*

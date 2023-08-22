@@ -1,6 +1,5 @@
 package com.umc.DongnaeFriend.domain.dongnae.service;
 
-import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingSympathy;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
 import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
@@ -11,19 +10,17 @@ import com.umc.DongnaeFriend.domain.dongnae.respository.*;
 import com.umc.DongnaeFriend.domain.type.DongnaeBoardCategory;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
+import com.umc.DongnaeFriend.global.dto.ContentsDto;
 import com.umc.DongnaeFriend.global.exception.CustomException;
 import com.umc.DongnaeFriend.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -71,7 +68,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
 
     @Override
 //    @Transactional(propagation = Propagation.REQUIRED)
-    public List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable) {
+    public ContentsDto searchByKeyword(String keyword, int category, Pageable pageable) {
         String categoryName = DongnaeBoardCategory.valueOf(category).name();
 
         List<DongnaeBoard> dongnaeBoardList = dongnaeBoardRepository.findByKeyword(keyword, categoryName, pageable);
@@ -80,7 +77,7 @@ public class DongnaeBoardServiceImpl implements DongnaeBoardService {
             throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
         }
 
-        return getListResponses(dongnaeBoardList);
+        return new ContentsDto(getListResponses(dongnaeBoardList));
     }
 
     /*
