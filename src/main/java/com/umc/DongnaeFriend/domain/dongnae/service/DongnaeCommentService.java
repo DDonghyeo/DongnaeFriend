@@ -1,6 +1,5 @@
 package com.umc.DongnaeFriend.domain.dongnae.service;
 
-import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingSympathy;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeCommentDto;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeBoard;
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeComment;
@@ -17,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
 
 @RequiredArgsConstructor
 @Service
@@ -115,14 +117,25 @@ public class DongnaeCommentService {
         return "동네정보 댓글 좋아요 삭제 성공";
     }
 
-    public DongnaeCommentDto.CommentListResponse getList(Long id) {
+    public List<DongnaeCommentDto.ListResponse> getList(Long id) {
 
         // 게시판 가져오기
         DongnaeBoard dongnaeBoard = dongnaeCommentRepository.findByDongnaeBoardId(id);
 
-        List<DongnaeComment> list = dongnaeCommentRepository.findListByBoardId(dongnaeBoard);
-        return DongnaeCommentDto.CommentListResponse.of(list);
+        List<DongnaeComment> list = dongnaeCommentRepository.findAllByBoardId(dongnaeBoard);
+        return getListResponse(list);
 
+    }
+
+    private List<DongnaeCommentDto.ListResponse> getListResponse(List<DongnaeComment> dongnaeCommentList) {
+        return dongnaeCommentList.stream()
+                .map(origin -> DongnaeCommentDto.ListResponse.builder()
+                        .nickname(origin.getUser().getNickname())
+                        .content(origin.getContent())
+                        .createdAt(getTime(origin.getCreatedAt()))
+                        .likes(dongnaeCommentLikeRepository.countAllByDongnaeCommentId(origin.getId()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public User findUser() {

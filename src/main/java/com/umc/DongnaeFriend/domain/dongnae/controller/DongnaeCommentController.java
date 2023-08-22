@@ -1,6 +1,5 @@
 package com.umc.DongnaeFriend.domain.dongnae.controller;
 
-import com.umc.DongnaeFriend.domain.account.sharing.dto.ReqSharingCommentDto;
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeCommentDto;
 import com.umc.DongnaeFriend.domain.dongnae.service.DongnaeCommentService;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +43,7 @@ public class DongnaeCommentController {
 
     // [동네정보] 댓글 목록 조회
     @GetMapping("")
-    public ResponseEntity<DongnaeCommentDto.CommentListResponse> getList(@RequestParam Long
-                                                                                     townInformationId) {
-        return ResponseEntity.status(HttpStatus.OK).body(dongnaeCommentService.getList(
-                townInformationId));
+    public ResponseEntity<?> getList(@RequestParam Long townInformationId) {
+        return ResponseEntity.ok(dongnaeCommentService.getList(townInformationId));
     }
 }
