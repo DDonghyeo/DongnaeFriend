@@ -3,6 +3,7 @@ package com.umc.DongnaeFriend.domain.account.sharing.service;
 import com.umc.DongnaeFriend.domain.account.sharing.dto.ReqSharingCommentDto;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingBoard;
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingComment;
+import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentLikeRepository;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentRepository;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
@@ -14,12 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
 
 @RequiredArgsConstructor
 @Service
 public class SharingCommentService {
     private final SharingCommentRepository sharingCommentRepository;
     private final UserRepository userRepository;
+    private final SharingCommentLikeRepository sharingCommentLikeRepository;
 
     public String newComment(Long accountBookId, ReqSharingCommentDto reqSharingCommentDto) {
 
@@ -87,13 +92,24 @@ public class SharingCommentService {
     }
 
     // [가계부 공유] 댓글 목록 조회
-    public ReqSharingCommentDto.CommentListResponse getList(Long accountBookId) {
+    public List<ReqSharingCommentDto.ListResponse> getList(Long accountBookId) {
         // 게시판 가져오기
         SharingBoard sharingBoard = sharingCommentRepository.findBySharingBoardId(accountBookId);
 
         List<SharingComment> list = sharingCommentRepository.findAllByBoard(sharingBoard);
 
-        return ReqSharingCommentDto.CommentListResponse.of(list);
+        return getListResponses(list);
+    }
+
+    private List<ReqSharingCommentDto.ListResponse> getListResponses(List<SharingComment> sharingCommentList) {
+        return sharingCommentList.stream()
+                .map(origin -> ReqSharingCommentDto.ListResponse.builder()
+                        .nickname(origin.getUser().getNickname())
+                        .content(origin.getContent())
+                        .createdAt(getTime(origin.getCreatedAt()))
+                        .likes(sharingCommentLikeRepository.countAllBySharingCommentId(origin.getId()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
 

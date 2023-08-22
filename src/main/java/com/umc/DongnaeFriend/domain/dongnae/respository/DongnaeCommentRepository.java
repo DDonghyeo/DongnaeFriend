@@ -25,7 +25,10 @@ public interface DongnaeCommentRepository extends JpaRepository<DongnaeComment, 
     @Query("SELECT db FROM DongnaeBoard db WHERE db.id = :dongnae_board_id")
     DongnaeBoard findByDongnaeBoardId(@Param("dongnae_board_id") Long dongnae_board_id);
 
-    @Query(value = "SELECT dongnae_comment.* FROM dongnae_comment WHERE dongnae_comment.dongnae_board_id = :dongnae_board_id", nativeQuery = true)
-    List<DongnaeComment> findListByBoardId(@Param("dongnae_board_id") DongnaeBoard dongnae_board_id);
+    @Query(value = "SELECT dongnae_comment.*, COUNT(dongnae_comment_like.dongnae_comment_id) AS cnt FROM dongnae_comment\n" +
+            "LEFT JOIN dongnae_comment_like ON dongnae_comment.dongnae_comment_id = dongnae_comment_like.dongnae_comment_id\n" +
+            "WHERE dongnae_comment.dongnae_board_id = :dongnae_board_id\n" +
+            "GROUP BY dongnae_comment.dongnae_comment_id ORDER BY cnt DESC;", nativeQuery = true)
+    List<DongnaeComment> findAllByBoardId(@Param("dongnae_board_id") DongnaeBoard dongnae_board_id);
 
 }

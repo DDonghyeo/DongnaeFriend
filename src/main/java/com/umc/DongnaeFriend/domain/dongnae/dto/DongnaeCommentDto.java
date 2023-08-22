@@ -2,6 +2,7 @@ package com.umc.DongnaeFriend.domain.dongnae.dto;
 
 import com.umc.DongnaeFriend.domain.dongnae.entity.DongnaeComment;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,5 +36,18 @@ public class DongnaeCommentDto {
 
             return new CommentListResponse(dongnaeCommentDtos);
         }
+    }
+
+    @Getter @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ListResponse {
+        private String nickname;
+
+        private String content;
+
+        private String createdAt;
+
+        private int likes;
     }
 }
