@@ -3,7 +3,6 @@ package com.umc.DongnaeFriend.domain.account.sharing.controller;
 import com.umc.DongnaeFriend.domain.account.sharing.dto.ReqSharingCommentDto;
 import com.umc.DongnaeFriend.domain.account.sharing.service.SharingCommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +35,7 @@ public class SharingCommentController {
 
     // [가계부 공유] 댓글 목록 조회
     @GetMapping("")
-    public ResponseEntity<ReqSharingCommentDto.CommentListResponse> getList(@RequestParam Long accountBookId) {
-        return ResponseEntity.status(HttpStatus.OK).body(sharingCommentService.getList(accountBookId));
+    public ResponseEntity<?> getList(@RequestParam Long accountBookId) {
+        return ResponseEntity.ok(sharingCommentService.getList(accountBookId));
     }
 }

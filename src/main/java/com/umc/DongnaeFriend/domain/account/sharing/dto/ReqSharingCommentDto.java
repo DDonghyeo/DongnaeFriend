@@ -2,6 +2,7 @@ package com.umc.DongnaeFriend.domain.account.sharing.dto;
 
 import com.umc.DongnaeFriend.domain.account.sharing.entity.SharingComment;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,4 +38,19 @@ public class ReqSharingCommentDto {
             return new CommentListResponse(sharingCommentDtos);
         }
     }
+
+
+    @Getter @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ListResponse {
+        private String nickname;
+
+        private String content;
+
+        private String createdAt;
+
+        private int likes;
+    }
+
 }
