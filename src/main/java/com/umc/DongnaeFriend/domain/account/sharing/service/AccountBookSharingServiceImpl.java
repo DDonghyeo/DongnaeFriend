@@ -7,17 +7,13 @@ import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingBoardRepos
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingCommentRepository;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingImgRepository;
 import com.umc.DongnaeFriend.domain.account.sharing.repository.SharingSympathyRepository;
-import com.umc.DongnaeFriend.domain.dongnae.entity.Dongnae;
-import com.umc.DongnaeFriend.domain.type.Age;
-import com.umc.DongnaeFriend.domain.type.Gender;
+import com.umc.DongnaeFriend.global.dto.ContentsDto;
 import org.springframework.transaction.annotation.Propagation;
 import com.umc.DongnaeFriend.domain.type.SharingCategory;
-import com.umc.DongnaeFriend.domain.type.YesNo;
 import com.umc.DongnaeFriend.domain.user.entity.User;
 import com.umc.DongnaeFriend.domain.user.repository.UserRepository;
 import com.umc.DongnaeFriend.global.exception.CustomException;
 import com.umc.DongnaeFriend.global.exception.ErrorCode;
-import com.umc.DongnaeFriend.global.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.transaction.annotation.Propagation;
+
 import org.springframework.transaction.annotation.Transactional;
 import static com.umc.DongnaeFriend.global.util.TimeUtil.getTime;
 
@@ -56,13 +52,13 @@ public class AccountBookSharingServiceImpl implements AccountBookSharingService 
      * [가계부 공유] 게시글 검색
      */
     @Override
-    public List<SharingDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable) {
+    public ContentsDto searchByKeyword(String keyword, int category, Pageable pageable) {
         //TODO : 전체 카테고리 처리
         List<SharingBoard> sharingBoards = sharingBoardRepository.findByKeyword(keyword, SharingCategory.valueOf(category).name(), pageable);
         if (sharingBoards.isEmpty()) {
             throw new CustomException(ErrorCode.NO_CONTENT_FOUND);
         }
-        return getListResponses(sharingBoards);
+        return new ContentsDto(getListResponses(sharingBoards));
     }
 
     /*

@@ -2,6 +2,7 @@ package com.umc.DongnaeFriend.domain.dongnae.service;
 
 import com.umc.DongnaeFriend.domain.dongnae.dto.DongnaeBoardDto;
 import com.umc.DongnaeFriend.domain.dongnae.dto.UserLocationDto;
+import com.umc.DongnaeFriend.global.dto.ContentsDto;
 import org.springframework.data.domain.Pageable;
 
 import javax.naming.AuthenticationException;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface DongnaeBoardService {
 
-    List<DongnaeBoardDto.ListResponse> searchByKeyword(String keyword, int category, Pageable pageable);
+    ContentsDto searchByKeyword(String keyword, int category, Pageable pageable);
 
     List<DongnaeBoardDto.ListResponse> searchAll(int sort);
 

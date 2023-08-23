@@ -16,4 +16,6 @@ public interface SharingCommentLikeRepository extends JpaRepository<SharingComme
 
     @Query(value = "SELECT sharing_comment_like.* FROM sharing_comment_like WHERE sharing_comment_like.sharing_comment_id = :comment_id", nativeQuery = true)
     SharingCommentLike findByCommentId(@Param("comment_id") SharingComment comment_id);
+
+    int countAllBySharingCommentId(Long sharing_comment_id);
 }

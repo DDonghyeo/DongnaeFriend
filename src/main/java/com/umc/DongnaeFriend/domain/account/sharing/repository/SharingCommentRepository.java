@@ -18,9 +18,11 @@ public interface SharingCommentRepository extends JpaRepository<SharingComment, 
     User findByUserId(@Param("user_id") Long user_id);
     @Query("SELECT sb FROM SharingBoard sb WHERE sb.id = :sharing_board_id")
     SharingBoard findBySharingBoardId(@Param("sharing_board_id") Long sharing_board_id);
-    @Query("SELECT sc FROM SharingComment sc WHERE sc.sharingBoard = :sharingBoard")
+    @Query(value = "SELECT sharing_comment.*, COUNT(sharing_comment_like.sharing_comment_id) AS cnt FROM sharing_comment\n" +
+            "LEFT JOIN sharing_comment_like ON sharing_comment.sharing_comment_id = sharing_comment_like.sharing_comment_id\n" +
+            "WHERE sharing_comment.sharing_board_id = :sharingBoard\n" +
+            "GROUP BY sharing_comment.sharing_comment_id ORDER BY cnt DESC;", nativeQuery = true)
     List<SharingComment> findAllByBoard(@Param("sharingBoard") SharingBoard sharingBoard);
-
 
     public int countAllBySharingBoardId(Long sharing_board_id);
     int countAllByUserId(Long userId);

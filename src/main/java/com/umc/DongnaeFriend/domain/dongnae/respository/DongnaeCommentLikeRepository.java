@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface DongnaeCommentLikeRepository extends JpaRepository<DongnaeCommentLike, Long> {
     @Query(value = "SELECT dongnae_comment_like.* FROM dongnae_comment_like WHERE dongnae_comment_like.dongnae_comment_id = :comment_id", nativeQuery = true)
     DongnaeCommentLike findByCommentId(@Param("comment_id") DongnaeComment comment_id);
+
+    int countAllByDongnaeCommentId(Long dongnae_comment_id);
 }
